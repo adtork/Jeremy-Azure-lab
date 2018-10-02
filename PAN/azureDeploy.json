@@ -13,7 +13,7 @@
             }
         },
         "Username": {
-            "defaultValue": "paloalto",
+            "defaultValue": "MSFT",
             "type": "String"
         },
         "Password": {
