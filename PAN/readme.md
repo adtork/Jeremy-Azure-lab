@@ -1,5 +1,3 @@
-<a href="https://azuredeploy.net/
-   repository="https://github.com/jwrightazure/lab/blob/master/PAN/"
-   target="_blank">
-   <img src="http://azuredeploy.net/deploybutton.png"/>
+<a href="https://azuredeploy.net/" target="_blank">
+    <img src="http://www.medicmadness.com/wp-content/uploads/2010/09/David-hasselhoff-Spedo-260x300.png"/>
 </a>
