@@ -4,6 +4,7 @@
     "parameters": {
     	"vmSize": {
             "type": "string",
+	    "defaultValue": "Standard_DS3_v2",
             "allowedValues": [
                 "Standard_DS3_v2",
             ],
