@@ -10,7 +10,7 @@
           </role-based>
         </permissions>
       </entry>
-      <entry name="paloalto">
+      <entry name="MSFT">
         <phash>$1$rwblbyxg$RV3bPYes7Ga4xi3SEPWkb1</phash>
         <permissions>
           <role-based>
