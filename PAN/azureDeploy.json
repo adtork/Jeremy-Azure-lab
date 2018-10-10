@@ -878,7 +878,7 @@
                         "publisher": "paloaltonetworks",
                         "offer": "vmseries1",
                         "sku": "byol",
-                        "version": "8.0.0"
+                        "version": "8.1.0"
                     },
                     "osDisk": {
                         "managedDisk": { "storageAccountType": "Premium_LRS" },
@@ -945,7 +945,7 @@
                         "publisher": "paloaltonetworks",
                         "offer": "vmseries1",
                         "sku": "byol",
-                        "version": "8.0.0"
+                        "version": "8.1.0"
                     },
                     "osDisk": {
                         "managedDisk": { "storageAccountType": "Premium_LRS" },
