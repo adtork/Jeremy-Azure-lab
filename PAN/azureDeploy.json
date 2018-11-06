@@ -262,11 +262,11 @@
                             "frontendIPConfiguration": {
                                 "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'LB-Web'), '/frontendIPConfigurations/LB-Web-FrontEnd')]"
                             },
-                            "frontendPort": 80,
-                            "backendPort": 80,
-                            "enableFloatingIP": true,
+                            "frontendPort": 0,
+                            "backendPort": 0,
+                            "enableFloatingIP": false,
                             "idleTimeoutInMinutes": 4,
-                            "protocol": "Tcp",
+                            "protocol": "All",
                             "loadDistribution": "Default",
                             "backendAddressPool": {
                                 "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'LB-Web'), '/backendAddressPools/AS-Web')]"
@@ -334,7 +334,7 @@
                             },
                             "frontendPort": 80,
                             "backendPort": 80,
-                            "enableFloatingIP": false,
+                            "enableFloatingIP": true,
                             "idleTimeoutInMinutes": 4,
                             "protocol": "Tcp",
                             "loadDistribution": "Default",
