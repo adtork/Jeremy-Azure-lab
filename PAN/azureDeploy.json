@@ -264,7 +264,7 @@
                             },
                             "frontendPort": 80,
                             "backendPort": 80,
-                            "enableFloatingIP": false,
+                            "enableFloatingIP": true,
                             "idleTimeoutInMinutes": 4,
                             "protocol": "Tcp",
                             "loadDistribution": "Default",
