@@ -48,6 +48,13 @@
                         }
                     },
                     {
+                        "name": "Jump-Route",
+                        "properties": {
+                            "addressPrefix": "10.0.0.100/32",
+                            "nextHopType": "VnetLocal"
+                        }
+                    },
+                    {
                         "name": "Webroute-Default",
                         "properties": {
                             "addressPrefix": "0.0.0.0/0",
