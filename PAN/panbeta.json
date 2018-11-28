@@ -956,7 +956,6 @@
             ]
         },
     	{
-            {
                 "apiVersion": "2016-04-30-preview",
                 "type": "Microsoft.Compute/virtualMachines",
                 "name": "VM-Web1",
