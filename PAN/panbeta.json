@@ -145,6 +145,9 @@
             "name": "IP-FW1-Management",
             "apiVersion": "2017-08-01",
             "location": "[resourceGroup().location]",
+            "zones": [
+                "1"
+            ],
 		"sku":
             {
                 "name": "Standard"
@@ -164,6 +167,9 @@
             "name": "IP-FW2-Management",
             "apiVersion": "2017-08-01",
             "location": "[resourceGroup().location]",
+            "zones": [
+                "2"
+            ],
 		"sku":
             {
                 "name": "Standard"
@@ -183,6 +189,9 @@
             "name": "IP-FW1-Egress",
             "apiVersion": "2017-08-01",
             "location": "[resourceGroup().location]",
+            "zones": [
+                "1"
+            ],
 		"sku":
             {
                 "name": "Standard"
@@ -202,6 +211,9 @@
             "name": "IP-FW2-Egress",
             "apiVersion": "2017-08-01",
             "location": "[resourceGroup().location]",
+            "zones": [
+                "2"
+            ],
 		"sku":
             {
                 "name": "Standard"
@@ -863,6 +875,9 @@
             "type": "Microsoft.Compute/virtualMachines",
             "name": "VM-FW1",
             "location": "[resourceGroup().location]",
+            "zones": [
+                "1"
+            ],
             "plan": {
                 "name": "byol",
                 "product": "vmseries1",
@@ -930,6 +945,9 @@
             "type": "Microsoft.Compute/virtualMachines",
             "name": "VM-FW2",
             "location": "[resourceGroup().location]",
+            "zones": [
+                "2"
+            ],
             "plan": {
                 "name": "byol",
                 "product": "vmseries1",
