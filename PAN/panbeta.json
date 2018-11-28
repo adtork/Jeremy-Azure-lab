@@ -961,14 +961,9 @@
                 "name": "VM-Web1",
                 "location": "[resourceGroup().location]",
                 "dependsOn": [
-                  "[resourceId('Microsoft.Network/networkInterfaces/', 'INT-Web1')]",
-                  "[resourceId('Microsoft.Compute/availabilitySets', 'AS-Web')]"
+                  "[resourceId('Microsoft.Network/networkInterfaces/', 'INT-Web1')]"
                 ],
                 "properties": {
-                    "availabilitySet": {
-                              "id": "[resourceId('Microsoft.Compute/availabilitySets', 'AS-Web')]"
-                          },
-                          "hardwareProfile": {
                     "vmSize": "Standard_F1s"
                   },
                   "osProfile": {
@@ -1017,13 +1012,9 @@
                 "name": "VM-Web2",
                 "location": "[resourceGroup().location]",
                 "dependsOn": [
-                  "[resourceId('Microsoft.Network/networkInterfaces/', 'INT-Web2')]",
-                  "[resourceId('Microsoft.Compute/availabilitySets', 'AS-Web')]"
+                  "[resourceId('Microsoft.Network/networkInterfaces/', 'INT-Web2')]"
                 ],
                 "properties": {
-                    "availabilitySet": {
-                              "id": "[resourceId('Microsoft.Compute/availabilitySets', 'AS-Web')]"
-                          },
                   "hardwareProfile": {
                     "vmSize": "Standard_F1s"
                   },
