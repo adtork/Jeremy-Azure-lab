@@ -953,9 +953,9 @@
                 "[resourceId('Microsoft.Network/networkInterfaces', 'INT-FW2-Management')]",
                 "[resourceId('Microsoft.Network/networkInterfaces', 'INT-FW2-Untrust')]",
                 "[resourceId('Microsoft.Network/networkInterfaces', 'INT-FW2-Trust')]"
-            ]
-        },
-    	{
+                ]
+            },
+            {
                 "apiVersion": "2016-04-30-preview",
                 "type": "Microsoft.Compute/virtualMachines",
                 "name": "VM-Web1",
