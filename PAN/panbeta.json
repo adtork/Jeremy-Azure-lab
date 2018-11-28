@@ -274,7 +274,7 @@
                             "backendPort": 0,
                             "enableFloatingIP": false,
                             "idleTimeoutInMinutes": 4,
-                            "protocol": "Tcp",
+                            "protocol": "All",
                             "loadDistribution": "Default",
                             "backendAddressPool": {
                                 "id": "[concat(resourceId('Microsoft.Network/loadBalancers', 'LB-Web'), '/backendAddressPools/Web-Pool')]"
