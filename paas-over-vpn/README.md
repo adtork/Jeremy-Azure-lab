@@ -19,7 +19,7 @@ The labs cover:
 -	Manipulate routing to send traffic destin to PAAS through the Azure Firewall
 -	Validation and further testing
 
-| **Description for West Region** | **Values used in this lab guide** |
+| **Description for _West_ Region** | **Values used in this lab guide** |
 | --- | --- |
 | Username for provisioned VMs | azureuser |
 | Password for provisioned VMs | Msft123Msft123 |
@@ -27,7 +27,7 @@ The labs cover:
 | Azure region | westus |
 
 
-| **Description for East Region** | **Values used in this lab guide** |
+| **Description for _East_ Region** | **Values used in this lab guide** |
 | --- | --- |
 | Username for provisioned VMs | azureuser |
 | Password for provisioned VMs | Msft123Msft123 |
