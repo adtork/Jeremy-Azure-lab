@@ -2,7 +2,8 @@
 
 # Objectives and initial setup <a name="objectives"></a>
 
-This document contains a lab guide that helps to deploy a basic environment in Azure that allows to route traffic destin for PAAS resources over VPN and then traversing an Azure Firewall. The lab takes a building block approach using the portal and Azure CLI instead of provisioning the entire topology with Powershell or other automation tools. The VPN connection is between Azure region East and West with the East region simulating an on-prem connection.
+This lab guide illustrates how to deploy a basic environment in Azure that allows you to route traffic destin for PAAS resources over VPN and then traversing an Azure Firewall. The lab takes a building block approach using the portal and Azure CLI instead of provisioning the entire topology with Powershell or other automation tools. The VPN connection is between Azure region East and West with the East region simulating an on-prem connection.
+
 Before starting with this account, make sure to fulfill all the prerequisites:
 -	A valid Azure subscription account. If you don’t have one, you can create your free azure account (https://azure.microsoft.com/en-us/free/) today.
 -	If you are using Windows 10, you can install Bash shell on Ubuntu on Windows (http://www.windowscentral.com/how-install-bash-shell-command-line-windows-10).
@@ -24,16 +25,26 @@ The labs cover:
 | --- | --- |
 | Username for provisioned VMs | azureuser |
 | Password for provisioned VMs | Msft123Msft123 |
-| Vnet Name | Hub |
 | Azure region | westus |
+| Vnet Name | Hub |
+| Resource Group | Hub |
+| VNET Address Space | 10.0.0.0/16 |
+| HubVM Subnet | 10.0.10.0/24 |
+| GatewaySubnet | 10.0.0.0/24 |
+| AzureFirewallSubnet | 10.0.100.0/24 |
 
 # Azure Region _East_ Values
 | **Description for Region** | **Values used in this lab guide** |
 | --- | --- |
 | Username for provisioned VMs | azureuser |
 | Password for provisioned VMs | Msft123Msft123 |
-| Vnet Name | Hub |
-| Azure region | westeuropa |
+| Azure region | eastus |
+| Vnet Name | East |
+| Resource Group | East |
+| VNET Address Space | 10.100.0.0/16 |
+| VM Subnet | 10.100.10.0/24 |
+| GatewaySubnet | 10.1000.0.0/24 |
+
 
 
 
