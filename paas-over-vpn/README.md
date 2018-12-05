@@ -19,21 +19,19 @@ The labs cover:
 -	Manipulate routing to send traffic destin to PAAS through the Azure Firewall
 -	Validation and further testing
 
-**Important note:**
-This lab has been modified to improve the user's experience. Testing with Virtual Network Gateways has been taken all the way to the end, since just the gateway deployment can take up to 45 minutes. The activities in this lab has been divided in 3 sections:
-
--	Section 1: Hub and Spoke networking (around 60 minutes)
--	Section 2: NVA scalability with Azure Load Balancer (around 90 minutes)
--	Section 3: using VPN gateway for spoke-to-spoke connectivity and site-to-site access (around 60 minutes, not including the time required to provision the gateways)
-
- 
-Along this lab some variables will be used, that might (and probably should) look different in your environment. This is the variables you need to decide on before starting with the lab. Notice that the VM names are prefixed by a (not so) random number, since these names will be used to create DNS entries as well, and DNS names need to be unique.
-
-| **Description** | **Value used in this lab guide** |
+| **Description for West Region** | **Values used in this lab guide** |
 | --- | --- |
-| Azure resource group | vnetTest |
-| Username for provisioned VMs and NVAs | lab-user |
-| Password for provisioned VMs and NVAs | Microsoft123! |
+| Username for provisioned VMs | azureuser |
+| Password for provisioned VMs | Msft123Msft123 |
+| Vnet Name | Hub |
+| Azure region | westus |
+
+
+| **Description for East Region** | **Values used in this lab guide** |
+| --- | --- |
+| Username for provisioned VMs | azureuser |
+| Password for provisioned VMs | Msft123Msft123 |
+| Vnet Name | Hub |
 | Azure region | westeuropa |
 
 
