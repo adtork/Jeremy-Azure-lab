@@ -2,7 +2,7 @@
 
 # Objectives and initial setup <a name="objectives"></a>
 
-This document contains a lab guide that helps to deploy a basic environment in Azure that allows to test accessing PAAS resources over VPN traversing an Azure Firewall. The lab takes a building block approach using the portal and Azure CLI instead of provisioning the entire topology with Powershell or other automation tools. The VPN connection is between Azure region East and West with the East region simulating an on-prem connection.
+This document contains a lab guide that helps to deploy a basic environment in Azure that allows to route traffic destin for PAAS resources over VPN and then traversing an Azure Firewall. The lab takes a building block approach using the portal and Azure CLI instead of provisioning the entire topology with Powershell or other automation tools. The VPN connection is between Azure region East and West with the East region simulating an on-prem connection.
 Before starting with this account, make sure to fulfill all the prerequisites:
 -	A valid Azure subscription account. If you don’t have one, you can create your free azure account (https://azure.microsoft.com/en-us/free/) today.
 -	If you are using Windows 10, you can install Bash shell on Ubuntu on Windows (http://www.windowscentral.com/how-install-bash-shell-command-line-windows-10).
