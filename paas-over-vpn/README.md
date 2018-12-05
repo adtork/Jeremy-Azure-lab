@@ -19,15 +19,16 @@ The labs cover:
 -	Manipulate routing to send traffic destin to PAAS through the Azure Firewall
 -	Validation and further testing
 
-| **Description for _West_ Region** | **Values used in this lab guide** |
+# Azure Region _West_ Values
+| **Description for Region** | **Values used in this lab guide** |
 | --- | --- |
 | Username for provisioned VMs | azureuser |
 | Password for provisioned VMs | Msft123Msft123 |
 | Vnet Name | Hub |
 | Azure region | westus |
 
-
-| **Description for _East_ Region** | **Values used in this lab guide** |
+# Azure Region _East_ Values
+| **Description for Region** | **Values used in this lab guide** |
 | --- | --- |
 | Username for provisioned VMs | azureuser |
 | Password for provisioned VMs | Msft123Msft123 |
@@ -35,7 +36,7 @@ The labs cover:
 | Azure region | westeuropa |
 
 
-As tip, if you want to do the VPN lab, it might be beneficial to run the commands in [Lab9](#lab9) Step1 as you are doing the previous labs, so that you don’t need to wait for 45 minutes (that is more or less the time it takes to provision VPN gateways) when you arrive to [Lab9](#lab9).
+
  
 ## Introduction to Azure Networking <a name="intro"></a>
 
