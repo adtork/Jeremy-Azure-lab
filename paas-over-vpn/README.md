@@ -2,20 +2,22 @@
 
 # Objectives and initial setup <a name="objectives"></a>
 
-This document contains a lab guide that helps to deploy a basic environment in Azure that allows to test accessing PAAS resources over VPN traversing an Azure Firewall.
-Before starting with this account, make sure to fulfill all the requisites:
+This document contains a lab guide that helps to deploy a basic environment in Azure that allows to test accessing PAAS resources over VPN traversing an Azure Firewall. The lab takes a building block approach using the portal and Azure CLI instead of provisioning the entire topology with Powershell or other automation tools. The VPN connection is between Azure region East and West with the East region simulating an on-prem connection.
+Before starting with this account, make sure to fulfill all the prerequisites:
 -	A valid Azure subscription account. If you don’t have one, you can create your free azure account (https://azure.microsoft.com/en-us/free/) today.
 -	If you are using Windows 10, you can install Bash shell on Ubuntu on Windows (http://www.windowscentral.com/how-install-bash-shell-command-line-windows-10).
 -	Azure CLI 2.0, follow these instructions to install: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli 
+- Necessary authorization with Azure
 
-The labs cover: 
--	Introduction to Azure networking
--	Deployment of multi-vnet Hub and Spoke design
--	Traffic filtering in Azure with firewalls
--	Microsegmentation using firewalls
--	Scaling out NVAs with load balancing and SNAT
--	Advanced probes for Azure Load Balancers
--	Linux custom routing
+
+The labs cover:
+-	Building VNETs and subnets
+-	Deployment of Azure VPN gateways
+-	Configuring BGP over IPSEC
+-	Deployment of Azure Firewall with basic rules
+-	Validate default routing behavior with PAAS
+-	Manipulate routing to send traffic destin to PAAS through the Azure Firewall
+-	Validation and further testing
 
 **Important note:**
 This lab has been modified to improve the user's experience. Testing with Virtual Network Gateways has been taken all the way to the end, since just the gateway deployment can take up to 45 minutes. The activities in this lab has been divided in 3 sections:
