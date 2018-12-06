@@ -96,7 +96,7 @@ az network vpn-connection show --name to-east --resource-group Hub --query "{sta
 <pre lang="...">
 az network vnet subnet create --address-prefix 10.0.100.0/24 --name AzureFirewallSubnet --resource-group Hub --vnet-name Hub
 </pre>
-![alt text](https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/paasvpn.png)
+![alt text](https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/fw1.png)
 
 # Create test VM in East (simulating on-prem)
 <pre lang="...">
