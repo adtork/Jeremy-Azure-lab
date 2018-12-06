@@ -1,6 +1,6 @@
 # Azure Networking Lab- accessing PAAS over VPN through Azure Firewall (DRAFT)
 
-# Objectives and initial setup <a name="objectives"></a>
+**Objectives and initial setup 
 
 This lab guide illustrates how to deploy a basic environment in Azure that allows you to route traffic destin for PAAS resources over VPN and then traversing an Azure Firewall. The lab takes a building block approach using the portal and Azure CLI instead of provisioning the entire topology with Powershell or other automation tools. The VPN connection is between Azure region East and West with the East region simulating an on-prem connection. Azure firewall is used between the VNET and PAAS for simplicity purposes. 3rd party NVAs could be used as well. The labs focuses on VPN and VNET networking and not any PAAS/SAAS related security controls.
 
@@ -22,8 +22,8 @@ The labs cover:
 -	Manipulate routing to send traffic destin to PAAS through the Azure Firewall
 -	Validation and further testing
 
-# Azure Region _West_ Values
-| **Description for Region** | **Values used in this lab guide** |
+**Azure Region _West_ Values
+| *Description for Region* | *Values used in this lab guide* |
 | --- | --- |
 | Username for provisioned VMs | azureuser |
 | Password for provisioned VMs | Msft123Msft123 |
@@ -35,8 +35,8 @@ The labs cover:
 | GatewaySubnet | 10.0.0.0/24 |
 | AzureFirewallSubnet | 10.0.100.0/24 |
 
-# Azure Region _East_ Values
-| **Description for Region** | **Values used in this lab guide** |
+**Azure Region _East_ Values
+| *Description for Region* | *Values used in this lab guide* |
 | --- | --- |
 | Username for provisioned VMs | azureuser |
 | Password for provisioned VMs | Msft123Msft123 |
@@ -47,7 +47,7 @@ The labs cover:
 | VM Subnet | 10.100.10.0/24 |
 | GatewaySubnet | 10.1000.0.0/24 |
 
- ## Base Topology
+** Base Topology
  
 ![alt text](https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/paasvpn.png)
  
