@@ -23,7 +23,7 @@ The labs cover:
 -	Validation and further testing
 
 **Azure Region _West_ Values
-| *Description for Region* | *Values used in this lab guide* |
+| **Description for Region** | **Values used in this lab guide** |
 | --- | --- |
 | Username for provisioned VMs | azureuser |
 | Password for provisioned VMs | Msft123Msft123 |
@@ -36,7 +36,7 @@ The labs cover:
 | AzureFirewallSubnet | 10.0.100.0/24 |
 
 **Azure Region _East_ Values
-| *Description for Region* | *Values used in this lab guide* |
+| **Description for Region** | **Values used in this lab guide** |
 | --- | --- |
 | Username for provisioned VMs | azureuser |
 | Password for provisioned VMs | Msft123Msft123 |
