@@ -95,8 +95,13 @@ az network vnet-gateway show -g Hub --name West-VNG
 az network vnet-gateway show -g East --name East-VNG
 </pre>
 
+# Create 
+<pre lang="...">
+az network local-gateway create --gateway-ip-address "insert east VPN GW IP" --name to-east --resource-group Hub --local-address-prefixes 10.100.0.0/16 --asn 65002 --bgp-peering-address 10.100.0.254
+az network local-gateway create --gateway-ip-address "insert west VPN GW IP"  --name to-west --resource-group East --local-address-prefixes 10.0.0.0/16 --asn 65001 --bgp-peering-address 10.0.0.254
+</pre>
 
-**Step 12.** We can verify what the route tables look like now, and how it has been programmed in one of the NICs associated to the subnet:
+# We can verify what the route tables look like now, and how it has been programmed in one of the NICs associated to the subnet:
 
 <pre lang="...">
 <b>az network route-table route list --route-table-name vnet1-subnet1 -o table</b>
