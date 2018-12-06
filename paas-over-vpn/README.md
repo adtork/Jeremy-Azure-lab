@@ -2,7 +2,7 @@
 
 # Objectives and initial setup <a name="objectives"></a>
 
-This lab guide illustrates how to deploy a basic environment in Azure that allows you to route traffic destin for PAAS resources over VPN and then traversing an Azure Firewall. The lab takes a building block approach using the portal and Azure CLI instead of provisioning the entire topology with Powershell or other automation tools. The VPN connection is between Azure region East and West with the East region simulating an on-prem connection. Azure firewall is used between the VNET and PAAS for simplicity purposes. 3rd party NVAs could be used as well.
+This lab guide illustrates how to deploy a basic environment in Azure that allows you to route traffic destin for PAAS resources over VPN and then traversing an Azure Firewall. The lab takes a building block approach using the portal and Azure CLI instead of provisioning the entire topology with Powershell or other automation tools. The VPN connection is between Azure region East and West with the East region simulating an on-prem connection. Azure firewall is used between the VNET and PAAS for simplicity purposes. 3rd party NVAs could be used as well. The labs focuses on VPN and VNET networking and not any PAAS/SAAS related security controls.
 
 Assumptions:
 -	A valid Azure subscription account. If you don’t have one, you can create your free azure account (https://azure.microsoft.com/en-us/free/) today.
@@ -74,14 +74,13 @@ az network public-ip create --name West-VNGpubip --resource-group Hub --allocati
 az network public-ip create --name East-VNGpubip --resource-group East --allocation-method Dynamic
 </pre>
 
-**Build Azure VPN Gateway. My lab uses BGP and sets ASN in this section.**
+**Build Azure VPN Gateway. My lab uses BGP and sets ASN in this section. Deployment will take some time **
 <pre lang="...">
 az network vnet-gateway create --name West-VNG --public-ip-address West-VNGpubip --resource-group Hub --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait --asn 65001
 az network vnet-gateway create --name East-VNG --public-ip-address East-VNGpubip --resource-group East --vnet East --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait --asn 65002
 </pre>
 
-# Gets the coffee while gateways deploy....
-![alt text](https://content.artofmanliness.com/uploads/2009/08/CoffeeArmy.jpg)
+# While waiting, create a storage account with anonymous read access. Upload basic test file to test with. Steps omitted.
 
 # After the gateways have been created, document the public IP address for both East and West VPN Gateways. Value will be null until it has been successfully provisioned.
 <pre lang="...">
