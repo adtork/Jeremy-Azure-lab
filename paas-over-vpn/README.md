@@ -80,7 +80,15 @@ az network vnet-gateway create --name West-VNG --public-ip-address West-VNGpubip
 az network vnet-gateway create --name East-VNG --public-ip-address East-VNGpubip --resource-group East --vnet East --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait --asn 65002
 </pre>
 
-# While waiting, create a storage account with anonymous read access in the West region. Upload basic test file to test with. Steps omitted.
+# While waiting, create a storage account with anonymous read access in the West region. 
+Upload basic test file to test with. Steps omitted.
+Document Blob URL
+https://paasvpn.blob.core.windows.net/paasvpn/test jw.txt
+nslookup paasvpn.blob.core.windows.net
+Document the IP. Go to http://iprange.omartin2010.com/ and select prefix search tool. Paste in the IP of the Blob to determine the Azure region and prefix.
+EX: 
+13.88.144.240 resolves to ...
+13.88.144.240/32 is part of 13.88.128.0/18 in region uswest
 
 # After the gateways have been created, document the public IP address for both East and West VPN Gateways. Value will be null until it has been successfully provisioned.
 <pre lang="...">
@@ -92,6 +100,15 @@ az network public-ip show -g East -n East-VNGpubip --query "{address: ipAddress}
 <pre lang="...">
 az network vnet-gateway show -g Hub --name West-VNG
 az network vnet-gateway show -g East --name East-VNG
+</pre>
+# Create VPN connections
+az network vpn-connection create --name to-east --resource-group Hub --vnet-gateway1 West-VNG -l westus --shared-key Msft123Msft123 --local-gateway2 to-east 
+az network vpn-connection create --name to-west --resource-group East --vnet-gateway1 East-VNG -l eastus --shared-key Msft123Msft123 --local-gateway2 to-west 
+# Validate VPN connection status
+az network vpn-connection show --name to-east --resource-group Hub --query "{status: connectionStatus}"
+# Create Azure Firewall subnet and firewall
+<pre lang="...">
+az network vnet subnet create --address-prefix 10.0.100.0/24 --name AzureFirewallSubnet --resource-group Hub --vnet-name Hub
 </pre>
 
 # Create 
