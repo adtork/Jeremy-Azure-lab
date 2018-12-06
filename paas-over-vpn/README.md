@@ -201,9 +201,6 @@ az network vnet subnet update --virtual-network-name Hub --subnet-name GatewaySu
 { "category": "AzureFirewallNetworkRule", "time": "2018-12-05T20:34:22.4850250Z", "resourceId": "/SUBSCRIPTIONS/xxxx/RESOURCEGROUPS/HUB/PROVIDERS/MICROSOFT.NETWORK/AZUREFIREWALLS/FW", "operationName": "AzureFirewallNetworkRuleLog", "properties": {"msg":"TCP request from 10.100.10.4:50072 to 52.241.88.84:443. Action: Allow"}}
 
 
-In case you are wondering what the 10.4.0.254/32 route is, that is the IP address that the gateways are using to establish the BGP adjacencies. Kind of a loopback interface in a router, if you will.
-
-
 # Conclusion
 
 
