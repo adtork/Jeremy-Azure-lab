@@ -101,7 +101,7 @@ az vm open-port --port 3389 --resource-group East --name EastVM
 </pre>
 
 **Create a storage account with anonymous read access in the West region.**
--Upload basic test file to test with. Steps omitted.<br/>
+-Upload basic text file to test with. Steps omitted.<br/>
 -Document Blob URL ex:https://paasvpn.blob.core.windows.net/paasvpn/testjw.txt.<br/>
 
 -nslookup paasvpn.blob.core.windows.net and document the IP.<br/>
