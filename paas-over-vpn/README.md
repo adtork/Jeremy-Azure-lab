@@ -88,7 +88,10 @@ az network vpn-connection create --name to-west --resource-group East --vnet-gat
 </pre>
 
 # Validate VPN connection status
+<pre lang="...">
 az network vpn-connection show --name to-east --resource-group Hub --query "{status: connectionStatus}"
+</pre>
+
 # Create Azure Firewall subnet and firewall
 <pre lang="...">
 az network vnet subnet create --address-prefix 10.0.100.0/24 --name AzureFirewallSubnet --resource-group Hub --vnet-name Hub
