@@ -97,8 +97,11 @@ az network vpn-connection show --name to-east --resource-group Hub --query "{sta
 az network vnet subnet create --address-prefix 10.0.100.0/24 --name AzureFirewallSubnet --resource-group Hub --vnet-name Hub
 </pre>
 
-**Create Firewall using the portal**
+**Create Azure Firewall using the portal**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/fw1.png)
+
+**Create Network Rule. Obviusly be more granular if needed.**
+(https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/fw2.png)
 
 
 
