@@ -101,6 +101,28 @@ az network local-gateway create --gateway-ip-address "insert east VPN GW IP" --n
 az network local-gateway create --gateway-ip-address "insert west VPN GW IP"  --name to-west --resource-group East --local-address-prefixes 10.0.0.0/16 --asn 65001 --bgp-peering-address 10.0.0.254
 </pre>
 
+# Create connections
+<pre lang="...">
+az network vpn-connection create --name to-east --resource-group Hub --vnet-gateway1 West-VNG -l westus --shared-key Msft123Msft123 --local-gateway2 to-east 
+az network vpn-connection create --name to-west --resource-group East --vnet-gateway1 East-VNG -l eastus --shared-key Msft123Msft123 --local-gateway2 to-west
+</pre>
+
+# Validate connectivity is successful
+<pre lang="...">
+az network vpn-connection show --name to-east --resource-group Hub --query "{status: connectionStatus}"
+</pre>
+
+
+# Create test VM in East (simulating on-prem)
+<pre lang="...">
+az network public-ip create --resource-group East --name EastVMPublicIP
+az network nsg create --resource-group East --name myNetworkSecurityGroup
+az network nic create --resource-group East --name myNic --vnet-name East --subnet VM --network-security-group myNetworkSecurityGroup --public-ip-address EastVMPublicIP
+az vm create --resource-group East --name EastVM --location eastus --nics myNic --image win2016datacenter --admin-username azureuser --admin-password Msft123Msft123
+az vm open-port --port 3389 --resource-group East --name EastVM
+</pre>
+
+
 # We can verify what the route tables look like now, and how it has been programmed in one of the NICs associated to the subnet:
 
 <pre lang="...">
