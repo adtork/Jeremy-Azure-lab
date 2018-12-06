@@ -69,26 +69,19 @@ az network vnet subnet create --address-prefix 10.100.0.0/24 --name GatewaySubne
 </pre>
 
 **Build Public IPs for VPN**
+<pre lang="...">
 az network public-ip create --name West-VNGpubip --resource-group Hub --allocation-method Dynamic
 az network public-ip create --name East-VNGpubip --resource-group East --allocation-method Dynamic
+</pre>
 
 **Build Azure VPN Gateway. My lab uses BGP and sets ASN in this section.**
+<pre lang="...">
 az network vnet-gateway create --name West-VNG --public-ip-address West-VNGpubip --resource-group Hub --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait --asn 65001
 az network vnet-gateway create --name East-VNG --public-ip-address East-VNGpubip --resource-group East --vnet East --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait --asn 65002
-     
-
-
-<pre lang="...">
-<b>ssh lab-user@1.2.3.4</b>
-The authenticity of host '1.2.3.4 (1.2.3.4)' can't be established.
-ECDSA key fingerprint is SHA256:FghxuVL+BuKux27Homrsm3nYjb7o/gE/SfFoiRYl5Y4.
-Are you sure you want to continue connecting (yes/no)? yes
-Warning: Permanently added '1.2.3.4' (ECDSA) to the list of known hosts.
-lab-user@1.2.3.4's password:
-Welcome to Ubuntu 16.04.4 LTS (GNU/Linux 4.13.0-1018-azure x86_64)
-... ouput omitted...
-lab-user@myVnet1-vm2:~$
 </pre>
+
+# Gets the coffee....# 
+
 
 
 **Step 12.** We can verify what the route tables look like now, and how it has been programmed in one of the NICs associated to the subnet:
