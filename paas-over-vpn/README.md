@@ -2,7 +2,7 @@
 
 **Objectives and initial setup 
 
-This lab guide illustrates how to deploy a basic environment in Azure that allows you to route traffic destin for PAAS resources over VPN and then traversing an Azure Firewall. The lab takes a building block approach using the portal and Azure CLI instead of provisioning the entire topology with Powershell or other automation tools. The VPN connection is between Azure region East and West with the East region simulating an on-prem connection. Azure firewall is used between the VNET and PAAS for simplicity purposes. 3rd party NVAs could be used as well. The labs focuses on VPN and VNET networking and not any PAAS/SAAS related security controls.
+This lab guide illustrates how to deploy a basic environment in Azure that allows you to route traffic destin for PAAS resources over VPN and then traversing an Azure Firewall. The lab takes a building block approach using the portal and Azure CLI instead of provisioning the entire topology with Powershell or other automation tools. The VPN connection is between Azure region East and West with the East region simulating an on-prem connection. Azure firewall is used between the VNET and PAAS for simplicity purposes. 3rd party NVAs could be used as well. The labs focuses on VPN and VNET networking and not any PAAS/SAAS related security controls. Azure public prefixes can change which is outside the scope of this lab.
 
 Assumptions:
 -	A valid Azure subscription account. If you don’t have one, you can create your free azure account (https://azure.microsoft.com/en-us/free/) today.
@@ -53,15 +53,6 @@ az network vnet-gateway create --name West-VNG --public-ip-address West-VNGpubip
 az network vnet-gateway create --name East-VNG --public-ip-address East-VNGpubip --resource-group East --vnet East --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait --asn 65002
 </pre>
 
-**While waiting, create a storage account with anonymous read access in the West region. **
-Upload basic test file to test with. Steps omitted.
-Document Blob URL
-https://paasvpn.blob.core.windows.net/paasvpn/test jw.txt
-nslookup paasvpn.blob.core.windows.net
-Document the IP. Go to http://iprange.omartin2010.com/ and select prefix search tool. Paste in the IP of the Blob to determine the Azure region and prefix.
-EX: 
-13.88.144.240 resolves to ...
-13.88.144.240/32 is part of 13.88.128.0/18 in region uswest
 
 **After the gateways have been created, document the public IP address for both East and West VPN Gateways. Value will be null until it has been successfully provisioned.**
 <pre lang="...">
@@ -105,9 +96,7 @@ az network vnet subnet create --address-prefix 10.0.100.0/24 --name AzureFirewal
 **Create Network Rule. Obviously be more granular if needed.**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/fw2.png)
 
-
-
-**Create test VM in East (simulating on-prem)**
+**Create test VM in East (simulating on-prem) and open RDP access**
 <pre lang="...">
 az network public-ip create --resource-group East --name EastVMPublicIP
 az network nsg create --resource-group East --name myNetworkSecurityGroup
@@ -116,37 +105,28 @@ az vm create --resource-group East --name EastVM --location eastus --nics myNic 
 az vm open-port --port 3389 --resource-group East --name EastVM
 </pre>
 
+**Create a storage account with anonymous read access in the West region.**
+Upload basic test file to test with. Steps omitted.
+Document Blob URL ex:
+https://paasvpn.blob.core.windows.net/paasvpn/testjw.txt
 
-# We can verify what the route tables look like now, and how it has been programmed in one of the NICs associated to the subnet:
+nslookup paasvpn.blob.core.windows.net and document the IP.
+Go to http://iprange.omartin2010.com/ and select prefix search tool. Paste in the IP of the Blob to determine the Azure region and prefix.
+EX: 
+52.239.229.100 resolves to ...
+52.239.229.100/32 is part of 52.239.228.0/23 in region uswest
+*Document the public prefix. Ex:52.239.228.0/23
+
+**Update East Local Network Gateway to attract the PAAS prefix over VPN. This specific to making this work over Azure to Azure VPN Gateways**
+az network local-gateway update --local-address-prefixes 52.239.228.0/23 --name to-west --resource-group East
+
+**Verify VM route table for the East VM NIC**
+az network nic show-effective-route-table --resource-group East --network-interface-name myNic
 
 <pre lang="...">
-<b>az network route-table route list --route-table-name vnet1-subnet1 -o table</b>
-AddressPrefix    Name     NextHopIpAddress    NextHopType       ProvisioningState
----------------  -------  ------------------  ----------------  -------------------
-10.2.0.0/16      vnet2    10.4.2.101          VirtualAppliance  Succeeded
-</pre>
-
-<pre lang="...">
-<b>az network nic show-effective-route-table -n myVnet1-vm1-nic</b>
-<i>...Output omitted...</i>
-    {
-      "addressPrefix": [
-        "10.2.0.0/16"
-      ],
-      "name": "vnet2",
-      "nextHopIpAddress": [
-        "10.4.2.101"
-      ],
-      "nextHopType": "VirtualAppliance",
-      "source": "User",
-      "state": "Active"
-    }
-<i>...Output omitted...</i>
-</pre>
+<b>az network nic show-effective-route-table --resource-group East --network-interface-name myNic | jq -r '.value[] | "\(.addressPrefix)\t\(.nextHopIpAddress)\t\(.nextHopType)"'</b>
 
 
-
-## Azure Firewall
 
 
 
@@ -157,12 +137,6 @@ AddressPrefix    Name     NextHopIpAddress    NextHopType       ProvisioningStat
 <b>az network nic show-effective-route-table -n myVnet5-vm1-nic | jq -r '.value[] | "\(.addressPrefix)\t\(.nextHopIpAddress)\t\(.nextHopType)"'</b>
 ["10.5.0.0/16"]         []                      VnetLocal
 ["10.4.0.254/32"]       ["13.94.129.120"]       VirtualNetworkGateway
-["10.4.0.0/16"]         ["13.94.129.120"]       VirtualNetworkGateway
-["0.0.0.0/0"]           []                      Internet
-["10.0.0.0/8"]          []                      None
-["100.64.0.0/10"]       []                      None
-["172.16.0.0/12"]       []                      None
-["192.168.0.0/16"]      []                      None
 </pre>
 
 az network route-table create --name gwsubnet-rt --resource-group Hub 
