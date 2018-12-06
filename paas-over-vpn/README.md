@@ -1,14 +1,12 @@
 # Azure Networking Lab- accessing PAAS over VPN through Azure Firewall (DRAFT)
 
-This lab guide illustrates how to deploy a basic environment in Azure that allows you to route traffic destin for PAAS resources over VPN and then traversing an Azure Firewall. The lab takes a building block approach using the portal and Azure CLI instead of provisioning the entire topology with Powershell or other automation tools. The VPN connection is between Azure region East and West with the East region simulating an on-prem connection. Azure firewall is used between the VNET and PAAS for simplicity purposes. 3rd party NVAs could be used as well. The labs focuses on VPN and VNET networking and not any PAAS/SAAS related security controls. Azure public prefixes can change which is outside the scope of this lab.
+This lab guide illustrates how to build a basic Azure environment for routing PAAS over a site to site VPN. After traffic is routed to Azure over VPN, traffic destin for a test BLob will be routed through the Azure Firewall. The lab takes a building block approach using the portal and Azure CLI instead of provisioning the entire topology with Powershell or other automation tools. Azure Firewall is used between the VNET and PAAS for simplicity purposes although 3rd party NVAs are an option. The lab focuses on VPN and VNET networking and not any PAAS/SAAS related security controls. Azure public prefixes can change which is outside the scope of this lab.
 
 Assumptions:
 -	A valid Azure subscription account. If you don’t have one, you can create your free azure account (https://azure.microsoft.com/en-us/free/) today.
--Azure CLI Options:
-      -	If you are using Windows 10, you can install Bash shell on Ubuntu on Windows (http://www.windowscentral.com/how-install-bash-shell-command-line-windows-10).
-      -	Azure CLI 2.0, follow these instructions to install: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli 
-      - https://shell.azure.com/
- - Necessary authorization with Azure
+
+-     Azure CLI 2.0, follow these instructions to install: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli 
+
 
 
 The labs cover:
