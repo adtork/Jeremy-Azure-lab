@@ -45,7 +45,8 @@ The labs cover:
 | VM Subnet | 10.100.10.0/24 |
 | GatewaySubnet | 10.1000.0.0/24 |
 
-
+ ## Base Topology
+ 
 ![alt text](https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/paasvpn.png)
  
  ## Lab 0: Initialize Azure Environment <a name="lab0"></a>
