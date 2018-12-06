@@ -193,6 +193,14 @@ vnet5Gw        65505
 ["192.168.0.0/16"]      []                      None
 </pre>
 
+az network route-table create --name gwsubnet-rt --resource-group Hub 
+az network route-table route create --route-table-name gwsubnet-rt --resource-group Hub --route-name to-paas --address-prefix 52.241.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.0.100.4
+az network vnet subnet update --virtual-network-name Hub --subnet-name GatewaySubnet  --resource-group Hub --route-table gwsubnet-rt
+####################################
+
+{ "category": "AzureFirewallNetworkRule", "time": "2018-12-05T20:34:22.4850250Z", "resourceId": "/SUBSCRIPTIONS/xxxx/RESOURCEGROUPS/HUB/PROVIDERS/MICROSOFT.NETWORK/AZUREFIREWALLS/FW", "operationName": "AzureFirewallNetworkRuleLog", "properties": {"msg":"TCP request from 10.100.10.4:50072 to 52.241.88.84:443. Action: Allow"}}
+
+
 In case you are wondering what the 10.4.0.254/32 route is, that is the IP address that the gateways are using to establish the BGP adjacencies. Kind of a loopback interface in a router, if you will.
 
 
