@@ -22,31 +22,6 @@ The labs cover:
 -	Manipulate routing to send traffic destin to PAAS through the Azure Firewall
 -	Validation and further testing
 
-**Azure Region _West_ Values
-| **Description for Region** | **Values used in this lab guide** |
-| --- | --- |
-| Username for provisioned VMs | azureuser |
-| Password for provisioned VMs | Msft123Msft123 |
-| Azure region | westus |
-| Vnet Name | Hub |
-| Resource Group | Hub |
-| VNET Address Space | 10.0.0.0/16 |
-| HubVM Subnet | 10.0.10.0/24 |
-| GatewaySubnet | 10.0.0.0/24 |
-| AzureFirewallSubnet | 10.0.100.0/24 |
-
-**Azure Region _East_ Values
-| **Description for Region** | **Values used in this lab guide** |
-| --- | --- |
-| Username for provisioned VMs | azureuser |
-| Password for provisioned VMs | Msft123Msft123 |
-| Azure region | eastus |
-| Vnet Name | East |
-| Resource Group | East |
-| VNET Address Space | 10.100.0.0/16 |
-| VM Subnet | 10.100.10.0/24 |
-| GatewaySubnet | 10.1000.0.0/24 |
-
 ** Base Topology
  
 ![alt text](https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/paasvpn.png)
