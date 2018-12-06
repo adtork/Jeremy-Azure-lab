@@ -106,16 +106,16 @@ az vm open-port --port 3389 --resource-group East --name EastVM
 </pre>
 
 **Create a storage account with anonymous read access in the West region.**
-<b>Upload basic test file to test with. Steps omitted.<b>
-<b>Document Blob URL ex:
-https://paasvpn.blob.core.windows.net/paasvpn/testjw.txt<b>
+Upload basic test file to test with. Steps omitted.<br/>
+Document Blob URL ex:https://paasvpn.blob.core.windows.net/paasvpn/testjw.txt.<br/>
 
-<b>nslookup paasvpn.blob.core.windows.net and document the IP.<b>
-<b>Go to http://iprange.omartin2010.com/ and select prefix search tool. Paste in the IP of the Blob to determine the Azure region and prefix.<b>
-<b>EX:<b>
-<b>52.239.229.100 resolves to ...
+nslookup paasvpn.blob.core.windows.net and document the IP.<br/>
+Go to http://iprange.omartin2010.com/ and select prefix search tool.<br/>
+Paste in the IP of the Blob to determine the Azure region and prefix.<br/>
+EX:
+52.239.229.100 resolves to ...
 52.239.229.100/32 is part of 52.239.228.0/23 in region uswest
-*Document the public prefix. Ex:52.239.228.0/23<b>
+*Document the public prefix. Ex:52.239.228.0/23
 
 **Update East Local Network Gateway to attract the PAAS prefix over VPN. This specific to making this work over Azure to Azure VPN Gateways**
 az network local-gateway update --local-address-prefixes 52.239.228.0/23 --name to-west --resource-group East
