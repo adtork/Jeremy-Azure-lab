@@ -53,7 +53,7 @@ az network vnet-gateway create --name West-VNG --public-ip-address West-VNGpubip
 az network vnet-gateway create --name East-VNG --public-ip-address East-VNGpubip --resource-group East --vnet East --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait --asn 65002
 </pre>
 
-# While waiting, create a storage account with anonymous read access in the West region. 
+**While waiting, create a storage account with anonymous read access in the West region. **
 Upload basic test file to test with. Steps omitted.
 Document Blob URL
 https://paasvpn.blob.core.windows.net/paasvpn/test jw.txt
@@ -63,44 +63,46 @@ EX:
 13.88.144.240 resolves to ...
 13.88.144.240/32 is part of 13.88.128.0/18 in region uswest
 
-# After the gateways have been created, document the public IP address for both East and West VPN Gateways. Value will be null until it has been successfully provisioned.
+**After the gateways have been created, document the public IP address for both East and West VPN Gateways. Value will be null until it has been successfully provisioned.**
 <pre lang="...">
 az network public-ip show -g Hub -n West-VNGpubip --query "{address: ipAddress}"
 az network public-ip show -g East -n East-VNGpubip --query "{address: ipAddress}"
 </pre>
 
-# Document BGP peer IP and ASN
+**Document BGP peer IP and ASN**
 <pre lang="...">
 az network vnet-gateway show -g Hub --name West-VNG
 az network vnet-gateway show -g East --name East-VNG
 </pre>
 
-# Create Local Network Gateway
+**Create Local Network Gateway**
 <pre lang="...">
 az network local-gateway create --gateway-ip-address "insert east VPN GW IP" --name to-east --resource-group Hub --local-address-prefixes 10.100.0.0/16 --asn 65002 --bgp-peering-address 10.100.0.254
 az network local-gateway create --gateway-ip-address "insert west VPN GW IP"  --name to-west --resource-group East --local-address-prefixes 10.0.0.0/16 --asn 65001 --bgp-peering-address 10.0.0.254
 </pre>
 
-# Create VPN connections
+**Create VPN connections**
 <pre lang="...">
 az network vpn-connection create --name to-east --resource-group Hub --vnet-gateway1 West-VNG -l westus --shared-key Msft123Msft123 --local-gateway2 to-east 
 az network vpn-connection create --name to-west --resource-group East --vnet-gateway1 East-VNG -l eastus --shared-key Msft123Msft123 --local-gateway2 to-west 
 </pre>
 
-# Validate VPN connection status
+**Validate VPN connection status**
 <pre lang="...">
 az network vpn-connection show --name to-east --resource-group Hub --query "{status: connectionStatus}"
 </pre>
 
-# Create Azure Firewall subnet, required for Azure Firewall
+**Create Azure Firewall subnet, required for Azure Firewall**
 <pre lang="...">
 az network vnet subnet create --address-prefix 10.0.100.0/24 --name AzureFirewallSubnet --resource-group Hub --vnet-name Hub
 </pre>
 
-# Creat Firewall using the portal
+**Create Firewall using the portal**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/fw1.png)
 
-# Create test VM in East (simulating on-prem)
+
+
+**Create test VM in East (simulating on-prem)**
 <pre lang="...">
 az network public-ip create --resource-group East --name EastVMPublicIP
 az network nsg create --resource-group East --name myNetworkSecurityGroup
