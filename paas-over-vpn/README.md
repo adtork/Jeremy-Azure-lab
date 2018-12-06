@@ -132,7 +132,7 @@ Although the traffic goes over the tunnel, the traffic hits the Azure VPN Gatewa
 **Create a route table and routes for the Gateway Subnet with correct association**
 <pre lang="...">
 az network route-table create --name gwsubnet-rt --resource-group Hub 
-az network route-table route create --route-table-name gwsubnet-rt --resource-group Hub --name to-paas --address-prefix 52.241.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.0.100.4
+az network route-table route create --route-table-name gwsubnet-rt --resource-group Hub --name to-paas --address-prefix 52.239.228.0/23 --next-hop-type VirtualAppliance --next-hop-ip-address 10.0.100.4
 az network vnet subnet update --virtual-network-name Hub --subnet-name GatewaySubnet --resource-group Hub --route-table gwsubnet-rt
 </pre>
 ####################################
