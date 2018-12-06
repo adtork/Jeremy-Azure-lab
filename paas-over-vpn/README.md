@@ -61,74 +61,15 @@ az network vnet create --resource-group Hub --name Hub --location westus --addre
 az network vnet subnet create --address-prefix 10.0.0.0/24 --name GatewaySubnet --resource-group Hub --vnet-name Hub
 </pre>
 
-
+**Build Resource Groups, VNETs and Subnets in East. Azure CLI on Windows 10 is used through the lab.**
 <pre lang="...">
-<b>az group deployment list -o table</b>
-Name               Timestamp                         State
------------------  --------------------------------  ---------
-Name               Timestamp                         State
------------------  --------------------------------  ---------
-myVnet5gwPip       2017-06-29T19:15:28.227920+00:00  Succeeded
-myVnet4gwPip       2017-06-29T19:15:31.617920+00:00  Succeeded
-myVnet5-vm1-nic    2017-06-29T19:15:38.468886+00:00  Succeeded
-myVnet1VpnGw       2017-06-29T19:15:38.565418+00:00  Succeeded
-myVnet5VpnGw       2017-06-29T19:15:39.056567+00:00  Succeeded
-myVnet3-vm1-nic    2017-06-29T19:15:39.269138+00:00  Succeeded
-myVnet4-vm1-nic    2017-06-29T19:15:39.509990+00:00  Succeeded
-myVnet2VpnGw       2017-06-29T19:15:40.576390+00:00  Succeeded
-myVnet2-vm1-nic    2017-06-29T19:15:41.003741+00:00  Succeeded
-myVnet1-vm1-nic    2017-06-29T19:15:41.143406+00:00  Succeeded
-myVnet4VpnGw       2017-06-29T19:15:42.608290+00:00  Succeeded
-myVnet3VpnGw       2017-06-29T19:15:44.467581+00:00  Succeeded
-myVnet3-vm         2017-06-29T19:20:21.195625+00:00  Succeeded
-myVnet4-vm         2017-06-29T19:20:21.856738+00:00  Succeeded
-myVnet5-vm         2017-06-29T19:20:38.720152+00:00  Succeeded
-myVnet-template-3  2017-06-29T19:20:42.269630+00:00  Succeeded
-myVnet-template-4  2017-06-29T19:20:42.581238+00:00  Succeeded
-myVnet1-vm         2017-06-29T19:20:42.663423+00:00  Succeeded
-myVnet-template-5  2017-06-29T19:20:55.790429+00:00  Succeeded
-myVnet-template-1  2017-06-29T19:20:59.148149+00:00  Succeeded
-myVnet2-vm         2017-06-29T19:21:11.406220+00:00  Succeeded
-myVnet-template-2  2017-06-29T19:21:29.787517+00:00  Succeeded
-vnets              2017-06-29T19:21:32.490251+00:00  Succeeded
-vnet5Gw            2017-06-29T19:21:52.630513+00:00  Succeeded
-vnet4Gw            2017-06-29T19:21:53.090784+00:00  Succeeded
-linuxnva-1-nic0    2017-06-29T19:21:56.417810+00:00  Succeeded
-UDRs               2017-06-29T19:21:57.487004+00:00  Succeeded
-linuxnva-2-nic0    2017-06-29T19:21:58.322935+00:00  Succeeded
-myVnet1-vm2-nic    2017-06-29T19:21:58.354766+00:00  Succeeded
-linuxnva-2-nic1    2017-06-29T19:21:59.328610+00:00  Succeeded
-linuxnva-1-nic1    2017-06-29T19:21:59.490821+00:00  Succeeded
-nva-slb-int        2017-06-29T19:22:03.146781+00:00  Succeeded
-hub2spoke2         2017-06-29T19:22:09.140223+00:00  Succeeded
-hub2spoke3         2017-06-29T19:22:10.229240+00:00  Succeeded
-hub2spoke1         2017-06-29T19:22:12.980700+00:00  Succeeded
-AzureLB            2017-06-29T19:22:15.587843+00:00  Succeeded
-nva-slb-ext        2017-06-29T19:22:18.507575+00:00  Succeeded
-vnet1subnet1vm2    2017-06-29T19:26:53.109076+00:00  Succeeded
-nva                2017-06-29T19:29:24.679832+00:00  Succeeded
-netLabDeployment   2017-06-29T19:29:26.491546+00:00  Succeeded
+az group create --name East --location eastus
+az network vnet create --resource-group East --name East --location eastus --address-prefixes 10.100.0.0/16 --subnet-name VM --subnet-prefix 10.100.10.0/24
+az network vnet subnet create --address-prefix 10.100.0.0/24 --name GatewaySubnet --resource-group East --vnet-name East
 </pre>
 
-**Note:** You might see other resource names when using your template, since newer lab versions might have different object names
 
-## Lab 1: Explore the Azure environment <a name="lab1"></a> 
 
-**Step 1.** You don’t need to wait until all objects in the template have been successfully deployed (although it would be good, to make sure that everything is there). In your second terminal window, start exploring the objects created by the ARM template: vnets, subnets, VMs, interfaces, public IP addresses, etc. Save the output of these commands (copying and pasting to a text file for example).
-
-You can see some diagrams about the deployed environment here, so that you can interpret better the command outputs.
-
-Note that the output of these commands might be different, if the template deployment from lab 0 is not completed yet.
-
-![Architecture Image](figure01.png "Overall vnet diagram")
- 
-**Figure 1.** Overall vnet diagram
-
-![Architecture Image](figure02.png "Subnet design")
-
-**Figure 2.** Subnet design of every vnet
-
-<pre lang="...">
 <b>az network vnet list -o table</b>
 Location    Name     ProvisioningState    ResourceGroup    ResourceGuid
 ----------  -------  -------------------  ---------------  -------------
