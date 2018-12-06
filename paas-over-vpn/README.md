@@ -49,7 +49,7 @@ az network public-ip create --name West-VNGpubip --resource-group Hub --allocati
 az network public-ip create --name East-VNGpubip --resource-group East --allocation-method Dynamic
 </pre>
 
-**Build Azure VPN Gateway. My lab uses BGP and sets ASN in this section. Deployment will take some time **
+**Build Azure VPN Gateway. My lab uses BGP and sets ASN in this section. Deployment will take some time**
 <pre lang="...">
 az network vnet-gateway create --name West-VNG --public-ip-address West-VNGpubip --resource-group Hub --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait --asn 65001
 az network vnet-gateway create --name East-VNG --public-ip-address East-VNGpubip --resource-group East --vnet East --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait --asn 65002
