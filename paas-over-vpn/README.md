@@ -51,12 +51,8 @@ The labs cover:
  
 ![alt text](https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/paasvpn.png)
  
- ## Base VNET Builds
- **Log into your system. Azure CLI on Windows 10 is used through the lab.**
- <pre lang="...">
-<b>az login</b>
 
-**Build Resource Groups, VNETs and Subnets in West**
+**Build Resource Groups, VNETs and Subnets in West. Azure CLI on Windows 10 is used through the lab.**
 <pre lang="...">
 az group create --name Hub --location westus
 az group create --name Spoke1 --location westus
