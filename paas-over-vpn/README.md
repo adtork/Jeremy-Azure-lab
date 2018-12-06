@@ -80,7 +80,9 @@ az network vnet-gateway create --name West-VNG --public-ip-address West-VNGpubip
 az network vnet-gateway create --name East-VNG --public-ip-address East-VNGpubip --resource-group East --vnet East --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait --asn 65002
 </pre>
 
-# Gets the coffee....# 
+# Gets the coffee while gateways deploy....
+![alt text](https://content.artofmanliness.com/uploads/2009/08/CoffeeArmy.jpg)
+
 
 
 
