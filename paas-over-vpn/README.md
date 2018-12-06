@@ -1,7 +1,5 @@
 # Azure Networking Lab- accessing PAAS over VPN through Azure Firewall (DRAFT)
 
-**Objectives and initial setup 
-
 This lab guide illustrates how to deploy a basic environment in Azure that allows you to route traffic destin for PAAS resources over VPN and then traversing an Azure Firewall. The lab takes a building block approach using the portal and Azure CLI instead of provisioning the entire topology with Powershell or other automation tools. The VPN connection is between Azure region East and West with the East region simulating an on-prem connection. Azure firewall is used between the VNET and PAAS for simplicity purposes. 3rd party NVAs could be used as well. The labs focuses on VPN and VNET networking and not any PAAS/SAAS related security controls. Azure public prefixes can change which is outside the scope of this lab.
 
 Assumptions:
