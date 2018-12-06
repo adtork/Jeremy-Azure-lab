@@ -123,7 +123,7 @@ az network nic show-effective-route-table --resource-group East --network-interf
 </pre>
 
 As you can see, traffic destin for the PAAS public prefix will route to the Azure VPN gateway and across the tunnel to West.<br/>
-![alt text](https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/lng.png)
+![alt text](https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/lng.png)<br/>
 Although the traffic goes over the tunnel, the traffic hits the Azure VPN Gateway in West and is dropped. The Gateway Subnet in West needs to route traffic to the PAAS prefix over to the Azure Firewall. The Azure firewall has access to the Microsoft backbone where PAAS resources reside.
 
 **Create a route table and routes for the Gateway Subnet with correct association**
