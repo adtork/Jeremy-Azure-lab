@@ -46,7 +46,7 @@ The labs cover:
 | GatewaySubnet | 10.1000.0.0/24 |
 
  # Base Topology
- 
+ ![Cloud Shell Image](az_shell_tmux.PNG "Cloud Shell with 2 tmux panels")
  
  ## Lab 0: Initialize Azure Environment <a name="lab0"></a>
 
