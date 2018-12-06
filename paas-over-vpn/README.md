@@ -71,8 +71,10 @@ az network public-ip show -g East -n East-VNGpubip --query "{address: ipAddress}
 
 **Document BGP peer IP and ASN**
 <pre lang="...">
-az network vnet-gateway show -g Hub --name West-VNG
-az network vnet-gateway show -g East --name East-VNG
+az network vnet-gateway list --query [].[name,bgpSettings.asn,bgpSettings.bgpPeeringAddress] -o table --resource-group Hub
+</pre>
+<pre lang="...">
+az network vnet-gateway list --query [].[name,bgpSettings.asn,bgpSettings.bgpPeeringAddress] -o table --resource-group East
 </pre>
 
 **Create Local Network Gateway**
@@ -146,13 +148,7 @@ AddressPrefix    Name     NextHopIpAddress    NextHopType       ProvisioningStat
 
 ## Azure Firewall
 
-<pre lang="...">
-<b>az network vnet-gateway list --query [].[name,bgpSettings.asn] -o table</b>
-Column1      Column2
----------  ---------
-vnet4Gw        65504
-vnet5Gw        65505
-</pre>
+
 
 
 
