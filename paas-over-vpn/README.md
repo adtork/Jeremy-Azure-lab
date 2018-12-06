@@ -4,11 +4,13 @@
 
 This lab guide illustrates how to deploy a basic environment in Azure that allows you to route traffic destin for PAAS resources over VPN and then traversing an Azure Firewall. The lab takes a building block approach using the portal and Azure CLI instead of provisioning the entire topology with Powershell or other automation tools. The VPN connection is between Azure region East and West with the East region simulating an on-prem connection. Azure firewall is used between the VNET and PAAS for simplicity purposes. 3rd party NVAs could be used as well.
 
-Before starting with this account, make sure to fulfill all the prerequisites:
+Assumptions:
 -	A valid Azure subscription account. If you don’t have one, you can create your free azure account (https://azure.microsoft.com/en-us/free/) today.
--	If you are using Windows 10, you can install Bash shell on Ubuntu on Windows (http://www.windowscentral.com/how-install-bash-shell-command-line-windows-10).
--	Azure CLI 2.0, follow these instructions to install: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli 
-- Necessary authorization with Azure
+-Azure CLI Options:
+      -	If you are using Windows 10, you can install Bash shell on Ubuntu on Windows (http://www.windowscentral.com/how-install-bash-shell-command-line-windows-10).
+      -	Azure CLI 2.0, follow these instructions to install: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli 
+      - https://shell.azure.com/
+ - Necessary authorization with Azure
 
 
 The labs cover:
@@ -49,64 +51,20 @@ The labs cover:
  
 ![alt text](https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/paasvpn.png)
  
- ## Lab 0: Initialize Azure Environment <a name="lab0"></a>
-
-**Step 1.** Log into your system.
-
-**Step 2.** If you don’t have a valid Azure subscription, you can create a free Azure subscription in https://azure.microsoft.com/en-us/free. If you have received a voucher code for Azure, go to https://www.microsoftazurepass.com/Home/HowTo for instructions on how to redeem it.  
-
-**Step 3.** Open a terminal window. Here you have different options:
-
-* If you are using the Azure CLI on Windows, you can press the Windows key in your keyboard, then type `cmd` and hit the Enter key. You might want to maximize the command Window so that it fills your desktop.
-
-* If you are using the Azure CLI on the Linux subsystem for Windows, open your Linux console
-
-* If you are using Linux or Mac, you probably do not need me to tell me how to open a Terminal window
-
-* Alternatively you can use the Azure shell, no matter on which OS you are working. Open the URL https://shell.azure.com on a Web browser, and after authenticating with your Azure credentials you will get to an Azure Cloud Shell. In this lab we will use the Azure CLI (and not Powershell), so make sure you select the Bash shell. You can optionally use tmux, as this figure shows:  
-
-**Figure.** Cloud shell with two tmux panels
-
-![Cloud Shell Image](az_shell_tmux.PNG "Cloud Shell with 2 tmux panels")
-
-
-**Step 4.** Create a new resource group, where we will place all our objects (so that you can easily delete everything after you are done). The last command also sets the default resource group to the newly created one, so that you do not need to download it.
-
-You can copy the following command from this guide with Ctrl-C, and paste it into your terminal window using the Command menu (lighting bolt), and select Paste | Paste Clipboard Text
-
-<pre lang="...">
+ ## Base VNET Builds
+ **Log into your system. Azure CLI on Windows 10 is used through the lab.**
+ <pre lang="...">
 <b>az login</b>
-To sign in, use a web browser to open the page https://aka.ms/devicelogin and enter the code XXXXXXXXX to authenticate.
-</pre>
 
-The `az login` command will provide you a code, that you need to introduce (over copy and paste) in the web page http://aka.ms/devicelogin. Open an Internet browser, go to this URL, and after introducing the code, you will need to authenticate with credentials that are associated to a valid Azure subscription. After a successful login, you can enter the following two commands back in the terminal window in order to create a new resource group, and to set the default resource group accordingly.
-
+**Build Resource Groups, VNETs and Subnets in West**
 <pre lang="...">
-az group create --name vnetTest --location westeurope
+az group create --name Hub --location westus
+az group create --name Spoke1 --location westus
+az group create --name Spoke2 --location westus
+az network vnet create --resource-group Hub --name Hub --location westus --address-prefixes 10.0.0.0/16 --subnet-name HubVM --subnet-prefix 10.0.10.0/24
+az network vnet subnet create --address-prefix 10.0.0.0/24 --name GatewaySubnet --resource-group Hub --vnet-name Hub
 </pre>
 
-You might get an error message in the previous message if you have multiple subscriptions. If that is the case, you can select the subscription where you want to deploy the lab with the command `az account set --subscription <your subscription GUID>`. If you did not get any error message, you can safely ignore this paragraph.
-
-<pre lang="...">
-az configure --defaults group=vnetTest
-</pre>
-
-**Step 5.** Deploy the master template that will create our initial network configuration. The syntax here depends on the operating system you are using. For example, for **Windows** use this command:
-
-<pre lang="...">
-az group deployment create --name netLabDeployment --template-uri https://raw.githubusercontent.com/erjosito/azure-networking-lab/master/NetworkingLab_master.json --resource-group vnetTest --parameters "{\"adminPassword\":{\"value\":\"Microsoft123!\"}, \"location2ary\":{\"value\": \"westus2\"}, \"location2aryVnets\":{\"value\": [3]}}" 
-</pre>
-
-Or alternatively use the following command if you are using a **Linux** operative system:
-
-<pre lang="...">
-az group deployment create --name netLabDeployment --template-uri https://raw.githubusercontent.com/erjosito/azure-networking-lab/master/NetworkingLab_master.json --resource-group vnetTest --parameters '{"adminPassword":{"value":"Microsoft123!"}, "location2ary":{"value": "westus2"}, "location2aryVnets":{"value": [3]}}'
-</pre>
-
-**Note**: the previous command will deploy 5 vnets, one of them (vnet 3) in an alternate location. The goal of deploying this single vnet in a different location is to include **global vnet peering** in this lab. Should you not have access to locations where global vnet peering is available (such as West Europe and West US 2 used in the examples), you can just deploy the previous templates without the parameters `location2ary` and `location2aryVnets`, which will deploy or vnets into the same location as the resource group.
-
-
-**Step 6.** Since the previous command will take a while (around 15 minutes), open another command window (see Step 3 for detailed instructions) to monitor the deployment progress. Note you might have to login in this second window too:
 
 <pre lang="...">
 <b>az group deployment list -o table</b>
