@@ -124,21 +124,8 @@ az network local-gateway update --local-address-prefixes 52.239.228.0/23 --name 
 <pre lang="...">
 az network nic show-effective-route-table --resource-group East --network-interface-name myNic
 </pre>
-<pre lang="...">
-<b>az network nic show-effective-route-table --resource-group East --network-interface-name myNic | jq -r '.value[] | "\(.addressPrefix)\t\(.nextHopIpAddress)\t\(.nextHopType)"'</b>
-</pre>
 
-
-
-
-
-
-
-<pre lang="...">
-<b>az network nic show-effective-route-table -n myVnet5-vm1-nic | jq -r '.value[] | "\(.addressPrefix)\t\(.nextHopIpAddress)\t\(.nextHopType)"'</b>
-["10.5.0.0/16"]         []                      VnetLocal
-["10.4.0.254/32"]       ["13.94.129.120"]       VirtualNetworkGateway
-</pre>
+**
 
 az network route-table create --name gwsubnet-rt --resource-group Hub 
 az network route-table route create --route-table-name gwsubnet-rt --resource-group Hub --route-name to-paas --address-prefix 52.241.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.0.100.4
