@@ -133,6 +133,8 @@ az network route-table route create --route-table-name gwsubnet-rt --resource-gr
 az network vnet subnet update --virtual-network-name Hub --subnet-name GatewaySubnet --resource-group Hub --route-table gwsubnet-rt
 </pre>
 
+Traffic is now routing from on-prem over VPN through the Azure Firewall.
+
 **Azure Firewall log showing the connection SIP/DIP/Port and allow
 ![alt text](https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/fwlog.png)
 
