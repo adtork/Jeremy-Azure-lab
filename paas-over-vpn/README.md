@@ -30,8 +30,6 @@ The labs cover:
 **Build Resource Groups, VNETs and Subnets in West. Azure CLI on Windows 10 is used through the lab.**
 <pre lang="...">
 az group create --name Hub --location westus
-az group create --name Spoke1 --location westus
-az group create --name Spoke2 --location westus
 az network vnet create --resource-group Hub --name Hub --location westus --address-prefixes 10.0.0.0/16 --subnet-name HubVM --subnet-prefix 10.0.10.0/24
 az network vnet subnet create --address-prefix 10.0.0.0/24 --name GatewaySubnet --resource-group Hub --vnet-name Hub
 </pre>
