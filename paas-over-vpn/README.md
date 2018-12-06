@@ -80,7 +80,7 @@ az network vnet-gateway create --name West-VNG --public-ip-address West-VNGpubip
 az network vnet-gateway create --name East-VNG --public-ip-address East-VNGpubip --resource-group East --vnet East --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait --asn 65002
 </pre>
 
-# While waiting, create a storage account with anonymous read access. Upload basic test file to test with. Steps omitted.
+# While waiting, create a storage account with anonymous read access in the West region. Upload basic test file to test with. Steps omitted.
 
 # After the gateways have been created, document the public IP address for both East and West VPN Gateways. Value will be null until it has been successfully provisioned.
 <pre lang="...">
