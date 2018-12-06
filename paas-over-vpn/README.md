@@ -98,12 +98,6 @@ az network vnet subnet create --address-prefix 10.0.100.0/24 --name AzureFirewal
 </pre>
 
 
-# Validate connectivity is successful
-<pre lang="...">
-az network vpn-connection show --name to-east --resource-group Hub --query "{status: connectionStatus}"
-</pre>
-
-
 # Create test VM in East (simulating on-prem)
 <pre lang="...">
 az network public-ip create --resource-group East --name EastVMPublicIP
