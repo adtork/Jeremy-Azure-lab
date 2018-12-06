@@ -83,7 +83,17 @@ az network vnet-gateway create --name East-VNG --public-ip-address East-VNGpubip
 # Gets the coffee while gateways deploy....
 ![alt text](https://content.artofmanliness.com/uploads/2009/08/CoffeeArmy.jpg)
 
+# After the gateways have been created, document the public IP address for both East and West VPN Gateways
+<pre lang="...">
+az network public-ip show -g Hub -n West-VNGpubip --query "{address: ipAddress}"
+az network public-ip show -g East -n East-VNGpubip --query "{address: ipAddress}"
+</pre>
 
+# Document BGP peer IP and ASN
+<pre lang="...">
+az network vnet-gateway show -g Hub --name West-VNG
+az network vnet-gateway show -g East --name East-VNG
+</pre>
 
 
 **Step 12.** We can verify what the route tables look like now, and how it has been programmed in one of the NICs associated to the subnet:
