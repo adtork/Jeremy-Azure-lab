@@ -22,7 +22,7 @@ The labs cover:
 -	Manipulate routing to send traffic destin to PAAS through the Azure Firewall
 -	Validation and further testing
 
-** Base Topology
+# Base Topology
  
 ![alt text](https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/paasvpn.png)
  
