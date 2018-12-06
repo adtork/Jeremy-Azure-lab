@@ -100,7 +100,7 @@ az network vnet subnet create --address-prefix 10.0.100.0/24 --name AzureFirewal
 **Create Azure Firewall using the portal**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/fw1.png)
 
-**Create Network Rule. Obviusly be more granular if needed.**
+**Create Network Rule. Obviously be more granular if needed.**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/fw2.png)
 
 
