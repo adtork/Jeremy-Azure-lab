@@ -1,4 +1,4 @@
-# Azure Networking Lab- accessing PAAS over VPN and Expressroute through Azure Firewall (DRAFT)
+# Azure Networking Lab- accessing PAAS over VPN through Azure Firewall (DRAFT)
 
 # Objectives and initial setup <a name="objectives"></a>
 
