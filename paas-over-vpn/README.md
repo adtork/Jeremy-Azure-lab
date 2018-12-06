@@ -116,13 +116,17 @@ EX:<br/>
 *Document the public prefix. Ex:52.239.228.0/23
 
 **Update East Local Network Gateway to attract the PAAS prefix over VPN. This specific to making this work over Azure to Azure VPN Gateways**
+<pre lang="...">
 az network local-gateway update --local-address-prefixes 52.239.228.0/23 --name to-west --resource-group East
+</pre>
 
 **Verify VM route table for the East VM NIC**
 <pre lang="...">
 az network nic show-effective-route-table --resource-group East --network-interface-name myNic
 </pre>
 
+As you can see, traffic destin for the PAAS public prefix will route to the Azure VPN gateway and across the tunnel to West. 
+![alt text] (https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/lng.png)
 **
 
 az network route-table create --name gwsubnet-rt --resource-group Hub 
