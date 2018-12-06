@@ -83,7 +83,7 @@ az network vnet-gateway create --name East-VNG --public-ip-address East-VNGpubip
 # Gets the coffee while gateways deploy....
 ![alt text](https://content.artofmanliness.com/uploads/2009/08/CoffeeArmy.jpg)
 
-# After the gateways have been created, document the public IP address for both East and West VPN Gateways
+# After the gateways have been created, document the public IP address for both East and West VPN Gateways. Value will be null until it has been successfully provisioned.
 <pre lang="...">
 az network public-ip show -g Hub -n West-VNGpubip --query "{address: ipAddress}"
 az network public-ip show -g East -n East-VNGpubip --query "{address: ipAddress}"
