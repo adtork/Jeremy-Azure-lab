@@ -92,10 +92,12 @@ az network vpn-connection create --name to-west --resource-group East --vnet-gat
 az network vpn-connection show --name to-east --resource-group Hub --query "{status: connectionStatus}"
 </pre>
 
-# Create Azure Firewall subnet and firewall
+# Create Azure Firewall subnet, required for Azure Firewall
 <pre lang="...">
 az network vnet subnet create --address-prefix 10.0.100.0/24 --name AzureFirewallSubnet --resource-group Hub --vnet-name Hub
 </pre>
+
+# Creat Firewall using the portal
 ![alt text](https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/fw1.png)
 
 # Create test VM in East (simulating on-prem)
