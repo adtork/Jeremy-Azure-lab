@@ -206,8 +206,6 @@ In case you are wondering what the 10.4.0.254/32 route is, that is the IP addres
 
 # Conclusion
 
-I hope you have had fun running through this lab, and that you learnt something that you did not know before. We ran through multiple Azure networking topics like IPSec VPN, vnet peering, global vnet peering, NSGs, Load Balancing, outbound NAT rules, Hub & Spoke vnet topologies and advanced NVA HA concepts, but we covered as well other non-Azure topics such as basic iptables or advanced probes programming with PHP.
-
 
 
 
