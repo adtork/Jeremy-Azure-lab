@@ -115,7 +115,7 @@ EX:<br/>
 52.239.229.100/32 is part of 52.239.228.0/23 in region uswest<br/>
 *Document the public prefix. Ex:52.239.228.0/23
 
-**Update East Local Network Gateway to attract the PAAS prefix over VPN. This specific to making this work over Azure to Azure VPN Gateways**
+**Update East Local Network Gateway to attract the PAAS prefix over VPN. This is specific to making this work over Azure to Azure VPN Gateways**
 <pre lang="...">
 az network local-gateway update --local-address-prefixes 52.239.228.0/23 --name to-west --resource-group East
 </pre>
