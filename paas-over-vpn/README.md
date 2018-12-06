@@ -135,13 +135,9 @@ az network route-table create --name gwsubnet-rt --resource-group Hub
 az network route-table route create --route-table-name gwsubnet-rt --resource-group Hub --name to-paas --address-prefix 52.239.228.0/23 --next-hop-type VirtualAppliance --next-hop-ip-address 10.0.100.4
 az network vnet subnet update --virtual-network-name Hub --subnet-name GatewaySubnet --resource-group Hub --route-table gwsubnet-rt
 </pre>
-####################################
 
-{ "category": "AzureFirewallNetworkRule", "time": "2018-12-05T20:34:22.4850250Z", "resourceId": "/SUBSCRIPTIONS/xxxx/RESOURCEGROUPS/HUB/PROVIDERS/MICROSOFT.NETWORK/AZUREFIREWALLS/FW", "operationName": "AzureFirewallNetworkRuleLog", "properties": {"msg":"TCP request from 10.100.10.4:50072 to 52.241.88.84:443. Action: Allow"}}
-
-
-# Conclusion
-
+**Azure Firewall log showing the connection SIP/DIP/Port and allow
+![alt text](https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/fwlog.png)
 
 
 
