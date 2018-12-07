@@ -71,8 +71,8 @@ az network local-gateway create --gateway-ip-address "insert west VPN GW IP"  --
 
 **Create VPN connections**
 <pre lang="...">
-az network vpn-connection create --name to-east --resource-group Hub --vnet-gateway1 West-VNG -l westus --shared-key Msft123Msft123 --local-gateway2 to-east 
-az network vpn-connection create --name to-west --resource-group East --vnet-gateway1 East-VNG -l eastus --shared-key Msft123Msft123 --local-gateway2 to-west 
+az network vpn-connection create --name to-east --resource-group Hub --vnet-gateway1 West-VNG -l westus --shared-key Msft123Msft123 --local-gateway2 to-east --enable-bgp
+az network vpn-connection create --name to-west --resource-group East --vnet-gateway1 East-VNG -l eastus --shared-key Msft123Msft123 --local-gateway2 to-west --enable-bgp
 </pre>
 
 **Validate VPN connection status**
