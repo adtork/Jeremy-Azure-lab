@@ -80,6 +80,18 @@ az network vpn-connection create --name to-west --resource-group East --vnet-gat
 az network vpn-connection show --name to-east --resource-group Hub --query "{status: connectionStatus}"
 </pre>
 
+**List BGP advertised routes per peer**
+<pre lang="...">
+az network vnet-gateway list-advertised-routes -g Hub -n West-VNG --peer 10.100.0.254
+az network vnet-gateway list-advertised-routes -g East -n East-VNG --peer 10.0.0.254 
+</pre>
+
+**List routes learned from your BGP peer**
+<pre lang="...">
+az network vnet-gateway list-learned-routes -g Hub -n West-VNG
+az network vnet-gateway list-learned-routes -g East -n East-VNG
+</pre>
+
 **Create Azure Firewall subnet, required for Azure Firewall**
 <pre lang="...">
 az network vnet subnet create --address-prefix 10.0.100.0/24 --name AzureFirewallSubnet --resource-group Hub --vnet-name Hub
