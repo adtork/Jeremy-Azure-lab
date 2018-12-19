@@ -86,6 +86,8 @@ az network vnet-gateway list-advertised-routes -g Hub -n West-VNG --peer 10.100.
 az network vnet-gateway list-advertised-routes -g East -n East-VNG --peer 10.0.0.254 
 </pre>
 
+##draft- Get-AzVirtualNetworkGatewayBGPPeerStatus
+
 **List routes learned from your BGP peer**
 <pre lang="...">
 az network vnet-gateway list-learned-routes -g Hub -n West-VNG
