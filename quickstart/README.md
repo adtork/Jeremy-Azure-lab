@@ -13,7 +13,9 @@ The labs builds:
 -	Route table + association sending traffic destin to 8.8.8.8/32 to the Linux VM for packet capture
 
 # Base Topology
-2 Linux VMs in the same subnet. HubVM1 will serve as the Linux VM we will route traffic to for capturing. HubVM1=10.0.0.10, HubVM2=10.0.0.11
+- 2 Linux VMs in the same subnet. 
+- HubVM1 will serve as the Linux VM we will route traffic to for capturing. 
+- HubVM1=10.0.0.10, HubVM2=10.0.0.11
  
 
 **Build Resource Group, VNET, Subnets, VMs and route table in West. Azure CLI in Cloud Shell is used.**
@@ -37,5 +39,11 @@ az network vnet subnet update --name HubVM --vnet-name Hub --resource-group Hub 
 </pre>
 
 **Enable Tcpdump on HubVM1**
-SSH to HubVM1 public IP address.\
+- SSH to HubVM1 public IP address
+- Set SUDO password:
+- Enable Linux OS IP forwarding
+- Source ping from 10.0.0.11 to 8.8.8.8
+- Enable Tcpdump on HubVM1
+
+
 
