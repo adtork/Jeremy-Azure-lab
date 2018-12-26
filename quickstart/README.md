@@ -39,8 +39,7 @@ az network vnet subnet update --name HubVM --vnet-name Hub --resource-group Hub 
 </pre>
 
 **Connect to HubVM1, set SUDO password, enable IP forwarding:**
-- SSH to HubVM1 public IP address<br/>
-
+SSH to HubVM1 public IP address<br/>
 Set SUDO password<br/>
 azureuser@HubVM1:~$ sudo passwd root<br/>
 Enter new UNIX password:<br/>
