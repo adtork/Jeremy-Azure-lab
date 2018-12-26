@@ -40,9 +40,16 @@ az network vnet subnet update --name HubVM --vnet-name Hub --resource-group Hub 
 
 **Enable Tcpdump on HubVM1**
 - SSH to HubVM1 public IP address
-- Set SUDO password:
+- Set SUDO password and anable Linux OS IP forwarding
+azureuser@HubVM1:~$ sudo passwd root
+Enter new UNIX password: 
+Retype new UNIX password: 
+passwd: password updated successfully
 
-- Enable Linux OS IP forwarding
+azureuser@HubVM1:~$ sudo sysctl -w net.ipv4.ip_forward=1
+net.ipv4.ip_forward = 1
+- 
+sudo sysctl -w net.ipv4.ip_forward=1
 - Source ping from 10.0.0.11 to 8.8.8.8
 - Enable Tcpdump on HubVM1
 
