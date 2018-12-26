@@ -40,17 +40,17 @@ az network vnet subnet update --name HubVM --vnet-name Hub --resource-group Hub 
 
 **Connect to HubVM1, set SUDO password, enable IP forwarding:**
 - SSH to HubVM1 public IP address
-- Set SUDO password 
-azureuser@HubVM1:~$ sudo passwd root
-Enter new UNIX password:
-Retype new UNIX password:
-passwd: password updated successfully
+- Set SUDO password<br/>
+azureuser@HubVM1:~$ sudo passwd root<br/>
+Enter new UNIX password:<br/>
+Retype new UNIX password:<br/>
+passwd: password updated successfully<br/>
 
 #Enable IP forwarding in Linux OS#
-azureuser@HubVM1:~$ sudo sysctl -w net.ipv4.ip_forward=1
-net.ipv4.ip_forward = 1
-- 
-sudo sysctl -w net.ipv4.ip_forward=1
+azureuser@HubVM1:~$ sudo sysctl -w net.ipv4.ip_forward=1<br/>
+net.ipv4.ip_forward = 1<br/>
+
+sudo sysctl -w net.ipv4.ip_forward=1<br/>
 - Source ping from 10.0.0.11 to 8.8.8.8
 - Enable Tcpdump on HubVM1
 
