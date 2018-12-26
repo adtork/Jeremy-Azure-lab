@@ -1,2 +1,2 @@
 ##Networking Stuff##
-![alt text]https://github.com/jwrightazure/lab/blob/master/images/sb.png)
+![alt text](https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/paasvpn.png)
