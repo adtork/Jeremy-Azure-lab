@@ -47,10 +47,10 @@ Enter new UNIX password:<br/>
 Retype new UNIX password:<br/>
 passwd: password updated successfully<br/>
 
-**Enable IP forwarding in Linux OS**
+**Enable IP forwarding in Linux OS**<br/>
 azureuser@HubVM1:~$ sudo sysctl -w net.ipv4.ip_forward=1<br/>
 
-**Start ping and Tcpdump**
+**Start ping and Tcpdump**<br/>
 Source ping from 10.0.0.11 to 8.8.8.8<br/>
 - Enable Tcpdump on HubVM1
 
