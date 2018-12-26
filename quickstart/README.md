@@ -1,6 +1,6 @@
 # Azure Networking Lab- Routing Traffic to Linux for Packet Capture
 
-This lab guide builds a basic Azure environment for routing traffic to a Linux VM for Tcpdump packet captures. Turning up Linux VMs with Tcpdump can be used to quickly troubleshoot Azure routing, NSGs, security policies etc at different segments of the network. The lab is built with Azure CLI through Cloud Shell.
+This lab guide builds a very basic Azure environment for routing traffic to a Linux VM for Tcpdump packet captures. Turning up Linux VMs with Tcpdump can be used to quickly troubleshoot Azure routing, NSGs, security policies etc at different segments of the network. The lab is built with Azure CLI through Cloud Shell.
 
 Assumptions:
 -	A valid Azure subscription account. If you don’t have one, you can create your free azure account (https://azure.microsoft.com/en-us/free/) today.
@@ -41,6 +41,7 @@ az network vnet subnet update --name HubVM --vnet-name Hub --resource-group Hub 
 **Enable Tcpdump on HubVM1**
 - SSH to HubVM1 public IP address
 - Set SUDO password:
+
 - Enable Linux OS IP forwarding
 - Source ping from 10.0.0.11 to 8.8.8.8
 - Enable Tcpdump on HubVM1
