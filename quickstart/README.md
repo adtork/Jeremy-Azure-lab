@@ -38,14 +38,15 @@ az network route-table route create --name test --resource-group Hub --route-tab
 az network vnet subnet update --name HubVM --vnet-name Hub --resource-group Hub --route-table test
 </pre>
 
-**Connect to HubVM1, set SUDO password, enable IP forwarding**
+#Connect to HubVM1, set SUDO password, enable IP forwarding:#
 - SSH to HubVM1 public IP address
-- Set SUDO password and anable Linux OS IP forwarding
+- Set SUDO password 
 azureuser@HubVM1:~$ sudo passwd root
 Enter new UNIX password:
 Retype new UNIX password:
 passwd: password updated successfully
 
+#Enable IP forwarding in Linux OS#
 azureuser@HubVM1:~$ sudo sysctl -w net.ipv4.ip_forward=1
 net.ipv4.ip_forward = 1
 - 
