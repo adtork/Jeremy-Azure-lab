@@ -38,7 +38,7 @@ az network route-table route create --name test --resource-group Hub --route-tab
 az network vnet subnet update --name HubVM --vnet-name Hub --resource-group Hub --route-table test
 </pre>
 
-**Connect to HubVM1, set SUDO password, enable IP forwarding:**
+**Connect to HubVM1, set SUDO password, enable IP forwarding:**<br/>
 #SSH to HubVM1 public IP address#<br/>
 #Set SUDO password#<br/>
 azureuser@HubVM1:~$ sudo passwd root<br/>
