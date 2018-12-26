@@ -12,7 +12,7 @@ The labs builds:
 -	2 Linux VMs in an Availability Set with necessary NICs with IP forwarding enabled in Azure
 -	Route table + association sending traffic destin to 8.8.8.8/32 to the Linux VM for packet capture
 
-# Base Topology
+**Base Topology**
 - 2 Linux VMs in the same subnet. 
 - HubVM1 will serve as the Linux VM we will route traffic to for capturing. 
 - HubVM1=10.0.0.10, HubVM2=10.0.0.11
@@ -38,7 +38,7 @@ az network route-table route create --name test --resource-group Hub --route-tab
 az network vnet subnet update --name HubVM --vnet-name Hub --resource-group Hub --route-table test
 </pre>
 
-#Connect to HubVM1, set SUDO password, enable IP forwarding:#
+**Connect to HubVM1, set SUDO password, enable IP forwarding:**
 - SSH to HubVM1 public IP address
 - Set SUDO password 
 azureuser@HubVM1:~$ sudo passwd root
