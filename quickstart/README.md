@@ -56,7 +56,23 @@ Source ping from 10.0.0.11 to 8.8.8.8<br/>
 **Enable Tcpdump on HubVM1**<br/>
 sudo tcpdump -i eth0 src 10.0.0.11<br/>
 
-**Sample capture:**
+**HubVM2 should be receiving ICMP redirects:**
+azureuser@HubVM2:~$ ping 8.8.8.8<br/>
+PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.<br/>
+From 10.0.0.10: icmp_seq=1 Redirect Host(New nexthop: 10.0.0.1)<br/>
+From 10.0.0.10 icmp_seq=2 Time to live exceeded<br/>
+From 10.0.0.10 icmp_seq=3 Time to live exceeded<br/>
+From 10.0.0.10 icmp_seq=4 Time to live exceeded<br/>
+
+**HubVM1 Tcpdump sample output:**
+azureuser@HubVM1:~$ sudo tcpdump -i eth0 src 10.0.0.11<br/>
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode<br/>
+listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes<br/>
+16:05:47.681407 IP 10.0.0.11 > google-public-dns-a.google.com: ICMP echo request, id 2733, seq 100, length 64<br/>
+16:05:47.681410 IP 10.0.0.11 > google-public-dns-a.google.com: ICMP echo request, id 2733, seq 100, length 64<br/>
+16:05:47.682569 IP 10.0.0.11 > google-public-dns-a.google.com: ICMP echo request, id 2733, seq 100, length 64<br/>
+16:05:47.682582 IP 10.0.0.11 > google-public-dns-a.google.com: ICMP echo request, id 2733, seq 100, length 64<br/>
+16:05:47.682734 IP 10.0.0.11 > google-public-dns-a.google.com: ICMP echo request, id 2733, seq 100, length 64<br/>
 
 
 
