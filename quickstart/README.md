@@ -55,7 +55,7 @@ Source ping from 10.0.0.11 to 8.8.8.8<br/>
 **Enable Tcpdump on HubVM1**<br/>
 sudo tcpdump -i eth0 src 10.0.0.11<br/>
 
-**HubVM2 should be receiving ICMP redirects:**
+**HubVM2 should be receiving ICMP redirects:**<br/>
 azureuser@HubVM2:~$ ping 8.8.8.8<br/>
 PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.<br/>
 From 10.0.0.10: icmp_seq=1 Redirect Host(New nexthop: 10.0.0.1)<br/>
