@@ -52,7 +52,11 @@ azureuser@HubVM1:~$ sudo sysctl -w net.ipv4.ip_forward=1<br/>
 
 **Start ping and Tcpdump**<br/>
 Source ping from 10.0.0.11 to 8.8.8.8<br/>
-- Enable Tcpdump on HubVM1
+
+Enable Tcpdump on HubVM1<br/>
+sudo tcpdump -i eth0 src 10.0.0.11<br/>
+
+Sample capture:
 
 
 
