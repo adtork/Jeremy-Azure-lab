@@ -63,7 +63,7 @@ From 10.0.0.10 icmp_seq=2 Time to live exceeded<br/>
 From 10.0.0.10 icmp_seq=3 Time to live exceeded<br/>
 From 10.0.0.10 icmp_seq=4 Time to live exceeded<br/>
 
-**HubVM1 Tcpdump sample output:**
+**HubVM1 Tcpdump sample output:**<br/>
 azureuser@HubVM1:~$ sudo tcpdump -i eth0 src 10.0.0.11<br/>
 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode<br/>
 listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes<br/>
