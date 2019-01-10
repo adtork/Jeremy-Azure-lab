@@ -1,4 +1,4 @@
-##Silent install of Chrome Browser on Windows Server 2016 for lab testing.##
+# Silent install of Chrome Browser on Windows Server 2016 for lab testing. #
 Open Powershell on Windows 2016 server.
 Enter the following command to download, install and make shortcut on the Desktop:
 
