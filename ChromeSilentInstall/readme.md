@@ -1,6 +1,6 @@
 # Silent install of Chrome Browser on Windows Server 2016. #
 
-**This is for lab testing only when you do not want to deal with Microsoft Edge.**
+**This is for lab testing when you do not want to deal with Microsoft Edge.**
 Open Powershell on Windows 2016 server.
 Enter the following command to download the Chrome browser, install it and make shortcut on the Desktop:
 
