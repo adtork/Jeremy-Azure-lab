@@ -79,7 +79,7 @@ crypto ikev2 proposal to-csr-proposal
   group 2
   exit
 
-##the local IP is the private IP of the outside interface. Azure will automatically NAT this outbound. Replace this with your public IP if needed##
+!the local IP is the private IP of the outside interface. Azure will automatically NAT this outbound. Replace this with your public IP !if needed
 crypto ikev2 policy to-csr-policy
   proposal to-csr-proposal
   match address local 10.1.0.4
