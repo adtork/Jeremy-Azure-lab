@@ -1,6 +1,6 @@
 # Azure Networking Lab- IPSEC VPN (IKEv2) between Cisco CSR and Azure VPN Gateway (draft)
 
-This lab guide illustrates how to build a basic IPSEC VPN tunnel w/IKEv2 and the Azure VPN gateway without BGP. This is for lab testing purposes only. 
+This lab guide illustrates how to build a basic IPSEC VPN tunnel w/IKEv2 and the Azure VPN gateway without BGP. This is for lab testing purposes only. All Azure configs are done in Azure CLI so you can change them as needed to match your environment. 
 
 Assumptions:
 -	A valid Azure subscription account. If you don’t have one, you can create your free azure account (https://azure.microsoft.com/en-us/free/) today.
@@ -56,45 +56,93 @@ az network public-ip show -g onprem -n CSR1PublicIP --query "{address: ipAddress
 az network local-gateway create --gateway-ip-address "insert CSR IP" --name to-onprem --resource-group onprem --local-address-prefixes 10.1.0.0/16
 </pre>
 
-**Build CSR configuration**
-
-
 **Create VPN connections**
 <pre lang="...">
-az network vpn-connection create --name to-onprem --resource-group onprem --vnet-gateway1 Azure-VNG -l eastus --shared-key Msft123Msft123 --local-gateway2 to-onprem
+az network vpn-connection create --name to-onprem --resource-group hub --vnet-gateway1 Azure-VNG -l eastus --shared-key Msft123Msft123 --local-gateway2 to-onprem
 </pre>
 
-**Validate VPN connection status**
+**Create a route table and routes for the Azure VNET with correct association. This is for the onprem simulation to route traffic to the CSR**
+<pre lang="...">
+az network route-table create --name vm-rt --resource-group onprem
+az network route-table route create --name vm-rt --resource-group onprem --route-table-name vm-rt --address-prefix 10.0.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.1.1.4
+az network vnet subnet update --name VM --vnet-name onprem --resource-group onprem --route-table vm-rt
+</pre>
+
+**Build CSR configuration in Cisco CLI**
+<pre lang="...">
+!route for simulated onprem vm subnet
+ip route 10.1.10.0 255.255.255.0 10.1.1.1
+
+crypto ikev2 proposal to-csr-proposal
+  encryption aes-cbc-256
+  integrity sha1
+  group 2
+  exit
+
+##the local IP is the private IP of the outside interface. Azure will automatically NAT this outbound. Replace this with your public IP if needed##
+crypto ikev2 policy to-csr-policy
+  proposal to-csr-proposal
+  match address local 10.1.0.4
+  exit
+ 
+#Peer IP/address is the Azure VPN gateway
+crypto ikev2 keyring to-csr-keyring
+  peer 13.92.121.57 
+    address 13.92.121.57
+    pre-shared-key Msft123Msft123
+    exit
+  exit
+
+crypto ikev2 profile to-csr-profile
+  match address  local 10.1.0.4
+  match identity remote address 13.92.121.57 255.255.255.255
+  authentication remote pre-share
+  authentication local  pre-share
+  lifetime 3600
+  dpd 10 5 on-demand
+  keyring local  to-csr-keyring
+  exit
+
+crypto ipsec transform-set to-csr-TransformSet esp-gcm 256 
+  mode tunnel
+  exit
+
+crypto ipsec profile to-csr-IPsecProfile
+  set transform-set  to-csr-TransformSet
+  set ikev2-profile  to-csr-profile
+  set security-association lifetime seconds 3600
+  exit
+
+int tunnel 11
+  ip address 169.254.0.1 255.255.255.255
+  tunnel mode ipsec ipv4
+  ip tcp adjust-mss 1350
+  tunnel source 10.1.0.4
+  tunnel destination 13.92.121.57
+  tunnel protection ipsec profile to-csr-IPsecProfile
+  exit
+
+ip route 10.0.0.0 255.255.0.0 Tunnel 11
+</pre>
+
+**Validate VPN connection status in Azure CLI**
 <pre lang="...">
 az network vpn-connection show --name to-onprem --resource-group Hub --query "{status: connectionStatus}"
 </pre>
 
-
-**Create test VM in East and open RDP access**
-<pre lang="...">
-az network public-ip create --resource-group East --name EastVMPublicIP
-az network nsg create --resource-group East --name myNetworkSecurityGroup
-az network nic create --resource-group East --name myNic --vnet-name East --subnet VM --network-security-group myNetworkSecurityGroup --public-ip-address EastVMPublicIP
-az vm create --resource-group East --name EastVM --location eastus --nics myNic --image win2016datacenter --admin-username azureuser --admin-password Msft123Msft123
-az vm open-port --port 3389 --resource-group East --name EastVM
-</pre>
+**Key Cisco commands**
+show interface tunnel 11
+show crypto session
+show ip route  (make sure Azure prefix is pointing to tu11)
+show crypto ipsec transform-set
+show crypto ikev2 proposal
 
 
-**Verify VM route table for the East VM NIC**
-<pre lang="...">
-az network nic show-effective-route-table --resource-group East --network-interface-name myNic
-</pre>
 
-As you can see, traffic destin for the PAAS public prefix will route to the Azure VPN gateway and across the tunnel to West.<br/>
-![alt text](https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/lng.png)<br/>
-Although the traffic goes over the tunnel, the traffic hits the Azure VPN Gateway in West and is dropped. The Gateway Subnet in West needs to route traffic to the PAAS prefix over to the Azure Firewall. The Azure firewall has access to the Microsoft backbone where PAAS resources reside.
 
-**Create a route table and routes for the Gateway Subnet with correct association**
-<pre lang="...">
-az network route-table create --name gwsubnet-rt --resource-group Hub 
-az network route-table route create --route-table-name gwsubnet-rt --resource-group Hub --name to-paas --address-prefix 52.239.228.0/23 --next-hop-type VirtualAppliance --next-hop-ip-address 10.0.100.4
-az network vnet subnet update --virtual-network-name Hub --subnet-name GatewaySubnet --resource-group Hub --route-table gwsubnet-rt
-</pre>
+
+
+
 
 
 
