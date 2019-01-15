@@ -131,11 +131,11 @@ az network vpn-connection show --name to-onprem --resource-group Hub --query "{s
 </pre>
 
 **Key Cisco commands**
-show interface tunnel 11
-show crypto session
-show ip route  (make sure Azure prefix is pointing to tu11)
-show crypto ipsec transform-set
-show crypto ikev2 proposal
+-show interface tunnel 11
+-show crypto session
+-show ip route  (make sure Azure prefix is pointing to tu11)
+-show crypto ipsec transform-set
+-show crypto ikev2 proposal
 
 
 
