@@ -11,7 +11,7 @@ Assumptions:
 The lab deploys an Azure VPN gateway into a VNET. We will also deploy a Cisco CSR in a seperate VNET to simulate on prem.
  
 
-**Build VNET Resource Groups, VNETs and Subnets**
+**Build Resource Groups, VNETs and Subnets**
 <pre lang="...">
 az group create --name Hub --location eastus
 az network vnet create --resource-group Hub --name Hub --location eastus --address-prefixes 10.0.0.0/16 --subnet-name HubVM --subnet-prefix 10.0.10.0/24
@@ -36,10 +36,19 @@ az network public-ip create --name Azure-VNGpubip --resource-group Hub --allocat
 az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpubip --resource-group Hub --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait 
 </pre>
 
-
-**After the gateways have been created, document the public IP address for both East and West VPN Gateways. Value will be null until it has been successfully provisioned.**
+**Build onprem CSR**
 <pre lang="...">
-az network public-ip show -g East -n Azure-VNGpubip --query "{address: ipAddress}"
+az network public-ip create --name CSR1PublicIP --resource-group onprem --idle-timeout 30 --allocation-method Static
+az network nic create --name CSR1OutsideInterface -g onprem --subnet zeronet --vnet onprem --public-ip-address CSR1PublicIP --ip-forwarding true
+az network nic create --name CSR1InsideInterface -g onprem --subnet onenet --vnet onprem --ip-forwarding true
+az vm create --resource-group onprem --location eastus --name CSR1 --size Standard_D2_v2 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:16_6:16.6.220171219 --admin-username jewrigh --admin-password Msft123Msft123
+</pre>
+
+
+**After the gateway and CSR have been created, document the public IP address for both. Value will be null until it has been successfully provisioned.**
+<pre lang="...">
+az network public-ip show -g Hub -n Azure-VNGpubip --query "{address: ipAddress}"
+az network public-ip show -g onprem -n CSR1PublicIP --query "{address: ipAddress}"
 </pre>
 
 **Create Local Network Gateway**
