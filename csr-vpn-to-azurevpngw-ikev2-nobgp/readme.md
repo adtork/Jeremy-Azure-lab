@@ -51,14 +51,17 @@ az network public-ip show -g Hub -n Azure-VNGpubip --query "{address: ipAddress}
 az network public-ip show -g onprem -n CSR1PublicIP --query "{address: ipAddress}"
 </pre>
 
-**Create Local Network Gateway**
+**Create Local Network Gateway. This specifies the prefixes that are allowed to source from Azure over the tunnel to onprem.**
 <pre lang="...">
-az network local-gateway create --gateway-ip-address "insert east VPN GW IP" --name to-onprem --resource-group Hub --local-address-prefixes 10.0.0.0/16
+az network local-gateway create --gateway-ip-address "insert CSR IP" --name to-onprem --resource-group onprem --local-address-prefixes 10.1.0.0/16
 </pre>
+
+**Build CSR configuration**
+
 
 **Create VPN connections**
 <pre lang="...">
-az network vpn-connection create --name to-onprem --resource-group Hub --vnet-gateway1 Azure-VNG -l eastus --shared-key Msft123Msft123 --local-gateway2 to-onprem
+az network vpn-connection create --name to-onprem --resource-group onprem --vnet-gateway1 Azure-VNG -l eastus --shared-key Msft123Msft123 --local-gateway2 to-onprem
 </pre>
 
 **Validate VPN connection status**
