@@ -28,18 +28,18 @@ az network vnet subnet create --address-prefix 10.1.1.0/24 --name onenet --resou
 
 **Build Public IPs for Azure VPN Gateway**
 <pre lang="...">
-az network public-ip create --name East-VNGpubip --resource-group Hub --allocation-method Dynamic
+az network public-ip create --name Azure-VNGpubip --resource-group Hub --allocation-method Dynamic
 </pre>
 
 **Build Azure VPN Gateway. Deployment will take some time**
 <pre lang="...">
-az network vnet-gateway create --name Azure-VNG --public-ip-address Easst-VNGpubip --resource-group Hub --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait 
+az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpubip --resource-group Hub --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait 
 </pre>
 
 
 **After the gateways have been created, document the public IP address for both East and West VPN Gateways. Value will be null until it has been successfully provisioned.**
 <pre lang="...">
-az network public-ip show -g East -n East-VNGpubip --query "{address: ipAddress}"
+az network public-ip show -g East -n Azure-VNGpubip --query "{address: ipAddress}"
 </pre>
 
 **Create Local Network Gateway**
@@ -54,30 +54,11 @@ az network vpn-connection create --name to-onprem --resource-group Hub --vnet-ga
 
 **Validate VPN connection status**
 <pre lang="...">
-az network vpn-connection show --name to-east --resource-group Hub --query "{status: connectionStatus}"
-</pre>
-
-**List BGP advertised routes per peer**
-<pre lang="...">
-az network vnet-gateway list-advertised-routes -g Hub -n West-VNG --peer 10.100.0.254
-az network vnet-gateway list-advertised-routes -g East -n East-VNG --peer 10.0.0.254 
-</pre>
-
-##draft- Get-AzVirtualNetworkGatewayBGPPeerStatus
-
-**List routes learned from your BGP peer**
-<pre lang="...">
-az network vnet-gateway list-learned-routes -g Hub -n West-VNG
-az network vnet-gateway list-learned-routes -g East -n East-VNG
-</pre>
-
-**Create Azure Firewall subnet, required for Azure Firewall**
-<pre lang="...">
-az network vnet subnet create --address-prefix 10.0.100.0/24 --name AzureFirewallSubnet --resource-group Hub --vnet-name Hub
+az network vpn-connection show --name to-onprem --resource-group Hub --query "{status: connectionStatus}"
 </pre>
 
 
-**Create test VM in East (simulating on-prem) and open RDP access**
+**Create test VM in East and open RDP access**
 <pre lang="...">
 az network public-ip create --resource-group East --name EastVMPublicIP
 az network nsg create --resource-group East --name myNetworkSecurityGroup
@@ -86,22 +67,6 @@ az vm create --resource-group East --name EastVM --location eastus --nics myNic 
 az vm open-port --port 3389 --resource-group East --name EastVM
 </pre>
 
-**Create a storage account with anonymous read access in the West region.**
--Upload basic text file to test with. Steps omitted.<br/>
--Document Blob URL ex:https://paasvpn.blob.core.windows.net/paasvpn/testjw.txt.<br/>
-
--nslookup paasvpn.blob.core.windows.net and document the IP.<br/>
--Go to http://iprange.omartin2010.com/ and select prefix search tool.<br/>
--Paste in the IP of the Blob to determine the Azure region and prefix.<br/>
-EX:<br/>
-52.239.229.100 resolves to ...<br/>
-52.239.229.100/32 is part of 52.239.228.0/23 in region uswest<br/>
-*Document the public prefix. Ex:52.239.228.0/23
-
-**Update East Local Network Gateway to attract the PAAS prefix over VPN. This is specific to making this work over Azure to Azure VPN Gateways**
-<pre lang="...">
-az network local-gateway update --local-address-prefixes 52.239.228.0/23 --name to-west --resource-group East
-</pre>
 
 **Verify VM route table for the East VM NIC**
 <pre lang="...">
@@ -118,11 +83,6 @@ az network route-table create --name gwsubnet-rt --resource-group Hub
 az network route-table route create --route-table-name gwsubnet-rt --resource-group Hub --name to-paas --address-prefix 52.239.228.0/23 --next-hop-type VirtualAppliance --next-hop-ip-address 10.0.100.4
 az network vnet subnet update --virtual-network-name Hub --subnet-name GatewaySubnet --resource-group Hub --route-table gwsubnet-rt
 </pre>
-
-Traffic is now routing from on-prem over VPN through the Azure Firewall.
-
-**Azure Firewall log showing the connection SIP/DIP/Port and allow
-![alt text](https://github.com/jwrightazure/lab/blob/master/paas-over-vpn/fwlog.png)
 
 
 
