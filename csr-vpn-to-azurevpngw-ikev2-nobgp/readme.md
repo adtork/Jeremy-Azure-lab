@@ -26,6 +26,22 @@ az network vnet subnet create --address-prefix 10.1.0.0/24 --name zeronet --reso
 az network vnet subnet create --address-prefix 10.1.1.0/24 --name onenet --resource-group onprem --vnet-name onprem
 </pre>
 
+**Build Azure side Linux VM**
+<pre lang="...">
+az network public-ip create --name HubVMPubIP --resource-group Hub --location eastus --allocation-method Dynamic
+az network nic create --resource-group Hub -n HubVMNIC --location eastus --subnet HubVM --private-ip-address 10.0.10.10 --vnet-name Hub --public-ip-address HubVMPubIP
+az vm create -n HubVM -g Hub --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics HubVMNIC
+</pre>
+
+**Build onprem side Linux VM**
+<pre lang="...">
+az network public-ip create --name onpremVMPubIP --resource-group onprem --location eastus --allocation-method Dynamic
+az network nic create --resource-group onprem -n onpremVMNIC --location eastus --subnet VM --private-ip-address 10.1.10.10 --vnet-name onprem --public-ip-address onpremVMPubIP
+az vm create -n onpremVM -g onprem --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics onpremVMNIC
+</pre>
+
+
+
 **Build Public IPs for Azure VPN Gateway**
 <pre lang="...">
 az network public-ip create --name Azure-VNGpubip --resource-group Hub --allocation-method Dynamic
