@@ -1,6 +1,6 @@
-# Azure Networking Lab- IPSEC VPN (ikev2) between Cisco CSR and Azure VPN Gateway (draft)
+# Azure Networking Lab- IPSEC VPN (IKEv2) between Cisco CSR and Azure VPN Gateway (draft)
 
-This lab guide illustrates how to build a basic IPSEC VPN tunnel w/ikev2 and the Azure VPN gateway without BGP. This is for lab testing purposes only. 
+This lab guide illustrates how to build a basic IPSEC VPN tunnel w/IKEv2 and the Azure VPN gateway without BGP. This is for lab testing purposes only. 
 
 Assumptions:
 -	A valid Azure subscription account. If you don’t have one, you can create your free azure account (https://azure.microsoft.com/en-us/free/) today.
@@ -8,21 +8,21 @@ Assumptions:
 
 
 # Base Topology
-The lab deploys an Azure VPN gateway into a VNET in US East. We will also deploy a Cisco CSR in a seperate VNET to simulate on prem.
+The lab deploys an Azure VPN gateway into a VNET. We will also deploy a Cisco CSR in a seperate VNET to simulate on prem.
  
 
-**Build Resource Groups, VNETs and Subnets in West. Azure CLI on Windows 10 is used through the lab.**
+**Build VNET Resource Groups, VNETs and Subnets**
 <pre lang="...">
-az group create --name Hub --location westus
-az network vnet create --resource-group Hub --name Hub --location westus --address-prefixes 10.0.0.0/16 --subnet-name HubVM --subnet-prefix 10.0.10.0/24
+az group create --name Hub --location eastus
+az network vnet create --resource-group Hub --name Hub --location eastus --address-prefixes 10.0.0.0/16 --subnet-name HubVM --subnet-prefix 10.0.10.0/24
 az network vnet subnet create --address-prefix 10.0.0.0/24 --name GatewaySubnet --resource-group Hub --vnet-name Hub
 </pre>
 
-**Build Resource Groups, VNETs and Subnets in East.**
+**Build Resource Groups, VNETs and Subnets to simulate on prem**
 <pre lang="...">
-az group create --name East --location eastus
-az network vnet create --resource-group East --name East --location eastus --address-prefixes 10.100.0.0/16 --subnet-name VM --subnet-prefix 10.100.10.0/24
-az network vnet subnet create --address-prefix 10.100.0.0/24 --name GatewaySubnet --resource-group East --vnet-name East
+az group create --name onprem --location eastus
+az network vnet create --resource-group onprem --name onprem --location eastus --address-prefixes 10.1.0.0/16 --subnet-name VM --subnet-prefix 10.1.10.0/24
+az network vnet subnet create --address-prefix 10.1.0.0/24 --name zeronet --resource-group onprem --vnet-name onprem
 </pre>
 
 **Build Public IPs for VPN**
