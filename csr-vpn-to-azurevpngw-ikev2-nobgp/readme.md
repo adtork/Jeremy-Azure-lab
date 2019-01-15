@@ -23,45 +23,33 @@ az network vnet subnet create --address-prefix 10.0.0.0/24 --name GatewaySubnet 
 az group create --name onprem --location eastus
 az network vnet create --resource-group onprem --name onprem --location eastus --address-prefixes 10.1.0.0/16 --subnet-name VM --subnet-prefix 10.1.10.0/24
 az network vnet subnet create --address-prefix 10.1.0.0/24 --name zeronet --resource-group onprem --vnet-name onprem
+az network vnet subnet create --address-prefix 10.1.1.0/24 --name onenet --resource-group onprem --vnet-name onprem
 </pre>
 
-**Build Public IPs for VPN**
+**Build Public IPs for Azure VPN Gateway**
 <pre lang="...">
-az network public-ip create --name West-VNGpubip --resource-group Hub --allocation-method Dynamic
-az network public-ip create --name East-VNGpubip --resource-group East --allocation-method Dynamic
+az network public-ip create --name East-VNGpubip --resource-group Hub --allocation-method Dynamic
 </pre>
 
-**Build Azure VPN Gateway. My lab uses BGP and sets ASN in this section. Deployment will take some time**
+**Build Azure VPN Gateway. Deployment will take some time**
 <pre lang="...">
-az network vnet-gateway create --name West-VNG --public-ip-address West-VNGpubip --resource-group Hub --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait --asn 65001
-az network vnet-gateway create --name East-VNG --public-ip-address East-VNGpubip --resource-group East --vnet East --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait --asn 65002
+az network vnet-gateway create --name Azure-VNG --public-ip-address Easst-VNGpubip --resource-group Hub --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait 
 </pre>
 
 
 **After the gateways have been created, document the public IP address for both East and West VPN Gateways. Value will be null until it has been successfully provisioned.**
 <pre lang="...">
-az network public-ip show -g Hub -n West-VNGpubip --query "{address: ipAddress}"
 az network public-ip show -g East -n East-VNGpubip --query "{address: ipAddress}"
-</pre>
-
-**Document BGP peer IP and ASN**
-<pre lang="...">
-az network vnet-gateway list --query [].[name,bgpSettings.asn,bgpSettings.bgpPeeringAddress] -o table --resource-group Hub
-</pre>
-<pre lang="...">
-az network vnet-gateway list --query [].[name,bgpSettings.asn,bgpSettings.bgpPeeringAddress] -o table --resource-group East
 </pre>
 
 **Create Local Network Gateway**
 <pre lang="...">
-az network local-gateway create --gateway-ip-address "insert east VPN GW IP" --name to-east --resource-group Hub --local-address-prefixes 10.100.0.0/16 --asn 65002 --bgp-peering-address 10.100.0.254
-az network local-gateway create --gateway-ip-address "insert west VPN GW IP"  --name to-west --resource-group East --local-address-prefixes 10.0.0.0/16 --asn 65001 --bgp-peering-address 10.0.0.254
+az network local-gateway create --gateway-ip-address "insert east VPN GW IP" --name to-onprem --resource-group Hub --local-address-prefixes 10.0.0.0/16
 </pre>
 
 **Create VPN connections**
 <pre lang="...">
-az network vpn-connection create --name to-east --resource-group Hub --vnet-gateway1 West-VNG -l westus --shared-key Msft123Msft123 --local-gateway2 to-east --enable-bgp
-az network vpn-connection create --name to-west --resource-group East --vnet-gateway1 East-VNG -l eastus --shared-key Msft123Msft123 --local-gateway2 to-west --enable-bgp
+az network vpn-connection create --name to-onprem --resource-group Hub --vnet-gateway1 Azure-VNG -l eastus --shared-key Msft123Msft123 --local-gateway2 to-onprem
 </pre>
 
 **Validate VPN connection status**
