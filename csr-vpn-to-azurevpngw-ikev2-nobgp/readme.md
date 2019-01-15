@@ -36,7 +36,7 @@ az network public-ip create --name Azure-VNGpubip --resource-group Hub --allocat
 az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpubip --resource-group Hub --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait 
 </pre>
 
-**Build onprem CSR**
+**Build onprem CSR. CSR image is specified from the Marketplace in this example.**
 <pre lang="...">
 az network public-ip create --name CSR1PublicIP --resource-group onprem --idle-timeout 30 --allocation-method Static
 az network nic create --name CSR1OutsideInterface -g onprem --subnet zeronet --vnet onprem --public-ip-address CSR1PublicIP --ip-forwarding true
