@@ -1,6 +1,6 @@
 # Azure Networking Lab- IPSEC VPN (IKEv2) between Cisco CSR and Azure VPN Gateway (draft)
 
-This lab guide illustrates how to build a basic IPSEC VPN tunnel w/IKEv2 and the Azure VPN gateway without BGP. This is for lab testing purposes only. All Azure configs are done in Azure CLI so you can change them as needed to match your environment. 
+This lab guide illustrates how to build a basic IPSEC VPN tunnel w/IKEv2 between a Cisco CSR and the Azure VPN gateway without BGP. This is for lab testing purposes only. All Azure configs are done in Azure CLI so you can change them as needed to match your environment. 
 
 Assumptions:
 -	A valid Azure subscription account. If you don’t have one, you can create your free azure account (https://azure.microsoft.com/en-us/free/) today.
