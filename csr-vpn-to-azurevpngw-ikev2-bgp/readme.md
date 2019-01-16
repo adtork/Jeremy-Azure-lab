@@ -165,7 +165,7 @@ Key Cisco commands
 - show crypto ipsec transform-set
 - show crypto ikev2 proposal
 
-**List BGP advertised routes per peer**
+**List BGP advertised routes per peer.**
 <pre lang="...">
 az network vnet-gateway list-advertised-routes -g Hub -n Azure-VNG --peer 192.168.1.1
 
