@@ -56,7 +56,7 @@ az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpub
 az network public-ip create --name CSR1PublicIP --resource-group onprem --idle-timeout 30 --allocation-method Static
 az network nic create --name CSR1OutsideInterface -g onprem --subnet zeronet --vnet onprem --public-ip-address CSR1PublicIP --ip-forwarding true
 az network nic create --name CSR1InsideInterface -g onprem --subnet onenet --vnet onprem --ip-forwarding true
-az vm create --resource-group onprem --location eastus --name CSR1 --size Standard_D2_v2 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:16_6:16.6.220171219 --admin-username jewrigh --admin-password Msft123Msft123
+az vm create --resource-group onprem --location eastus --name CSR1 --size Standard_D2_v2 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:16_6:16.6.220171219 --admin-username azureuser --admin-password Msft123Msft123
 </pre>
 
 **After the gateway and CSR have been created, document the public IP address for both. Value will be null until it has been successfully provisioned.**
@@ -84,7 +84,7 @@ az network vpn-connection create --name to-onprem --resource-group hub --vnet-ga
 
 
 
-**Build CSR configuration in Cisco CLI**
+**SSH to CSR public IP. Public IPs in the below config are an example.**
 <pre lang="...">
 !route for simulated onprem vm subnet
 ip route 10.1.10.0 255.255.255.0 10.1.1.1
