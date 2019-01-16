@@ -66,7 +66,7 @@ az network public-ip show -g onprem -n CSR1PublicIP --query "{address: ipAddress
 
 **Create Local Network Gateway. This specifies the prefixes that are allowed to source from Azure over the tunnel to onprem.**
 <pre lang="...">
-az network local-gateway create --gateway-ip-address "insert CSR IP" --name to-onprem --resource-group onprem --local-address-prefixes 10.1.0.0/16
+az network local-gateway create --gateway-ip-address "insert CSR Public IP" --name to-onprem --resource-group onprem --local-address-prefixes 10.1.0.0/16
 </pre>
 
 **Create VPN connections**
