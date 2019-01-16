@@ -46,7 +46,9 @@ az network public-ip create --name Azure-VNGpubip --resource-group Hub --allocat
 </pre>
 
 **Build Azure VPN Gateway. Enable BGP with ASN 65001. Deployment will take some time.**
+<pre lang="...">
 az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpubip --resource-group Hub --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait --asn 65001
+</pre>
 
 **Build onprem CSR. CSR image is specified from the Marketplace in this example.**
 <pre lang="...">
