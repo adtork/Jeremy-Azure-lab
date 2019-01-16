@@ -141,7 +141,7 @@ int tunnel 11
   exit
 
  router bgp 65002
-  bgp      log-neighbor-changes
+  bgp log-neighbor-changes
   neighbor 10.0.0.254 remote-as 65001
   neighbor 10.0.0.254 ebgp-multihop 255
   neighbor 10.0.0.254 update-source tu11
