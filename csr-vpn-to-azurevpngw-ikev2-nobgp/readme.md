@@ -48,7 +48,7 @@ az vm create -n onpremVM -g onprem --image UbuntuLTS --admin-username azureuser 
 az network public-ip create --name Azure-VNGpubip --resource-group Hub --allocation-method Dynamic
 </pre>
 
-**Build Azure VPN Gateway. Deployment will take some time**
+**Build Azure VPN Gateway. Deployment will take some time.**
 <pre lang="...">
 az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpubip --resource-group Hub --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait 
 </pre>
@@ -68,6 +68,13 @@ az network public-ip show -g Hub -n Azure-VNGpubip --query "{address: ipAddress}
 az network public-ip show -g onprem -n CSR1PublicIP --query "{address: ipAddress}"
 </pre>
 
+**Create a route table and routes for the Azure VNET with correct association. This is for the onprem simulation to route traffic to the CSR**
+<pre lang="...">
+az network route-table create --name vm-rt --resource-group onprem
+az network route-table route create --name vm-rt --resource-group onprem --route-table-name vm-rt --address-prefix 10.0.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.1.1.4
+az network vnet subnet update --name VM --vnet-name onprem --resource-group onprem --route-table vm-rt
+</pre>
+
 **Create Local Network Gateway. This specifies the prefixes that are allowed to source from Azure over the tunnel to onprem.**
 <pre lang="...">
 az network local-gateway create --gateway-ip-address "insert CSR Public IP" --name to-onprem --resource-group onprem --local-address-prefixes 10.1.0.0/16
@@ -78,12 +85,7 @@ az network local-gateway create --gateway-ip-address "insert CSR Public IP" --na
 az network vpn-connection create --name to-onprem --resource-group hub --vnet-gateway1 Azure-VNG -l eastus --shared-key Msft123Msft123 --local-gateway2 to-onprem
 </pre>
 
-**Create a route table and routes for the Azure VNET with correct association. This is for the onprem simulation to route traffic to the CSR**
-<pre lang="...">
-az network route-table create --name vm-rt --resource-group onprem
-az network route-table route create --name vm-rt --resource-group onprem --route-table-name vm-rt --address-prefix 10.0.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.1.1.4
-az network vnet subnet update --name VM --vnet-name onprem --resource-group onprem --route-table vm-rt
-</pre>
+
 
 **Build CSR configuration in Cisco CLI**
 <pre lang="...">
