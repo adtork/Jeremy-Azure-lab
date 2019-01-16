@@ -130,7 +130,7 @@ crypto ipsec profile to-csr-IPsecProfile
   exit
 
 int tunnel 11
-  ip address 169.254.0.1 255.255.255.255
+  ip address 192.168.1.1 255.255.255.255
   tunnel mode ipsec ipv4
   ip tcp adjust-mss 1350
   tunnel source 10.1.0.4
