@@ -62,6 +62,7 @@ az vm create --resource-group onprem --location eastus --name CSR1 --size Standa
 <pre lang="...">
 az network public-ip show -g Hub -n Azure-VNGpubip --query "{address: ipAddress}"
 az network public-ip show -g onprem -n CSR1PublicIP --query "{address: ipAddress}"
+</pre>
 
 **Document BGP peer IP and ASN**
 <pre lang="...">
