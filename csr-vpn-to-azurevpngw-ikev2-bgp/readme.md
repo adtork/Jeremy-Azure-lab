@@ -1,4 +1,4 @@
-# Azure Networking Lab- IPSEC VPN (IKEv2) between Cisco CSR and Azure VPN Gateway- with BGP (DRAFT)
+# Azure Networking Lab- IPSEC VPN (IKEv2) between Cisco CSR and Azure VPN Gateway- with BGP
 
 This lab guide illustrates how to build a basic IPSEC VPN tunnel w/IKEv2 between a Cisco CSR and the Azure VPN gateway with BGP. This is for lab testing purposes only. All Azure configs are done in Azure CLI so you can change them as needed to match your environment. Note- the on prem CSR has a private IP on the outside interface since it's hosted in Azure. You can apply a public IP if needed.
 
@@ -8,35 +8,35 @@ Assumptions:
 
 
 # Base Topology
-The lab deploys an Azure VPN gateway into a VNET. We will also deploy a Cisco CSR in a seperate VNET to simulate on prem. BGP over IPSEC is used to exchange routes. 
+The lab deploys an Azure VPN gateway into a VNET. We will also deploy a Cisco CSR in a seperate VNET to simulate on prem.
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/csrvpnikev2.png)
 
 **Build Resource Groups, VNETs and Subnets**
 <pre lang="...">
-az group create --name Hub --location eastus
-az network vnet create --resource-group Hub --name Hub --location eastus --address-prefixes 10.0.0.0/16 --subnet-name HubVM --subnet-prefix 10.0.10.0/24
+az group create --name Hub --location westus
+az network vnet create --resource-group Hub --name Hub --location westus --address-prefixes 10.0.0.0/16 --subnet-name HubVM --subnet-prefix 10.0.10.0/24
 az network vnet subnet create --address-prefix 10.0.0.0/24 --name GatewaySubnet --resource-group Hub --vnet-name Hub
 </pre>
 
 **Build Resource Groups, VNETs and Subnets to simulate on prem**
 <pre lang="...">
-az group create --name onprem --location eastus
-az network vnet create --resource-group onprem --name onprem --location eastus --address-prefixes 10.1.0.0/16 --subnet-name VM --subnet-prefix 10.1.10.0/24
+az group create --name onprem --location westus
+az network vnet create --resource-group onprem --name onprem --location westus --address-prefixes 10.1.0.0/16 --subnet-name VM --subnet-prefix 10.1.10.0/24
 az network vnet subnet create --address-prefix 10.1.0.0/24 --name zeronet --resource-group onprem --vnet-name onprem
 az network vnet subnet create --address-prefix 10.1.1.0/24 --name onenet --resource-group onprem --vnet-name onprem
 </pre>
 
 **Build Azure side Linux VM**
 <pre lang="...">
-az network public-ip create --name HubVMPubIP --resource-group Hub --location eastus --allocation-method Dynamic
-az network nic create --resource-group Hub -n HubVMNIC --location eastus --subnet HubVM --private-ip-address 10.0.10.10 --vnet-name Hub --public-ip-address HubVMPubIP
+az network public-ip create --name HubVMPubIP --resource-group Hub --location westus --allocation-method Dynamic
+az network nic create --resource-group Hub -n HubVMNIC --location westus --subnet HubVM --private-ip-address 10.0.10.10 --vnet-name Hub --public-ip-address HubVMPubIP
 az vm create -n HubVM -g Hub --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics HubVMNIC
 </pre>
 
 **Build onprem side Linux VM**
 <pre lang="...">
-az network public-ip create --name onpremVMPubIP --resource-group onprem --location eastus --allocation-method Dynamic
-az network nic create --resource-group onprem -n onpremVMNIC --location eastus --subnet VM --private-ip-address 10.1.10.10 --vnet-name onprem --public-ip-address onpremVMPubIP
+az network public-ip create --name onpremVMPubIP --resource-group onprem --location westus --allocation-method Dynamic
+az network nic create --resource-group onprem -n onpremVMNIC --location westus --subnet VM --private-ip-address 10.1.10.10 --vnet-name onprem --public-ip-address onpremVMPubIP
 az vm create -n onpremVM -g onprem --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics onpremVMNIC
 </pre>
 
@@ -46,8 +46,6 @@ az network public-ip create --name Azure-VNGpubip --resource-group Hub --allocat
 </pre>
 
 **Build Azure VPN Gateway. Enable BGP with ASN 65001. Deployment will take some time.**
-
-az network public-ip create --name Azure-VNGpubip --resource-group Hub --allocation-method Dynamic
 az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpubip --resource-group Hub --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait --asn 65001
 
 **Build onprem CSR. CSR image is specified from the Marketplace in this example.**
@@ -55,14 +53,13 @@ az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpub
 az network public-ip create --name CSR1PublicIP --resource-group onprem --idle-timeout 30 --allocation-method Static
 az network nic create --name CSR1OutsideInterface -g onprem --subnet zeronet --vnet onprem --public-ip-address CSR1PublicIP --ip-forwarding true
 az network nic create --name CSR1InsideInterface -g onprem --subnet onenet --vnet onprem --ip-forwarding true
-az vm create --resource-group onprem --location eastus --name CSR1 --size Standard_D2_v2 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:16_6:16.6.220171219 --admin-username azureuser --admin-password Msft123Msft123
+az vm create --resource-group onprem --location westus --name CSR1 --size Standard_D2_v2 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:16_6:16.6.220171219 --admin-username azureuser --admin-password Msft123Msft123
 </pre>
 
 **After the gateway and CSR have been created, document the public IP address for both. Value will be null until it has been successfully provisioned.**
 <pre lang="...">
 az network public-ip show -g Hub -n Azure-VNGpubip --query "{address: ipAddress}"
 az network public-ip show -g onprem -n CSR1PublicIP --query "{address: ipAddress}"
-</pre>
 
 **Document BGP peer IP and ASN**
 <pre lang="...">
@@ -83,7 +80,7 @@ az network local-gateway create --gateway-ip-address "insert CSR Public IP" --na
 
 **Create VPN connections**
 <pre lang="...">
-az network vpn-connection create --name to-onprem --resource-group hub --vnet-gateway1 Azure-VNG -l eastus --shared-key Msft123Msft123 --local-gateway2 to-onprem --enable-bgp
+az network vpn-connection create --name to-onprem --resource-group hub --vnet-gateway1 Azure-VNG -l westus --shared-key Msft123Msft123 --local-gateway2 to-onprem --enable-bgp
 </pre>
 
 **SSH to CSR public IP. Public IPs in the below config are an example.**
@@ -132,7 +129,7 @@ crypto ipsec profile to-csr-IPsecProfile
   exit
 
 int tunnel 11
-  ip address 169.254.0.1 255.255.255.255
+  ip address 192.168.1.1 255.255.255.255
   tunnel mode ipsec ipv4
   ip tcp adjust-mss 1350
   tunnel source 10.1.0.4
@@ -141,7 +138,7 @@ int tunnel 11
   exit
 
  router bgp 65002
-  bgp log-neighbor-changes
+  bgp      log-neighbor-changes
   neighbor 10.0.0.254 remote-as 65001
   neighbor 10.0.0.254 ebgp-multihop 255
   neighbor 10.0.0.254 update-source tu11
@@ -171,4 +168,3 @@ Key Cisco commands
 <pre lang="...">
 az network vnet-gateway list-advertised-routes -g Hub -n Azure-VNG --peer 169.254.0.1
 </pre>
-
