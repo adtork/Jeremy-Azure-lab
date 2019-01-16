@@ -8,7 +8,7 @@ Assumptions:
 
 
 # Base Topology
-The lab deploys an Azure VPN gateway into a VNET. We will also deploy a Cisco CSR in a seperate VNET to simulate on prem.
+The lab deploys an Azure VPN gateway into a VNET. We will also deploy a Cisco CSR in a seperate VNET to simulate on prem. BGP over IPSEC is used to exchange routes. 
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/csrvpnikev2.png)
 
 **Build Resource Groups, VNETs and Subnets**
