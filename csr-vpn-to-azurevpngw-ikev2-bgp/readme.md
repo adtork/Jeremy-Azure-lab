@@ -60,6 +60,7 @@ az vm create --resource-group onprem --location westus --name CSR1 --size Standa
 <pre lang="...">
 az network public-ip show -g Hub -n Azure-VNGpubip --query "{address: ipAddress}"
 az network public-ip show -g onprem -n CSR1PublicIP --query "{address: ipAddress}"
+</pre>
 
 **Document BGP peer IP and ASN**
 <pre lang="...">
@@ -75,7 +76,7 @@ az network vnet subnet update --name VM --vnet-name onprem --resource-group onpr
 
 **Create Local Network Gateway. This specifies the prefixes that are allowed to source from Azure over the tunnel to onprem. The APIPA addrees is the IP of the tunnel interface on the CSR.**
 <pre lang="...">
-az network local-gateway create --gateway-ip-address "insert CSR Public IP" --name to-onprem --resource-group onprem --local-address-prefixes 10.1.0.0/16 --asn 65002 --bgp-peering-address 169.254.0.1
+az network local-gateway create --gateway-ip-address "insert CSR Public IP" --name to-onprem --resource-group onprem --local-address-prefixes 10.1.0.0/16 --asn 65002 --bgp-peering-address 192.168.1.1
 </pre>
 
 **Create VPN connections**
@@ -88,43 +89,41 @@ az network vpn-connection create --name to-onprem --resource-group hub --vnet-ga
 !route for simulate on prem vm
 ip route 10.1.10.0 255.255.255.0 10.1.1.1
 
-crypto ikev2 proposal to-csr-proposal
+crypto ikev2 proposal to-onprem-proposal
   encryption aes-cbc-256
-  integrity sha1
-  group 2
+  integrity  sha1
+  group      2
   exit
 
-!the local IP is the private IP of the outside interface. Azure will automatically NAT this outbound. Replace this with your public IP !if needed
-crypto ikev2 policy to-csr-policy
-  proposal to-csr-proposal
+crypto ikev2 policy to-onprem-policy
+  proposal to-onprem-proposal
   match address local 10.1.0.4
   exit
- 
-#Peer IP/address is the Azure VPN gateway
-crypto ikev2 keyring to-csr-keyring
-  peer 23.96.50.124 
-    address 23.96.50.124
+  
+crypto ikev2 keyring to-onprem-keyring
+  peer 40.118.238.212
+    address 40.118.238.212
     pre-shared-key Msft123Msft123
     exit
   exit
 
-crypto ikev2 profile to-csr-profile
+crypto ikev2 profile to-onprem-profile
   match address  local 10.1.0.4
-  match identity remote address 23.96.50.124 255.255.255.255
+  match identity remote address 40.118.238.212 255.255.255.255
   authentication remote pre-share
   authentication local  pre-share
-  lifetime 3600
+  lifetime       3600
   dpd 10 5 on-demand
-  keyring local  to-csr-keyring
+  keyring local  to-onprem-keyring
   exit
 
-crypto ipsec transform-set to-csr-TransformSet esp-gcm 256 
+crypto ipsec transform-set to-onprem-TransformSet esp-gcm 256 
   mode tunnel
   exit
 
-crypto ipsec profile to-csr-IPsecProfile
-  set transform-set  to-csr-TransformSet
-  set ikev2-profile  to-csr-profile
+crypto ipsec profile to-onprem-IPsecProfile
+  set transform-set  to-onprem-TransformSet
+  set ikev2-profile  to-onprem-profile
   set security-association lifetime seconds 3600
   exit
 
@@ -133,23 +132,25 @@ int tunnel 11
   tunnel mode ipsec ipv4
   ip tcp adjust-mss 1350
   tunnel source 10.1.0.4
-  tunnel destination 23.96.50.124
-  tunnel protection ipsec profile to-csr-IPsecProfile
+  tunnel destination 40.118.238.212
+  tunnel protection ipsec profile to-onprem-IPsecProfile
   exit
 
- router bgp 65002
+router bgp 65002
   bgp      log-neighbor-changes
   neighbor 10.0.0.254 remote-as 65001
   neighbor 10.0.0.254 ebgp-multihop 255
-  neighbor 10.0.0.254 update-source tu11
+  neighbor 10.0.0.254 update-source tunnel 11
 
   address-family ipv4
-    network 10.1.0.0 mask 255.255.0.0 
+    network 10.1.0.0 mask 255.255.0.0
     neighbor 10.0.0.254 activate    
     exit
   exit
- 
- ip route 10.0.0.254 255.255.255.255 Tunnel 11
+
+!route BGP peer IP over the tunnel
+ip route 10.0.0.254 255.255.255.255 Tunnel 11
+
 </pre>
 
 **Validate VPN connection status in Azure CLI**
