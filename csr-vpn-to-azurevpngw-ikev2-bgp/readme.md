@@ -74,7 +74,7 @@ az network route-table route create --name vm-rt --resource-group onprem --route
 az network vnet subnet update --name VM --vnet-name onprem --resource-group onprem --route-table vm-rt
 </pre>
 
-**Create Local Network Gateway. This specifies the prefixes that are allowed to source from Azure over the tunnel to onprem. The APIPA addrees is the IP of the tunnel interface on the CSR.**
+**Create Local Network Gateway. This specifies the prefixes that are allowed to source from Azure over the tunnel to onprem. The 192.168.1.1 addrees is the IP of the tunnel interface on the CSR.**
 <pre lang="...">
 az network local-gateway create --gateway-ip-address "insert CSR Public IP" --name to-onprem --resource-group onprem --local-address-prefixes 10.1.0.0/16 --asn 65002 --bgp-peering-address 192.168.1.1
 </pre>
