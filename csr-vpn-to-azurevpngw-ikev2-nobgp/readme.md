@@ -142,6 +142,9 @@ int tunnel 11
 ip route 10.0.0.0 255.255.0.0 Tunnel 11
 </pre>
 
+**Generate interesting traffic to initiate tunnel**
+Connect to onprem VM and ping the VM in the Azure Hub VNET (10.0.10.10)
+
 **Validate VPN connection status in Azure CLI**
 <pre lang="...">
 az network vpn-connection show --name to-onprem --resource-group Hub --query "{status: connectionStatus}"
