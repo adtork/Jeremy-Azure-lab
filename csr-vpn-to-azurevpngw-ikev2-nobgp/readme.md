@@ -41,8 +41,6 @@ az network nic create --resource-group onprem -n onpremVMNIC --location eastus -
 az vm create -n onpremVM -g onprem --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics onpremVMNIC
 </pre>
 
-
-
 **Build Public IPs for Azure VPN Gateway**
 <pre lang="...">
 az network public-ip create --name Azure-VNGpubip --resource-group Hub --allocation-method Dynamic
@@ -60,7 +58,6 @@ az network nic create --name CSR1OutsideInterface -g onprem --subnet zeronet --v
 az network nic create --name CSR1InsideInterface -g onprem --subnet onenet --vnet onprem --ip-forwarding true
 az vm create --resource-group onprem --location eastus --name CSR1 --size Standard_D2_v2 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:16_6:16.6.220171219 --admin-username jewrigh --admin-password Msft123Msft123
 </pre>
-
 
 **After the gateway and CSR have been created, document the public IP address for both. Value will be null until it has been successfully provisioned.**
 <pre lang="...">
