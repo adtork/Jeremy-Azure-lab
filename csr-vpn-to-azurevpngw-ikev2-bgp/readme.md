@@ -182,3 +182,48 @@ PS Azure:\> az network vnet-gateway list-advertised-routes -g Hub -n Azure-VNG -
       "weight": 0
     },
 </pre>
+**If you add a new prefix to your existing VNET, it will automatically be advertised to the CSR. Example: I added 172.16.1.0/24 to the VNET address space.**
+<pre lang="...">
+PS Azure:\> az network vnet-gateway list-advertised-routes -g Hub -n Azure-VNG --peer 192.168.1.1
+{
+  "value": [{
+      "asPath": "65001",
+      "localAddress": "10.0.0.254",
+      "network": "172.16.1.0/24",
+      "nextHop": "10.0.0.254",
+      "origin": "Igp",
+      "sourcePeer": null,
+      "weight": 0
+    }
+ On CSR:
+ CSR1#sh ip route 172.16.1.0
+Routing entry for 172.16.1.0/24
+  Known via "bgp 65002", distance 20, metric 0
+  Tag 65001, type external
+  Last update from 10.0.0.254 00:02:31 ago
+  Routing Descriptor Blocks:
+  * 10.0.0.254, from 10.0.0.254, 00:02:31 ago
+      Route metric is 0, traffic share count is 1
+      AS Hops 1
+      Route tag 65001
+      MPLS label: none
+</pre>
+**Advertise a new prefix from on prem over BGP**
+<pre lang="...">
+CSR:
+CSR1(config)#int lo100
+CSR1(config-if)#ip address 1.1.1.1 255.255.255.255
+CSR1(config-if)#router bgp 65002
+CSR1(config-router)#address-family ipv4
+CSR1(config-router-af)#  network 1.1.1.1 mask 255.255.255.255
+
+PS Azure:\> az network vnet-gateway list-learned-routes -g Hub -n Azure-VNG
+{
+      "asPath": "65002",
+      "localAddress": "10.0.0.254",
+      "network": "1.1.1.1/32",
+      "nextHop": "192.168.1.1",
+      "origin": "EBgp",
+      "sourcePeer": "192.168.1.1",
+      "weight": 32768
+</pre>
