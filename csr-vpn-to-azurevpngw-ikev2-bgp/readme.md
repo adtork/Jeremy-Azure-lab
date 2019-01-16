@@ -167,5 +167,18 @@ Key Cisco commands
 
 **List BGP advertised routes per peer**
 <pre lang="...">
-az network vnet-gateway list-advertised-routes -g Hub -n Azure-VNG --peer 169.254.0.1
+az network vnet-gateway list-advertised-routes -g Hub -n Azure-VNG --peer 192.168.1.1
+
+PS Azure:\> az network vnet-gateway list-advertised-routes -g Hub -n Azure-VNG --peer 192.168.1.1
+{
+  "value": [
+    {
+      "asPath": "65001",
+      "localAddress": "10.0.0.254",
+      "network": "10.0.0.0/16",
+      "nextHop": "10.0.0.254",
+      "origin": "Igp",
+      "sourcePeer": null,
+      "weight": 0
+    },
 </pre>
