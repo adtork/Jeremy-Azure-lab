@@ -42,6 +42,4 @@ az network public-ip create --name ASA1PublicIP --resource-group onprem --idle-t
 az network nic create --name ASA1OutsideInterface -g onprem --subnet zeronet --vnet onprem --public-ip-address ASA1PublicIP --ip-forwarding true
 az network nic create --name ASA1InsideInterface -g onprem --subnet onenet --vnet onprem --ip-forwarding true
 az vm create --resource-group onprem --location eastus --name ASA1 --size Standard_D3_v2 --nics ASA1OutsideInterface ASA1InsideInterface  --image cisco:cisco-asav:910.1.0 --admin-username azureuser --admin-password Msft123Msft123
-
-az vm create --resource-group onprem --location eastus --name ASA1 --size Standard_D3_v2 --nics ASA1OutsideInterface ASA1InsideInterface  --image cisco:cisco-asav:910.1.0 --admin-username azureuser --admin-password Msft123Msft123
 </pre>
