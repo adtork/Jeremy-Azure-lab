@@ -25,6 +25,7 @@ az group create --name onprem --location eastus
 az network vnet create --resource-group onprem --name onprem --location eastus --address-prefixes 10.1.0.0/16 --subnet-name VM --subnet-prefix 10.1.10.0/24
 az network vnet subnet create --address-prefix 10.1.0.0/24 --name zeronet --resource-group onprem --vnet-name onprem
 az network vnet subnet create --address-prefix 10.1.1.0/24 --name onenet --resource-group onprem --vnet-name onprem
+az network vnet subnet create --address-prefix 10.2.1.0/24 --name twonet --resource-group onprem --vnet-name onprem
 </pre>
 
 **Build Azure side Linux VM**
@@ -53,16 +54,18 @@ az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpub
 
 **Build on prem ASAv. ASAv image is specified from the Marketplace in this example.**
 <pre lang="...">
-az network public-ip create --name ASA1PublicIP --resource-group onprem --idle-timeout 30 --allocation-method Static
-az network nic create --name ASA1OutsideInterface -g onprem --subnet zeronet --vnet onprem --public-ip-address ASA1PublicIP --private-ip-address 10.1.0.4 --ip-forwarding true
+az network public-ip create --name ASA1MgmtIP --resource-group onprem --idle-timeout 30 --allocation-method Static
+az network public-ip create --name ASA1VPNPublicIP --resource-group onprem --idle-timeout 30 --allocation-method Static
+az network nic create --name ASA1MgmtInterface -g onprem --subnet twonet --vnet onprem --public-ip-address ASA1MgmtIP --private-ip-address 10.1.2.4 --ip-forwarding true
+az network nic create --name ASA1OutsideInterface -g onprem --subnet zeronet --vnet onprem --public-ip-address ASA1VPNPublicIP --private-ip-address 10.1.0.4 --ip-forwarding true
 az network nic create --name ASA1InsideInterface -g onprem --subnet onenet --vnet onprem --private-ip-address 10.1.1.4 --ip-forwarding true
-az vm create --resource-group onprem --location eastus --name ASA1 --size Standard_D3_v2 --nics ASA1OutsideInterface ASA1InsideInterface  --image cisco:cisco-asav:asav-azure-byol:910.1.0 --admin-username azureuser --admin-password Msft123Msft123
+az vm create --resource-group onprem --location eastus --name ASA1 --size Standard_D3_v2 --nics ASA1MgmtInterface ASA1OutsideInterface ASA1InsideInterface  --image cisco:cisco-asav:asav-azure-byol:910.1.0 --admin-username azureuser --admin-password Msft123Msft123
 </pre>
 
 **After the gateway and ASAv have been created, document the public IP address for both. Value will be null until it has been successfully provisioned.**
 <pre lang="...">
 az network public-ip show -g Hub -n Azure-VNGpubip --query "{address: ipAddress}"
-az network public-ip show -g onprem -n ASA1PublicIP --query "{address: ipAddress}"
+az network public-ip show -g onprem -n ASA1VPNPublicIP --query "{address: ipAddress}"
 </pre>
 
 **Create a route table and routes for the Azure VNET with correct association. This is for the onprem simulation to route traffic to the ASAv.**
@@ -74,7 +77,7 @@ az network vnet subnet update --name VM --vnet-name onprem --resource-group onpr
 
 **Create Local Network Gateway. This specifies the prefixes that are allowed to source from Azure over the tunnel to onprem.**
 <pre lang="...">
-az network local-gateway create --gateway-ip-address "insert CSR Public IP" --name to-onprem --resource-group Hub --local-address-prefixes 10.1.0.0/16
+az network local-gateway create --gateway-ip-address "insert ASA Public IP" --name to-onprem --resource-group Hub --local-address-prefixes 10.1.0.0/16
 </pre>
 
 **Create VPN connections**
