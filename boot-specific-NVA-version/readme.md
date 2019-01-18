@@ -1,24 +1,28 @@
 # Azure CLI to find a NVA Marketplace image. In this example, we will search Azure East for a Cisco ASAv version.
 
 **Fill in Azure region**
-
+<pre lang="...">
 $locName="East US"
 Get-AzureRMVMImagePublisher -Location $locName | Select PublisherName
+</pre>
 
 **Insert the publisher name. This example is Cisco**
-
+<pre lang="...">
 $pubName="Cisco"
 Get-AzureRMVMImageOffer -Location $locName -Publisher $pubName | Select Offer
+</pre>
 
 **Fill in offer based on previous command. This example is ASAv.**
-
+<pre lang="...">
 $offerName="cisco-asav"
 Get-AzureRMVMImageSku -Location $locName -Publisher $pubName -Offer $offerName | Select Skus
+</pre>
 
 **Fill in SKU from previous command to get available images**
-
+<pre lang="...">
 $skuName="asav-azure-byol"
 Get-AzureRMVMImage -Location $locName -Publisher $pubName -Offer $offerName -Sku $skuName | Select Version
+</pre>
 
 **Sample output:**</br>
 Version</br>
