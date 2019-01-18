@@ -20,7 +20,7 @@ Get-AzureRMVMImageSku -Location $locName -Publisher $pubName -Offer $offerName |
 $skuName="asav-azure-byol"
 Get-AzureRMVMImage -Location $locName -Publisher $pubName -Offer $offerName -Sku $skuName | Select Version
 
-**Sample output:**
+**Sample output:**</br>
 Version</br>
 -------</br>
 910.1.0</br>
