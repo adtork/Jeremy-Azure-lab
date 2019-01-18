@@ -1,4 +1,4 @@
-# Boot specific NVA version. EX: Cisco
+# Boot specific NVA version. EX: Cisco ASAv
 **Fill in Azure region**
 
 $locName="East US"
