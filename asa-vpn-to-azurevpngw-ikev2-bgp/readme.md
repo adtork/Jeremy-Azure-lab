@@ -47,7 +47,7 @@ az vm create -n onpremVM -g onprem --image UbuntuLTS --admin-username azureuser 
 az network public-ip create --name Azure-VNGpubip --resource-group Hub --allocation-method Dynamic
 </pre>
 
-**Build Azure VPN Gateway. Deployment will take some time.**
+**Build Azure VPN Gateway. Deployment will take some time. Azure side BGP ASN is 65001**
 <pre lang="...">
 az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpubip --resource-group Hub --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait --asn 65001
 </pre>
@@ -75,7 +75,7 @@ az network route-table route create --name vm-rt --resource-group onprem --route
 az network vnet subnet update --name VM --vnet-name onprem --resource-group onprem --route-table vm-rt
 </pre>
 
-**Create Local Network Gateway. This specifies the prefixes that are allowed to source from Azure over the tunnel to onprem.**
+**Create Local Network Gateway. On prem BGP peer over IPSEC is in ASN 65002.**
 <pre lang="...">
 az network local-gateway create --gateway-ip-address "insert ASA Public IP" --name to-onprem --resource-group Hub --local-address-prefixes 10.1.0.0/16 --asn 65002 --bgp-peering-address 192.168.1.1
 </pre>
