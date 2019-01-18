@@ -89,7 +89,118 @@ az network vpn-connection create --name to-onprem --resource-group Hub --vnet-ga
 
 **SSH to ASAv public IP. Public IPs in the below config are an example.**
 <pre lang="...">
+interface GigabitEthernet0/0
+ nameif outside
+ security-level 0
+ ip address 10.1.0.4 255.255.255.0 
+ no shut
+!
+interface GigabitEthernet0/1
+ nameif inside
+ security-level 100
+ ip address 10.1.1.4 255.255.255.0
+ no shut
 
+!By default, ASAv has default route (burned in) pointing out the Mgmt interface. Route Azure VPN GW out the outside interface which we're using for VPN termination
+route OUTSIDE 13.90.86.204 255.255.255.255 10.1.0.1 1
+
+!route traffic from the ASAv destin for the on prem subnet to the fabric
+route inside 10.1.10.0 255.255.255.0 10.1.1.1 1
+
+!Must create crypto profiles first
+crypto ipsec ikev2 ipsec-proposal Azure-Ipsec-PROP-to-onprem
+ protocol esp encryption aes-256 aes-192 aes
+ protocol esp integrity sha-256 sha-1
+crypto ipsec ikev2 ipsec-proposal AES256
+ protocol esp encryption aes-256
+ protocol esp integrity sha-1 md5
+crypto ipsec ikev2 ipsec-proposal AES192
+ protocol esp encryption aes-192
+ protocol esp integrity sha-1 md5
+crypto ipsec ikev2 ipsec-proposal AES
+ protocol esp encryption aes
+ protocol esp integrity sha-1 md5
+crypto ipsec ikev2 ipsec-proposal 3DES
+ protocol esp encryption 3des
+ protocol esp integrity sha-1 md5
+crypto ipsec ikev2 ipsec-proposal DES
+ protocol esp encryption des
+ protocol esp integrity sha-1 md5
+crypto ipsec profile Azure-Ipsec-PROF-to-onprem
+ set ikev2 ipsec-proposal Azure-Ipsec-PROP-to-onprem
+ set security-association lifetime kilobytes unlimited
+ set security-association lifetime seconds 3600
+crypto ipsec security-association lifetime seconds 3600
+crypto ipsec security-association lifetime kilobytes unlimited
+crypto ipsec security-association replay disable
+crypto ipsec security-association pmtu-aging infinite
+crypto ca trustpool policy
+crypto isakmp disconnect-notify
+
+crypto ikev2 policy 1
+ encryption aes-256 aes-192 aes 3des
+ integrity sha256 sha
+ group 2
+ prf sha256 sha
+ lifetime seconds 28800
+
+!Tunnel IP must not conflict with any prefixes. This can be a /30
+interface Tunnel11
+ nameif vti-to-onprem
+ ip address 192.168.2.1 255.255.255.0 
+ tunnel source interface OUTSIDE
+ tunnel destination 13.90.86.204
+ tunnel mode ipsec ipv4
+ tunnel protection ipsec profile Azure-Ipsec-PROF-to-onprem
+ no shut
+
+object network AZURE-GW
+ host 13.90.86.204
+object network ASA-IP
+ host 40.117.42.98
+object network AnyNets
+ subnet 0.0.0.0 0.0.0.0
+object network obj_any
+ subnet 0.0.0.0 0.0.0.0
+object network VTI-IP
+ host 192.168.2.1
+object-group network AZURE-ASA-WAN-IP
+ network-object object ASA-IP
+
+access-list Azure-ACL extended permit ip object obj_any object obj_any log debugging 
+access-list OUTSIDE_access_in extended permit ip object obj_any object obj_any log debugging 
+access-list INSIDE_access_in extended permit ip object obj_any object obj_any log debugging 
+
+mtu OUTSIDE 1400
+mtu INSIDE 1500
+sysopt connection tcpmss 1350
+sysopt connection preserve-vpn-flows
+
+nat (INSIDE,OUTSIDE) source static obj_any obj_any destination static obj_any obj_any no-proxy-arp route-lookup
+access-group OUTSIDE_access_in in interface OUTSIDE
+access-group INSIDE_access_in in interface INSIDE
+
+!route traffic for Azure over the tunnel to the tunnel interface
+route vti-to-onprem 10.0.0.0 255.255.0.0 13.90.86.204 1
+
+crypto ikev2 enable OUTSIDE
+crypto ikev2 notify invalid-selectors
+
+group-policy AzureGroupPolicy internal
+group-policy AzureGroupPolicy attributes
+ vpn-tunnel-protocol ikev2 l2tp-ipsec 
+dynamic-access-policy-record DfltAccessPolicy
+tunnel-group 13.90.86.204 type ipsec-l2l
+tunnel-group 13.90.86.204 general-attributes
+ default-group-policy AzureGroupPolicy
+tunnel-group 13.90.86.204 ipsec-attributes
+ ikev2 remote-authentication pre-shared-key Msft123Msft123
+ ikev2 local-authentication pre-shared-key Msft123Msft123
+no tunnel-group-map enable peer-ip
+tunnel-group-map default-group 13.90.86.204
+!
+class-map inspection_default
+ match default-inspection-traffic
 
 </pre>
 
@@ -101,7 +212,7 @@ Connect to onprem VM and ping the VM in the Azure Hub VNET (10.0.10.10)
 az network vpn-connection show --name to-onprem --resource-group Hub --query "{status: connectionStatus}"
 </pre>
 
-Key Cisco commands
+
 
 
 
