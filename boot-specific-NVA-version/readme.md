@@ -1,4 +1,4 @@
-# Azure CLI to find a NVA Marketplace image. In this example, we will search Azure East for a Cisco ASAv version.
+# How to find and use a specific NVA image. In this example, we will search Azure East for a Cisco ASAv version.
 
 **Fill in Azure region**
 <pre lang="...">
