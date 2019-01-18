@@ -21,11 +21,11 @@ $skuName="asav-azure-byol"
 Get-AzureRMVMImage -Location $locName -Publisher $pubName -Offer $offerName -Sku $skuName | Select Version
 
 **Sample output:**
-Version
--------
-910.1.0
-99.1.6
-99.2.18
+Version</br>
+-------</br>
+910.1.0</br>
+99.1.6</br>
+99.2.18</br>
 
 **Example:**
 <pre lang="...">
