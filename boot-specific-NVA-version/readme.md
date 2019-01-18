@@ -1,4 +1,4 @@
-##Placeholder##
+##Placeholder##</br>
 **Boot specific NVA version. EX: Cisco**
 #Fill in Azure region#
 
@@ -20,7 +20,7 @@ Get-AzureRMVMImageSku -Location $locName -Publisher $pubName -Offer $offerName |
 $skuName="asav-azure-byol"
 Get-AzureRMVMImage -Location $locName -Publisher $pubName -Offer $offerName -Sku $skuName | Select Version
 
-Sample output:
+**Sample output:**
 Version
 -------
 910.1.0
