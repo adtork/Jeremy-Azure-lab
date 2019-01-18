@@ -1,12 +1,12 @@
 # How to find and use a specific NVA image. In this example, we will search Azure East for a Cisco ASAv version.
 
-**Fill in Azure region**
+**Fill in Azure region to find available publishers.**
 <pre lang="...">
 $locName="East US"
 Get-AzureRMVMImagePublisher -Location $locName | Select PublisherName
 </pre>
 
-**Insert the publisher name. This example is Cisco**
+**Insert the publisher name from previous output. This example is Cisco.**
 <pre lang="...">
 $pubName="Cisco"
 Get-AzureRMVMImageOffer -Location $locName -Publisher $pubName | Select Offer
