@@ -1,4 +1,5 @@
-# Boot specific NVA version. EX: Cisco ASAv
+# Azure CLI to find a NVA Marketplace image. In this example, we will search 
+
 **Fill in Azure region**
 
 $locName="East US"
