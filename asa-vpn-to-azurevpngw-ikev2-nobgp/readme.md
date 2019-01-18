@@ -204,7 +204,7 @@ class-map inspection_default
 
 </pre>
 
-**Generate interesting traffic to initiate tunnel**
+**Generate interesting traffic to initiate tunnel**</br>
 Connect to onprem VM and ping the VM in the Azure Hub VNET (10.0.10.10)
 
 **Validate VPN connection status in Azure CLI**
