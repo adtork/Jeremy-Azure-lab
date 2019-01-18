@@ -25,7 +25,7 @@ az group create --name onprem --location eastus
 az network vnet create --resource-group onprem --name onprem --location eastus --address-prefixes 10.1.0.0/16 --subnet-name VM --subnet-prefix 10.1.10.0/24
 az network vnet subnet create --address-prefix 10.1.0.0/24 --name zeronet --resource-group onprem --vnet-name onprem
 az network vnet subnet create --address-prefix 10.1.1.0/24 --name onenet --resource-group onprem --vnet-name onprem
-az network vnet subnet create --address-prefix 10.2.1.0/24 --name twonet --resource-group onprem --vnet-name onprem
+az network vnet subnet create --address-prefix 10.1.2.0/24 --name twonet --resource-group onprem --vnet-name onprem
 </pre>
 
 **Build Azure side Linux VM**
