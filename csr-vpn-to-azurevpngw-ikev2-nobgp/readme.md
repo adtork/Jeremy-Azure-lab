@@ -74,12 +74,12 @@ az network vnet subnet update --name VM --vnet-name onprem --resource-group onpr
 
 **Create Local Network Gateway. This specifies the prefixes that are allowed to source from Azure over the tunnel to onprem.**
 <pre lang="...">
-az network local-gateway create --gateway-ip-address "insert CSR Public IP" --name to-onprem --resource-group onprem --local-address-prefixes 10.1.0.0/16
+az network local-gateway create --gateway-ip-address "insert CSR Public IP" --name to-onprem --resource-group Hub --local-address-prefixes 10.1.0.0/16
 </pre>
 
 **Create VPN connections**
 <pre lang="...">
-az network vpn-connection create --name to-onprem --resource-group hub --vnet-gateway1 Azure-VNG -l eastus --shared-key Msft123Msft123 --local-gateway2 to-onprem
+az network vpn-connection create --name to-onprem --resource-group Hub --vnet-gateway1 Azure-VNG -l eastus --shared-key Msft123Msft123 --local-gateway2 to-onprem
 </pre>
 
 
