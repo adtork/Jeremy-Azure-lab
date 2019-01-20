@@ -90,6 +90,160 @@ az network vpn-connection create --name to-onprem --resource-group Hub --vnet-ga
 **SSH to ASAv public IP. Public IPs in the below config are an example.**
 <pre lang="...">
 
+interface GigabitEthernet0/0
+ nameif outside
+ security-level 0
+ ip address 10.1.0.4 255.255.255.0 
+!
+interface GigabitEthernet0/1
+ nameif inside
+ security-level 100
+ ip address 10.1.1.4 255.255.255.0 
+!
+
+sysopt connection tcpmss 1350
+sysopt connection preserve-vpn-flows
+crypto ipsec ikev2 ipsec-proposal Azure-Ipsec-PROP-to-onprem
+ protocol esp encryption aes-256 aes-192 aes
+ protocol esp integrity sha-256 sha-1
+crypto ipsec ikev2 ipsec-proposal AES256
+ protocol esp encryption aes-256
+ protocol esp integrity sha-1 md5
+crypto ipsec ikev2 ipsec-proposal AES192
+ protocol esp encryption aes-192
+ protocol esp integrity sha-1 md5
+crypto ipsec ikev2 ipsec-proposal AES
+ protocol esp encryption aes
+ protocol esp integrity sha-1 md5
+crypto ipsec ikev2 ipsec-proposal 3DES
+ protocol esp encryption 3des
+ protocol esp integrity sha-1 md5
+crypto ipsec ikev2 ipsec-proposal DES
+ protocol esp encryption des
+ protocol esp integrity sha-1 md5
+crypto ipsec profile Azure-Ipsec-PROF-to-onprem
+ set ikev2 ipsec-proposal Azure-Ipsec-PROP-to-onprem
+ set security-association lifetime kilobytes unlimited
+ set security-association lifetime seconds 3600
+
+route vti-to-onprem 10.0.0.0 255.255.0.0 137.135.113.108 1
+route inside 10.1.10.0 255.255.255.0 10.1.1.1 1
+route outside 137.135.113.108 255.255.255.255 10.1.0.1 1
+!
+interface Tunnel11
+ nameif vti-to-onprem
+ ip address 192.168.1.1 255.255.255.0 
+ tunnel source interface outside
+ tunnel destination 137.135.113.108
+ tunnel mode ipsec ipv4
+ tunnel protection ipsec profile Azure-Ipsec-PROF-to-onprem
+
+dns server-group DefaultDNS
+ name-server 168.63.129.16 
+object network AZURE-GW
+ host 137.135.113.108
+object network ASA-IP
+ host 40.85.179.88
+object network AnyNets
+ subnet 0.0.0.0 0.0.0.0
+object network obj_any
+ subnet 0.0.0.0 0.0.0.0
+object network VTI-IP
+ host 192.168.2.1
+object-group network AZURE-ASA-WAN-IP
+ network-object object ASA-IP
+access-list Azure-ACL extended permit ip object obj_any object obj_any log debugging 
+access-list OUTSIDE_access_in extended permit ip object obj_any object obj_any log debugging 
+access-list INSIDE_access_in extended permit ip object obj_any object obj_any log debugging 
+pager lines 23
+mtu management 1400
+mtu outside 1400
+mtu inside 1400
+
+nat (inside,outside) source static obj_any obj_any destination static obj_any obj_any no-proxy-arp route-lookup
+access-group OUTSIDE_access_in in interface outside
+access-group INSIDE_access_in in interface inside
+router bgp 65002
+ bgp log-neighbor-changes
+ bgp graceful-restart
+ bgp router-id 192.168.1.1
+ address-family ipv4 unicast
+  neighbor 10.0.0.254 remote-as 65001
+  neighbor 10.0.0.254 ebgp-multihop 255
+  neighbor 10.0.0.254 activate
+  network 10.1.0.0 mask 255.255.0.0
+  no auto-summary
+  no synchronization
+ exit-address-family
+!
+
+crypto ipsec security-association lifetime seconds 3600
+crypto ipsec security-association lifetime kilobytes unlimited
+crypto ipsec security-association replay disable
+crypto ipsec security-association pmtu-aging infinite
+crypto ca trustpoint _SmartCallHome_ServerCA
+ no validation-usage
+ crl configure
+crypto ca trustpool policy
+ auto-import
+
+crypto isakmp disconnect-notify
+crypto ikev2 policy 1
+ encryption aes-256 aes-192 aes 3des
+ integrity sha256 sha
+ group 2
+ prf sha256 sha
+ lifetime seconds 28800
+crypto ikev2 enable outside
+crypto ikev2 notify invalid-selectors
+
+threat-detection basic-threat
+threat-detection statistics access-list
+no threat-detection statistics tcp-intercept
+group-policy AzureGroupPolicy internal
+group-policy AzureGroupPolicy attributes
+ vpn-tunnel-protocol ikev2 l2tp-ipsec 
+dynamic-access-policy-record DfltAccessPolicy
+
+tunnel-group 137.135.113.108 type ipsec-l2l
+tunnel-group 137.135.113.108 general-attributes
+ default-group-policy AzureGroupPolicy
+tunnel-group 137.135.113.108 ipsec-attributes
+ ikev2 remote-authentication pre-shared-key *****
+ ikev2 local-authentication pre-shared-key *****
+no tunnel-group-map enable peer-ip
+tunnel-group-map default-group 137.135.113.108
+!
+class-map inspection_default
+ match default-inspection-traffic
+!
+!
+policy-map type inspect dns preset_dns_map
+ parameters
+  message-length maximum client auto
+  message-length maximum 512
+  no tcp-inspection
+policy-map global_policy
+ class inspection_default
+  inspect dns preset_dns_map 
+  inspect ftp 
+  inspect h323 h225 
+  inspect h323 ras 
+  inspect rsh 
+  inspect rtsp 
+  inspect esmtp 
+  inspect sqlnet 
+  inspect skinny  
+  inspect sunrpc 
+  inspect xdmcp 
+  inspect sip  
+  inspect netbios 
+  inspect tftp 
+  inspect ip-options 
+!
+service-policy global_policy global
+
+
 
 </pre>
 
