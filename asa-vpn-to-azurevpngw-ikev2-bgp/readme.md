@@ -240,7 +240,7 @@ az network vnet-gateway list-advertised-routes -g Hub -n Azure-VNG --peer 192.16
 az network vnet-gateway list-learned-routes -g Hub -n Azure-VNG
 </pre>
 
-**Manually add a new address space 1.1.1.0/24 to the Hub VNET. Create subnet 1.1.1.0/24. Use Azure portal.**
+**Manually add a new address space 1.1.1.0/24 to the Hub VNET. Create subnet 1.1.1.0/24. Use Azure portal.**(/br>
 **Create VM in new 1.1.1.0/24 network**
 <pre lang="...">
 az network public-ip create --name test1VMPubIP --resource-group Hub --location eastus --allocation-method Dynamic
