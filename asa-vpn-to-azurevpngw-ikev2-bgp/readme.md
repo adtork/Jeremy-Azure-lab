@@ -181,7 +181,7 @@ access-group OUTSIDE_access_in in interface OUTSIDE
 access-group INSIDE_access_in in interface INSIDE
 
 !route traffic for Azure over the tunnel to the tunnel interface
-route vti-to-onprem 10.0.0.0 255.255.0.0 13.90.86.204 1
+route vti-to-onprem 10.0.0.254 255.255.255.255 13.90.86.204 1
 
 crypto ikev2 enable OUTSIDE
 crypto ikev2 notify invalid-selectors
