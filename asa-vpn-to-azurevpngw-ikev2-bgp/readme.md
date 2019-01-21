@@ -77,7 +77,7 @@ az network vnet subnet update --name VM --vnet-name onprem --resource-group onpr
 
 **Create Local Network Gateway. On prem BGP peer over IPSEC is in ASN 65002.**
 <pre lang="...">
-az network local-gateway create --gateway-ip-address "insert ASA Public IP" --name to-onprem --resource-group Hub --local-address-prefixes 10.1.0.0/16 --asn 65002 --bgp-peering-address 192.168.2.1
+az network local-gateway create --gateway-ip-address "insert ASA Public IP" --name to-onprem --resource-group Hub --local-address-prefixes 192.168.2.1/32 --asn 65002 --bgp-peering-address 192.168.2.1
 </pre>
 
 **Create VPN connections**
