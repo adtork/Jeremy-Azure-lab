@@ -240,6 +240,13 @@ az network vnet-gateway list-advertised-routes -g Hub -n Azure-VNG --peer 192.16
 az network vnet-gateway list-learned-routes -g Hub -n Azure-VNG
 </pre>
 
+**Manually add a new address space 1.1.1.0/24 to the Hub VNET. Create subnet 1.1.1.0/24**
+**Create VM in new 1.1.1.0/24 network**
+<pre lang="...">
+az network public-ip create --name test1VMPubIP --resource-group Hub --location eastus --allocation-method Dynamic
+az network nic create --resource-group Hub -n test1VMNIC --location eastus --subnet test1 --private-ip-address 1.1.1.10 --vnet-name Hub --public-ip-address test1VMPubIP
+az vm create -n test1VM -g Hub --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics test1VMNIC
+</pre>
 
 
 
