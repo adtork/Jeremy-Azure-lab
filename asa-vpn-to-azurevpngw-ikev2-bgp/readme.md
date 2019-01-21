@@ -211,9 +211,7 @@ router bgp 65002
   neighbor 10.0.0.254 remote-as 65001
   neighbor 10.0.0.254 ebgp-multihop 255
   neighbor 10.0.0.254 activate
-  network 10.1.2.0 mask 255.255.255.0
-  network 192.168.1.1 mask 255.255.255.255
-  network 192.168.2.1
+  network 192.168.2.1 mask 255.255.255.255
   no auto-summary
   no synchronization
  exit-address-family
