@@ -68,6 +68,11 @@ az network public-ip show -g Hub -n Azure-VNGpubip --query "{address: ipAddress}
 az network public-ip show -g onprem -n ASA1VPNPublicIP --query "{address: ipAddress}"
 </pre>
 
+**Verify BGP information on the Azure VPN GW**
+<pre lang="...">
+az network vnet-gateway list --query [].[name,bgpSettings.asn,bgpSettings.bgpPeeringAddress] -o table --resource-group Hub
+</pre>
+
 **Create a route table and routes for the Azure VNET with correct association. This is for the onprem simulation to route traffic to the ASAv.**
 <pre lang="...">
 az network route-table create --name vm-rt --resource-group onprem
@@ -84,8 +89,6 @@ az network local-gateway create --gateway-ip-address "insert ASA Public IP" --na
 <pre lang="...">
 az network vpn-connection create --name to-onprem --resource-group Hub --vnet-gateway1 Azure-VNG -l eastus --shared-key Msft123Msft123 --local-gateway2 to-onprem --enable-bgp
 </pre>
-
-
 
 **SSH to ASAv public IP. Public IPs in the below config are an example.**
 <pre lang="...">
@@ -227,7 +230,15 @@ Connect to onprem VM and ping the VM in the Azure Hub VNET (10.0.10.10)
 az network vpn-connection show --name to-onprem --resource-group Hub --query "{status: connectionStatus}"
 </pre>
 
+**Validate BGP routes being advetised from the Azure VPN GW to the ASA**
+<pre lang="...">
+az network vnet-gateway list-advertised-routes -g Hub -n Azure-VNG --peer 192.168.2.1
+</pre>
 
+**Validate BGP routes the Azure VPN GW is receiving from the ASA**
+<pre lang="...">
+az network vnet-gateway list-learned-routes -g Hub -n Azure-VNG
+</pre>
 
 
 
