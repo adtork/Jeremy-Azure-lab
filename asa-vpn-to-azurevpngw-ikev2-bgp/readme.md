@@ -202,7 +202,6 @@ tunnel-group-map default-group 13.90.86.204
 class-map inspection_default
  match default-inspection-traffic
 
- ASA1# sh run | b bgp
 router bgp 65002
  bgp log-neighbor-changes
  bgp graceful-restart
