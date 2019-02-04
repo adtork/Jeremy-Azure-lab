@@ -62,10 +62,11 @@ az network nic create --name ASA1InsideInterface -g onprem --subnet onenet --vne
 az vm create --resource-group onprem --location eastus --name ASA1 --size Standard_D3_v2 --nics ASA1MgmtInterface ASA1OutsideInterface ASA1InsideInterface  --image cisco:cisco-asav:asav-azure-byol:910.1.0 --admin-username azureuser --admin-password Msft123Msft123
 </pre>
 
-**After the gateway and ASAv have been created, document the public IP address for both. Value will be null until it has been successfully provisioned.**
+**After the gateway and ASAv have been created, document the public IP address for both. Value will be null until it has been successfully provisioned. Please note that the ASA VPN interface and management interfaces are different**
 <pre lang="...">
 az network public-ip show -g Hub -n Azure-VNGpubip --query "{address: ipAddress}"
 az network public-ip show -g onprem -n ASA1VPNPublicIP --query "{address: ipAddress}"
+az network public-ip show -g onprem -n ASA1MgmtIP --query "{address: ipAddress}"
 </pre>
 
 **Verify BGP information on the Azure VPN GW**
