@@ -106,7 +106,7 @@ interface GigabitEthernet0/1
  no shut
 
 !By default, ASAv has default route (burned in) pointing out the Mgmt interface. Route Azure VPN GW out the outside interface which we're using for VPN termination
-route OUTSIDE 13.90.86.204 255.255.255.255 10.1.0.1 1
+route OUTSIDE "insert AZ VPN GW Public IP" 255.255.255.255 10.1.0.1 1
 
 !route traffic from the ASAv destin for the on prem subnet to the fabric
 route inside 10.1.10.0 255.255.255.0 10.1.1.1 1
@@ -153,15 +153,15 @@ interface Tunnel11
  nameif vti-to-onprem
  ip address 192.168.2.1 255.255.255.0 
  tunnel source interface OUTSIDE
- tunnel destination 13.90.86.204
+ tunnel destination "insert AZ VPN GW Public IP"
  tunnel mode ipsec ipv4
  tunnel protection ipsec profile Azure-Ipsec-PROF-to-onprem
  no shut
 
 object network AZURE-GW
- host 13.90.86.204
+ host "insert AZ VPN GW Public IP"
 object network ASA-IP
- host 40.117.42.98
+ host "insert ASA Public IP"
 object network AnyNets
  subnet 0.0.0.0 0.0.0.0
 object network obj_any
@@ -185,7 +185,7 @@ access-group OUTSIDE_access_in in interface OUTSIDE
 access-group INSIDE_access_in in interface INSIDE
 
 !route traffic for Azure over the tunnel to the tunnel interface
-route vti-to-onprem 10.0.0.254 255.255.255.255 13.90.86.204 1
+route vti-to-onprem 10.0.0.254 255.255.255.255 "insert AZ VPN GW Public IP" 1
 
 crypto ikev2 enable OUTSIDE
 crypto ikev2 notify invalid-selectors
@@ -194,14 +194,14 @@ group-policy AzureGroupPolicy internal
 group-policy AzureGroupPolicy attributes
  vpn-tunnel-protocol ikev2 l2tp-ipsec 
 dynamic-access-policy-record DfltAccessPolicy
-tunnel-group 13.90.86.204 type ipsec-l2l
-tunnel-group 13.90.86.204 general-attributes
+tunnel-group "insert AZ VPN GW Public IP" type ipsec-l2l
+tunnel-group "insert AZ VPN GW Public IP" general-attributes
  default-group-policy AzureGroupPolicy
-tunnel-group 13.90.86.204 ipsec-attributes
+tunnel-group "insert AZ VPN GW Public IP" ipsec-attributes
  ikev2 remote-authentication pre-shared-key Msft123Msft123
  ikev2 local-authentication pre-shared-key Msft123Msft123
 no tunnel-group-map enable peer-ip
-tunnel-group-map default-group 13.90.86.204
+tunnel-group-map default-group "insert AZ VPN GW Public IP"
 !
 class-map inspection_default
  match default-inspection-traffic
