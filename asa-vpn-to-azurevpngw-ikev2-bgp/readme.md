@@ -251,8 +251,17 @@ az network nic create --resource-group Hub -n test1VMNIC --location eastus --sub
 az vm create -n test1VM -g Hub --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics test1VMNIC
 </pre>
 
-- The new address space created on the existing VNET will automatically be advertised to the ASA via BGP. Once the VM is created, ping 1.1.1.10 sourcing from the On Prem VM 10.1.10.10. You can also add static routes or network statements to the ASA to validate new prefixes are added to the Azure effective route table.
+- The new address space created on the existing VNET will automatically be advertised to the ASA via BGP. Once the VM is created, ping 1.1.1.10 sourcing from the On Prem VM 10.1.10.10. 
 
+**You can also add static routes or network statements to the ASA to validate new prefixes are added to the Azure effective route table.**
+<pre lang="...">
+ASA1(config)# route null0 2.2.2.2 255.255.255.255
+ASA1(config)# route null0 3.3.3.3 255.255.255.255
+ASA1(config-router)# address-family ipv4 unicast 
+ASA1(config)# router bgp 65002
+ASA1(config-router-af)# network 2.2.2.2 mask 255.255.255.255
+ASA1(config-router-af)# network 3.3.3.3 mask 255.255.255.255
+</pre>
 
 
 
