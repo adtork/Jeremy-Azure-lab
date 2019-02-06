@@ -89,7 +89,7 @@
           ],
           "properties": {
             "addressPrefix": "[parameters('subnet2Prefix')]"
-            {
+         {
             "type": "Microsoft.Network/publicIPAddresses",
             "name": "IP-FW1-Management",
             "apiVersion": "2017-08-01",
