@@ -90,9 +90,9 @@
           "properties": {
             "addressPrefix": "[parameters('subnet2Prefix')]"
            }
+          ]
          },
          {
-            "apiVersion": "2018-10-01",
             "type": "Microsoft.Network/publicIPAddresses",
             "name": "IP-FW1-Management",
             "apiVersion": "2017-08-01",
