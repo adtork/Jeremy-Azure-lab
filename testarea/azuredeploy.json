@@ -86,48 +86,6 @@
         "tags": {
           "displayName": "PublicIPAddress - FW1mgmt"
         }
-      },
-      {
-        "apiVersion": "2017-03-30",
-        "type": "Microsoft.Compute/virtualMachines",
-        "name": "[variables('webVMSetting').vmName]",
-        "location": "[parameters('location')]",
-        "dependsOn": [
-          "[concat('Microsoft.Network/networkInterfaces/', variables('webVMSetting').nicName)]"
-        ],
-        "tags": {
-          "displayName": "VM - Web"
-        },
-        "properties": {
-          "hardwareProfile": {
-            "vmSize": "[variables('webVMSetting').vmSize]"
-          },
-          "osProfile": {
-            "computerName": "[variables('webVMSetting').vmName]",
-            "adminUsername": "[parameters('adminUsername')]",
-            "adminPassword": "[parameters('adminPassword')]"
-          },
-          "storageProfile": {
-            "imageReference": {
-              "publisher": "[variables('webVMSetting').publisher]",
-              "offer": "[variables('webVMSetting').offer]",
-              "sku": "[variables('webVMSetting').sku]",
-              "version": "[variables('webVMSetting').version]"
-            },
-            "osDisk": {
-              "name": "[concat(variables('webVMSetting').vmName,'_OSDisk')]",
-              "caching": "ReadWrite",
-              "createOption": "FromImage"
-            }
-          },
-          "networkProfile": {
-            "networkInterfaces": [
-              {
-                "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('webVMSetting').nicName)]"
-              }
-            ]
-          }
-        }
-      }
-    ]
-  }
+    }
+]
+}
