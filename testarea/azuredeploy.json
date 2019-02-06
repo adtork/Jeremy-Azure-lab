@@ -30,6 +30,34 @@
           "description": "Untrust subnet."
         }
       },
+      "TrustSubnet": {
+      "type": "string",
+      "defaultValue": "Trust",
+      "metadata": {
+        "description": "Trust subnet."
+      }
+      },
+      "TrustSubnetPrefix": {
+      "type": "string",
+      "defaultValue": "10.38.253.0/24",
+      "metadata": {
+        "description": "Trust subnet."
+      }
+      },
+      "MgmtSubnet": {
+      "type": "string",
+      "defaultValue": "Mgmt",
+      "metadata": {
+      "description": "Mgmt subnet."
+      }
+      },
+      "MgmtSubnetPrefix": {
+      "type": "string",
+      "defaultValue": "10.38.0.0/24",
+      "metadata": {
+      "description": "Mgmt subnet."
+    }
+      },
       "adminUsername": {
         "type": "string",
         "metadata": {
