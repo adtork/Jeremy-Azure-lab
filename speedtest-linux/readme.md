@@ -23,16 +23,16 @@ az network nic create --resource-group speedtest -n speedtestVMNIC --location ea
 az vm create -n speedtestVM -g speedtest --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics speedtestVMNIC
 </pre>
 
-**SSH to Linux VM and install speedtest**
+**SSH to Linux VM and install speedtest**</br>
 sudo apt-get install speedtest-cli</br>
 
-**Basic speedtest from Linux**
+**Basic speedtest from Linux**</br>
 speedtest-cli --bytes 
 
-**Speedtest provides a number of destination servers. Get a list of servers available:**
+**Speedtest provides a number of destination servers. Get a list of servers available:**</br>
 speedtest-cli --list | less
 
-**Specify a server. EX: Sprint in NYC**
+**Specify a server. EX: Sprint in NYC**</br>
 (10546) Sprint (New York, NY, United States) [419.17 km]</br>
 </br>
 speedtest-cli --server 10546
