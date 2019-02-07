@@ -1,4 +1,4 @@
-# Azure Networking Lab- quick speed test with and without a firewall in path (draft)
+# Azure Networking Lab- quick speed test with and without a firewall in path 
 
 This lab guide illustrates how to build a simple environment with Linux host and a speed test tool. We will test outbound Internet connectivity to a few different geo diverse location with and without a firewall. The lab uses an Azure firewall but can be used with other devices. Obviously there are a number of performance testing tools and this is purely an example. Azure CLI is used so you can easily manipulate the configs to fit your environment. This is for testing purposes only.
 
@@ -16,7 +16,6 @@ az network vnet create --resource-group speedtest --name speedtest --location ea
 az network vnet subnet create --address-prefix 10.0.0.0/24 --name AzureFirewallSubnet --resource-group speedtest --vnet-name speedtest
 </pre>
 
-
 **Build Linux VM**
 <pre lang="...">
 az network public-ip create --name speedtestVMPubIP --resource-group speedtest --location eastus --allocation-method Dynamic
@@ -24,28 +23,67 @@ az network nic create --resource-group speedtest -n speedtestVMNIC --location ea
 az vm create -n speedtestVM -g speedtest --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics speedtestVMNIC
 </pre>
 
-################
-sudo apt-get install speedtest-cli
+**SSH to Linux VM and install speedtest**
+sudo apt-get install speedtest-cli</br>
+
+**Basic speedtest from Linux**
 speedtest-cli --bytes 
+
+**Speedtest provides a number of destination servers. Get a list of servers available:**
 speedtest-cli --list | less
-10546) Sprint (New York, NY, United States) [419.17 km]
+
+**Specify a server. EX: Sprint in NYC**
+(10546) Sprint (New York, NY, United States) [419.17 km]</br>
+</br>
 speedtest-cli --server 10546
-##################
+
+**Sample results without firewall (results will vary based on a number of variables):**
+<pre lang="...">
 azureuser@speedtestVM:~$ speedtest-cli --server 10546
 Retrieving speedtest.net configuration...
 Testing from Microsoft Corporation (40.71.168.188)...
 Retrieving speedtest.net server list...
 Retrieving information for the selected server...
-Hosted by Sprint (New York, NY) [419.17 km]: 18.964 ms
+Hosted by Sprint (New York, NY) [419.17 km]: 6.622 ms
 Testing download speed................................................................................
-Download: 1261.96 Mbit/s
+Download: 1178.10 Mbit/s
 Testing upload speed......................................................................................................
-Upload: 566.07 Mbit/s
+Upload: 562.83 Mbit/s
 azureuser@speedtestVM:~$
-##################
-Use portal to create an Azure firewall and allow everything outbound. Creating the firewall and rules are not shown.
+</pre>
 
-################
+**Sample results with firewall (results will vary based on a number of variables):**
+<pre lang="...">
+azureuser@speedtestVM:~$ speedtest-cli --server 10546
+Retrieving speedtest.net configuration...
+Testing from Microsoft Corporation (20.185.102.173)...
+Retrieving speedtest.net server list...
+Retrieving information for the selected server...
+Hosted by Sprint (New York, NY) [419.17 km]: 8.084 ms
+Testing download speed................................................................................
+Download: 1080.35 Mbit/s
+Testing upload speed......................................................................................................
+Upload: 271.21 Mbit/s
+azureuser@speedtestVM:~$
+</pre>
+
+**Use portal to create an Azure firewall and allow everything outbound. Creating the firewall and rules are not shown.
+</br>
+
+**Steer traffic through Azure firewall**
+
+- Locate AZ FW IP
+- Change default route to az firewall. Note- all traffic will go through the firewall and SSH will break if you are accessing the VM from the Internet. 
+- Example: If you're working from home, locate your public IP (ip chicken) and put a /32 for your IP in the route table with next hop Internet. 
+
+<pre lang="...">
+az network route-table create --name vm-rt --resource-group speedtest
+az network route-table route create --name vm-rt --resource-group speedtest --route-table-name vm-rt --address-prefix 0.0.0.0/0 --next-hop-type VirtualAppliance --next-hop-ip-address 10.0.0.4
+az network vnet subnet update --name speedtestVM --vnet-name speedtest --resource-group speedtest --route-table vm-rt
+</pre>
+
+**Speedtest has other hooks available:**
+<pre lang="...">
 azureuser@speedtestVM:~$ speedtest-cli -h
 usage: speedtest-cli [-h] [--no-download] [--no-upload] [--bytes] [--share]
                      [--simple] [--csv] [--csv-delimiter CSV_DELIMITER]
@@ -95,4 +133,4 @@ optional arguments:
                         option to avoid a MemoryError
   --version             Show the version number and exit
 azureuser@speedtestVM:~$
-###############
+</pre>
