@@ -52,21 +52,6 @@ Upload: 562.83 Mbit/s
 azureuser@speedtestVM:~$
 </pre>
 
-**Sample results with firewall (results will vary based on a number of variables):**
-<pre lang="...">
-azureuser@speedtestVM:~$ speedtest-cli --server 10546
-Retrieving speedtest.net configuration...
-Testing from Microsoft Corporation (20.185.102.173)...
-Retrieving speedtest.net server list...
-Retrieving information for the selected server...
-Hosted by Sprint (New York, NY) [419.17 km]: 8.084 ms
-Testing download speed................................................................................
-Download: 1080.35 Mbit/s
-Testing upload speed......................................................................................................
-Upload: 271.21 Mbit/s
-azureuser@speedtestVM:~$
-</pre>
-
 **Use portal to create an Azure firewall and allow everything outbound. Creating the firewall and rules are not shown.**
 </br>
 
@@ -80,6 +65,21 @@ azureuser@speedtestVM:~$
 az network route-table create --name vm-rt --resource-group speedtest
 az network route-table route create --name vm-rt --resource-group speedtest --route-table-name vm-rt --address-prefix 0.0.0.0/0 --next-hop-type VirtualAppliance --next-hop-ip-address 10.0.0.4
 az network vnet subnet update --name speedtestVM --vnet-name speedtest --resource-group speedtest --route-table vm-rt
+</pre>
+
+**Sample results with firewall (results will vary based on a number of variables):**
+<pre lang="...">
+azureuser@speedtestVM:~$ speedtest-cli --server 10546
+Retrieving speedtest.net configuration...
+Testing from Microsoft Corporation (20.185.102.173)...
+Retrieving speedtest.net server list...
+Retrieving information for the selected server...
+Hosted by Sprint (New York, NY) [419.17 km]: 8.084 ms
+Testing download speed................................................................................
+Download: 1080.35 Mbit/s
+Testing upload speed......................................................................................................
+Upload: 271.21 Mbit/s
+azureuser@speedtestVM:~$
 </pre>
 
 **Speedtest has other hooks available:**
