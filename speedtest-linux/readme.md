@@ -67,7 +67,7 @@ Upload: 271.21 Mbit/s
 azureuser@speedtestVM:~$
 </pre>
 
-**Use portal to create an Azure firewall and allow everything outbound. Creating the firewall and rules are not shown.
+**Use portal to create an Azure firewall and allow everything outbound. Creating the firewall and rules are not shown.**
 </br>
 
 **Steer traffic through Azure firewall**
