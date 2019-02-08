@@ -1,5 +1,5 @@
 **placeholder**
-
+<pre lang="...">
 az group create --name CSR --location "East US"
 az network vnet create --name CSR --resource-group CSR --address-prefix 10.0.0.0/16
 az network vnet subnet create --address-prefix 10.0.1.0/24 --name InsideSubnet --resource-group CSR --vnet-name CSR 
@@ -54,3 +54,4 @@ az vm create --resource-group onprem --location eastus2 --name CSR3 --size Stand
 Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "16_10-byol"
 Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "16_10-byol" | Set-AzureRmMarketplaceTerms -Accept
 ####
+</pre>
