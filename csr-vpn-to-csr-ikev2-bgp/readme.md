@@ -1,5 +1,5 @@
 # Azure Networking Lab- IPSEC VPN (IKEv2) between Cisco CSR1000s with BGP
-This lab guide illustrates how to build a basic IPSEC VPN tunnel w/IKEv2 between Cisco CSRs with BGP. This is for lab testing purposes only and should not be considered production configurations. All Azure configs are done in Azure CLI so you can change them as needed to match your environment. Note- Loopback address have been added to each CSR for troubleshooting purposes as well as the UDRs for reachability to them. The on prem VNET is to simulate on prem connectivity. Note- Cisco changes syntax in different code. This was tested with 16.10.
+This lab guide illustrates how to build a basic IPSEC VPN tunnel w/IKEv2 between Cisco CSRs with BGP. This is for lab testing purposes only and should not be considered production configurations. All Azure configs are done in Azure CLI so you can change them as needed to match your environment. Note- Loopback address have been added to each CSR for troubleshooting purposes as well as the UDRs for reachability to them. The on prem VNET is to simulate on prem connectivity. Each CSR uses code version 16.10 which has introduced new default configurations. 
 
 Assumptions:
 - A valid Azure subscription account. If you don’t have one, you can create your free azure account (https://azure.microsoft.com/en-us/free/) today.
