@@ -69,6 +69,265 @@ az network public-ip show -g CSR -n CSR2PublicIP --query "{address: ipAddress}"
 az network public-ip show -g onprem -n CSR3PublicIP --query "{address: ipAddress}"
 az network public-ip show -g onprem -n CSR3PublicIP2 --query "{address: ipAddress}"
 
+##CSR1
+CSR1
+int gi1
+no ip nat outside
+int gi2
+no ip nat inside
+!
+crypto ikev2 proposal to-csr3-proposal 
+ encryption aes-cbc-256
+ integrity sha1
+ group 2
+!
+crypto ikev2 policy to-csr3-policy 
+ match address local 10.0.0.4
+ proposal to-csr3-proposal
+!
+crypto ikev2 keyring to-csr3-keyring
+ peer 20.41.58.110
+  address 20.41.58.110
+  pre-shared-key Msft123Msft123
+!
+crypto ikev2 profile to-csr3-profile
+ match address local 10.0.0.4
+ match identity remote address 10.100.0.4 255.255.255.255 
+ authentication remote pre-share
+ authentication local pre-share
+ keyring local to-csr3-keyring
+ lifetime 3600
+ dpd 10 5 on-demand
+!
+crypto ipsec transform-set to-csr3-TransformSet esp-gcm 256 
+ mode tunnel
+!
+crypto ipsec profile to-csr3-IPsecProfile
+ set transform-set to-csr3-TransformSet 
+ set ikev2-profile to-csr3-profile
+!
+interface Loopback1
+ ip address 1.1.1.1 255.255.255.255
+!
+interface Tunnel11
+ ip address 192.168.1.1 255.255.255.255
+ ip tcp adjust-mss 1350
+ tunnel source 10.0.0.4
+ tunnel mode ipsec ipv4
+ tunnel destination 20.41.58.110
+ tunnel protection ipsec profile to-csr3-IPsecProfile
+!
+router bgp 65001
+ bgp log-neighbor-changes
+ neighbor 192.168.1.3 remote-as 65003
+ neighbor 192.168.1.3 ebgp-multihop 255
+ neighbor 192.168.1.3 update-source Tunnel11
+ !
+ address-family ipv4
+  network 1.1.1.1 mask 255.255.255.255
+  network 10.0.0.0 mask 255.255.0.0
+  network 192.168.1.1 mask 255.255.255.255
+  neighbor 192.168.1.3 activate
+ exit-address-family
+
+ip route 10.0.0.0 255.255.0.0 Null0
+ip route 10.0.10.0 255.255.255.0 10.0.1.1
+ip route 168.63.129.16 255.255.255.255 10.0.1.1
+ip route 192.168.1.3 255.255.255.255 Tunnel11
+
+
+##CSR2
+CSR2
+int gi1
+no ip nat outside
+int gi2
+no ip nat inside
+
+!
+crypto ikev2 proposal to-csr3-proposal 
+ encryption aes-cbc-256
+ integrity sha1
+ group 2
+!
+crypto ikev2 policy to-csr3-policy 
+ match address local 10.0.0.5
+ proposal to-csr3-proposal
+!
+crypto ikev2 keyring to-csr3-keyring
+ peer 20.41.58.224
+  address 20.41.58.224
+  pre-shared-key Msft123Msft123
+!
+crypto ikev2 profile to-csr3-profile
+ match address local 10.0.0.5
+ match identity remote address 10.100.2.4 255.255.255.255 
+ authentication remote pre-share
+ authentication local pre-share
+ keyring local to-csr3-keyring
+ lifetime 3600
+ dpd 10 5 on-demand
+!
+crypto ipsec transform-set to-csr3-TransformSet esp-gcm 256 
+ mode tunnel
+!
+crypto ipsec profile to-csr3-IPsecProfile
+ set transform-set to-csr3-TransformSet 
+ set ikev2-profile to-csr3-profile
+!
+interface Loopback1
+ ip address 2.2.2.2 255.255.255.255
+!
+interface Tunnel11
+ ip address 192.168.1.2 255.255.255.255
+ ip tcp adjust-mss 1350
+ tunnel source 10.0.0.5
+ tunnel mode ipsec ipv4
+ tunnel destination 20.41.58.224
+ tunnel protection ipsec profile to-csr3-IPsecProfile
+!
+router bgp 65002
+ bgp log-neighbor-changes
+ neighbor 192.168.1.33 remote-as 65003
+ neighbor 192.168.1.33 ebgp-multihop 255
+ neighbor 192.168.1.33 update-source Tunnel11
+ !
+ address-family ipv4
+  network 2.2.2.2 mask 255.255.255.255
+  network 10.0.0.0 mask 255.255.0.0
+  network 192.168.1.2 mask 255.255.255.255
+  neighbor 192.168.1.33 activate
+ exit-address-family
+!
+ip route 10.0.0.0 255.255.0.0 Null0
+ip route 10.0.10.0 255.255.255.0 10.0.1.1
+ip route 168.63.129.16 255.255.255.255 10.0.1.1
+ip route 192.168.1.33 255.255.255.255 Tunnel11
+
+
+#CSR3
+CSR3
+int gi1
+no ip nat outside
+int gi2
+no ip nat inside
+int gi3
+ip address dhcp
+no shut
+!
+crypto ikev2 proposal to-csr1-proposal 
+ encryption aes-cbc-256
+ integrity sha1
+ group 2
+crypto ikev2 proposal to-csr2-proposal 
+ encryption aes-cbc-256
+ integrity sha1
+ group 2
+!
+crypto ikev2 policy to-csr1-policy 
+ match address local 10.100.0.4
+ proposal to-csr1-proposal
+crypto ikev2 policy to-csr2-policy 
+ match address local 10.100.2.4
+ proposal to-csr1-proposal
+!
+crypto ikev2 keyring to-csr1-keyring
+ peer 104.45.169.110
+  address 104.45.169.110
+  pre-shared-key Msft123Msft123
+ !
+!
+crypto ikev2 keyring to-csr2-keyring
+ peer 104.45.170.225
+  address 104.45.170.225
+  pre-shared-key Msft123Msft123
+!
+crypto ikev2 profile to-csr1-profile
+ match address local 10.100.0.4
+ match identity remote address 10.0.0.4 255.255.255.255 
+ authentication remote pre-share
+ authentication local pre-share
+ keyring local to-csr1-keyring
+ lifetime 3600
+ dpd 10 5 on-demand
+!
+crypto ikev2 profile to-csr2-profile
+ match address local 10.100.2.4
+ match identity remote address 10.0.0.5 255.255.255.255 
+ authentication remote pre-share
+ authentication local pre-share
+ keyring local to-csr2-keyring
+ lifetime 3600
+ dpd 10 5 on-demand
+!
+crypto ipsec transform-set to-csr1-TransformSet esp-gcm 256 
+ mode tunnel
+crypto ipsec transform-set to-csr2-TransformSet esp-gcm 256 
+ mode tunnel
+!
+crypto ipsec profile to-104.45.169.110secProfile
+ set transform-set to-csr1-TransformSet 
+ set ikev2-profile to-csr1-profile
+!
+crypto ipsec profile to-104.45.170.225secProfile
+ set transform-set to-csr2-TransformSet 
+ set ikev2-profile to-csr2-profile
+!
+interface Loopback1
+ ip address 3.3.3.3 255.255.255.255
+!
+interface Tunnel11
+ ip address 192.168.1.3 255.255.255.255
+ ip tcp adjust-mss 1350
+ tunnel source 10.100.0.4
+ tunnel mode ipsec ipv4
+ tunnel destination 104.45.169.110
+ tunnel protection ipsec profile to-104.45.169.110secProfile
+!
+interface Tunnel12
+ ip address 192.168.1.33 255.255.255.255
+ ip tcp adjust-mss 1350
+ tunnel source 10.100.2.4
+ tunnel mode ipsec ipv4
+ tunnel destination 104.45.170.225
+ tunnel protection ipsec profile to-104.45.170.225secProfile
+
+ip prefix-list FILTER-TO-CSR1 seq 10 permit 10.100.0.0/16
+ip prefix-list FILTER-TO-CSR1 seq 20 permit 3.3.3.3/32
+ip prefix-list FILTER-TO-CSR1 seq 30 permit 192.168.1.3/32
+
+ip prefix-list FILTER-TO-CSR2 seq 10 permit 10.100.0.0/16
+ip prefix-list FILTER-TO-CSR2 seq 20 permit 3.3.3.3/32
+ip prefix-list FILTER-TO-CSR2 seq 30 permit 192.168.1.33/32
+
+
+router bgp 65003
+ bgp log-neighbor-changes
+ neighbor 192.168.1.1 remote-as 65001
+ neighbor 192.168.1.1 ebgp-multihop 255
+ neighbor 192.168.1.1 update-source Tunnel11
+ neighbor 192.168.1.2 remote-as 65002
+ neighbor 192.168.1.2 ebgp-multihop 255
+ 
+ neighbor 192.168.1.2 update-source Tunnel12
+ !
+ address-family ipv4
+ neighbor 192.168.1.1 prefix-list FILTER-TO-CSR1 out
+ neighbor 192.168.1.2 prefix-list FILTER-TO-CSR2 out
+  network 3.3.3.3 mask 255.255.255.255
+  network 10.100.0.0 mask 255.255.0.0
+  network 192.168.1.3 mask 255.255.255.255
+  network 192.168.1.33 mask 255.255.255.255
+  neighbor 192.168.1.1 activate
+  neighbor 192.168.1.2 activate
+ exit-address-family
+
+ip route 10.100.0.0 255.255.0.0 Null0
+ip route 10.100.10.0 255.255.255.0 10.100.1.1
+ip route 104.45.170.225 255.255.255.255 10.100.2.1
+ip route 192.168.1.1 255.255.255.255 Tunnel11
+ip route 192.168.1.2 255.255.255.255 Tunnel12
+
+
 ##Create NSG for Azure side test VM##
 az network nsg create --resource-group CSR --name Azure-VM-NSG --location EastUS
 
@@ -126,9 +385,4 @@ az network vnet subnet update --name testVMSubnet --vnet-name CSR --resource-gro
 
 
 
-
-
-
-#####
-CSR1 config:
 
