@@ -6,7 +6,7 @@ Assumptions:
 - Latest Azure CLI, follow these instructions to install: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli 
 
 # Base Topology
-
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/csrvpnikev2bgp.PNG)
 
 **You may have to accept the NVA agreement if you;ve never deployed this image before. This is just an example:**
 <pre lang="...">
