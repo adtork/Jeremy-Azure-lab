@@ -1,4 +1,5 @@
-#placeholder
+# placeholder
+<pre lang="...">
 ##You may have to accept the NVA agreement if you;ve never deployed this image before. This is just an example:##
 Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "16_10-byol"
 Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "16_10-byol" | Set-AzureRmMarketplaceTerms -Accept
@@ -383,6 +384,6 @@ az network route-table route create --name csr3-vti --resource-group CSR --route
 
 az network vnet subnet update --name testVMSubnet --vnet-name CSR --resource-group CSR --route-table vm-rt
 
-
+</pre>
 
 
