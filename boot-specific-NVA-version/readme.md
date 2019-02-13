@@ -43,3 +43,16 @@ az network nic create --name ASA1OutsideInterface -g onprem --subnet zeronet --v
 az network nic create --name ASA1InsideInterface -g onprem --subnet onenet --vnet onprem --ip-forwarding true
 az vm create --resource-group onprem --location eastus --name ASA1 --size Standard_D3_v2 --nics ASA1OutsideInterface ASA1InsideInterface  --image cisco:cisco-asav:asav-azure-byol:910.1.0 --admin-username azureuser --admin-password Msft123Msft123
 </pre>
+**CSR example**
+<pre lang="...">
+$locName="West US"
+Get-AzureRMVMImagePublisher -Location $locName | Select PublisherName
+$pubName="Cisco"
+Get-AzureRMVMImageOffer -Location $locName -Publisher $pubName | Select Offer
+
+$offerName="cisco-csr-1000v"
+Get-AzureRMVMImageSku -Location $locName -Publisher $pubName -Offer $offerName | Select Skus
+
+$skuName="16_10-byol"
+Get-AzureRMVMImage -Location $locName -Publisher $pubName -Offer $offerName -Sku $skuName | Select Version
+</pre>
