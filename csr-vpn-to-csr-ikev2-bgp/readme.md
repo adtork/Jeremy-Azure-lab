@@ -283,3 +283,9 @@ router bgp 65003
 ip route 192.168.1.1 255.255.255.255 Tunnel 11
 ip route 10.100.0.0 255.255.0.0 null0
 </pre>
+
+**Validation on CSR1 and CSR3**
+- show crypto ikev2 sa
+- show ip route bgp
+- Source ping from loopback to other side loopback
+- Both test VMs should be able to ping all loopbacks, VTIs and VMs acorss the tunnel
