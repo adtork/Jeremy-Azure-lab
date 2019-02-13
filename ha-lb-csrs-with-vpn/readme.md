@@ -70,8 +70,8 @@ az network public-ip show -g CSR -n CSR2PublicIP --query "{address: ipAddress}"
 az network public-ip show -g onprem -n CSR3PublicIP --query "{address: ipAddress}"
 az network public-ip show -g onprem -n CSR3PublicIP2 --query "{address: ipAddress}"
 
-##CSR1
-CSR1
+#####################################################################################
+##CSR1##
 int gi1
 no ip nat outside
 int gi2
@@ -118,13 +118,20 @@ interface Tunnel11
  tunnel destination 20.41.58.110
  tunnel protection ipsec profile to-csr3-IPsecProfile
 !
+ip prefix-list FILTER-TO-CSR2 seq 10 permit 10.100.0.0/16
+ip prefix-list FILTER-TO-CSR2 seq 20 permit 3.3.3.3/32
+ip prefix-list FILTER-TO-CSR2 seq 30 permit 1.1.1.1/32
+
 router bgp 65001
  bgp log-neighbor-changes
  neighbor 192.168.1.3 remote-as 65003
  neighbor 192.168.1.3 ebgp-multihop 255
  neighbor 192.168.1.3 update-source Tunnel11
+ neighbor 10.0.1.5 remote-as 65002
+ neighbor 10.0.1.5 update-source gi2
  !
  address-family ipv4
+  neighbor 10.0.1.5 prefix-list FILTER-TO-CSR2 out
   network 1.1.1.1 mask 255.255.255.255
   network 10.0.0.0 mask 255.255.0.0
   network 192.168.1.1 mask 255.255.255.255
@@ -136,9 +143,8 @@ ip route 10.0.10.0 255.255.255.0 10.0.1.1
 ip route 168.63.129.16 255.255.255.255 10.0.1.1
 ip route 192.168.1.3 255.255.255.255 Tunnel11
 
-
-##CSR2
-CSR2
+#####################################################################################
+##CSR2##
 int gi1
 no ip nat outside
 int gi2
@@ -186,13 +192,20 @@ interface Tunnel11
  tunnel destination 20.41.58.224
  tunnel protection ipsec profile to-csr3-IPsecProfile
 !
+ip prefix-list FILTER-TO-CSR1 seq 10 permit 10.100.0.0/16
+ip prefix-list FILTER-TO-CSR1 seq 20 permit 3.3.3.3/32
+ip prefix-list FILTER-TO-CSR1 seq 30 permit 2.2.2.2/32
+
 router bgp 65002
  bgp log-neighbor-changes
  neighbor 192.168.1.33 remote-as 65003
  neighbor 192.168.1.33 ebgp-multihop 255
  neighbor 192.168.1.33 update-source Tunnel11
+ neighbor 10.0.1.4 remote-as 65001
+ neighbor 10.0.1.4 update-source gi2
  !
  address-family ipv4
+  neighbor 10.0.1.4 prefix-list FILTER-TO-CSR1 out
   network 2.2.2.2 mask 255.255.255.255
   network 10.0.0.0 mask 255.255.0.0
   network 192.168.1.2 mask 255.255.255.255
@@ -204,9 +217,8 @@ ip route 10.0.10.0 255.255.255.0 10.0.1.1
 ip route 168.63.129.16 255.255.255.255 10.0.1.1
 ip route 192.168.1.33 255.255.255.255 Tunnel11
 
-
-#CSR3
-CSR3
+#####################################################################################
+##CSR3##
 int gi1
 no ip nat outside
 int gi2
@@ -328,6 +340,7 @@ ip route 104.45.170.225 255.255.255.255 10.100.2.1
 ip route 192.168.1.1 255.255.255.255 Tunnel11
 ip route 192.168.1.2 255.255.255.255 Tunnel12
 
+#####################################################################################
 
 ##Create NSG for Azure side test VM##
 az network nsg create --resource-group CSR --name Azure-VM-NSG --location EastUS
