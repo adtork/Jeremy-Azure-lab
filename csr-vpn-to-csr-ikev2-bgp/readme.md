@@ -8,7 +8,7 @@ Assumptions:
 # Base Topology
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/csrvpnikev2bgp.PNG)
 
-**You may have to accept the NVA agreement if you;ve never deployed this image before. This is just an example:**
+**You may have to accept the NVA agreement if you've never deployed this image before. This is just an example:**
 <pre lang="...">
 Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "16_10-byol"
 Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "16_10-byol" | Set-AzureRmMarketplaceTerms -Accept
