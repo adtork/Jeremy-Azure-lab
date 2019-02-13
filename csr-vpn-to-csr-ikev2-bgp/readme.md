@@ -124,7 +124,7 @@ az network public-ip show -g CSR -n CSR1PublicIP --query "{address: ipAddress}"
 az network public-ip show -g onprem -n CSR3PublicIP --query "{address: ipAddress}"
 </pre>
 
-**SSH to CSR1 and paste in the below configs. Make sure to chage the CSR public IPs referenced**
+**SSH to CSR1 and paste in the below configs. Make sure to change the CSR public IPs referenced**
 <pre lang="...">
 int gi1
 no ip nat outside
