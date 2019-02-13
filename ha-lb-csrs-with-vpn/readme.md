@@ -1,6 +1,6 @@
 # placeholder
 <pre lang="...">
-##You may have to accept the NVA agreement if you;ve never deployed this image before. This is just an example:##
+##You may have to accept the NVA agreement if you've never deployed this image before. This is just an example:##
 Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "16_10-byol"
 Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "16_10-byol" | Set-AzureRmMarketplaceTerms -Accept
 
