@@ -34,7 +34,6 @@ az network nic create --name CSR1InsideInterface -g CSR --subnet InsideSubnet --
 az vm create --resource-group CSR --location EastUS --name CSR1 --size Standard_DS3_v2 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:16_10-byol:16.10.120190108 --admin-username azureuser --admin-password Msft123Msft123 --availability-set myAvailabilitySet --no-wait
 
 ##Create CSR2##
-####Create CSR2
 az network public-ip create --name CSR2PublicIP --resource-group CSR --idle-timeout 30 --allocation-method Static --sku standard
 az network nic create --name CSR2OutsideInterface -g CSR --subnet OutsideSubnet --vnet CSR --public-ip-address CSR2PublicIP --private-ip-address 10.0.0.5 --ip-forwarding true --network-security-group Azure-CSR-NSG
 az network nic create --name CSR2InsideInterface -g CSR --subnet InsideSubnet --vnet CSR --ip-forwarding true --private-ip-address 10.0.1.5 --network-security-group Azure-CSR-NSG --lb-name csr-lb --lb-address-pools csr-backendpool
@@ -344,9 +343,7 @@ ip route 192.168.1.2 255.255.255.255 Tunnel12
 
 ##Create NSG for Azure side test VM##
 az network nsg create --resource-group CSR --name Azure-VM-NSG --location EastUS
-
 az network nsg rule create --resource-group CSR --nsg-name Azure-VM-NSG --name Allow-SSH-All --access Allow --protocol Tcp --direction Inbound --priority 120 --source-address-prefix Internet --source-port-range "*" --destination-address-prefix "*" --destination-port-range 22
-
 az network nsg rule create --resource-group CSR --nsg-name Azure-VM-NSG --name Allow-Tens --access Allow --protocol "*" --direction Inbound --priority 130 --source-address-prefix 10.0.0.0/8 --source-port-range "*" --destination-address-prefix "*" --destination-port-range "*"
 
 ##Create Azure side VM##
@@ -356,11 +353,8 @@ az vm create -n AzureVM -g CSR --image UbuntuLTS --admin-username azureuser --ad
 
 ##Create NSG for onprem side test VM##
 az network nsg create --resource-group onprem --name onprem-VM-NSG --location EastUS2
-
 az network nsg rule create --resource-group onprem --nsg-name onprem-VM-NSG --name Allow-SSH-All --access Allow --protocol Tcp --direction Inbound --priority 120 --source-address-prefix Internet --source-port-range "*" --destination-address-prefix "*" --destination-port-range 22
-
 az network nsg rule create --resource-group onprem --nsg-name onprem-VM-NSG --name Allow-Tens --access Allow --protocol "*" --direction Inbound --priority 130 --source-address-prefix 10.0.0.0/8 --source-port-range "*" --destination-address-prefix "*" --destination-port-range "*"
-
 
 ##Create  onprem side VM##
 az network public-ip create --name onpremVMPubIP --resource-group onprem --location EastUS2 --allocation-method Dynamic
@@ -371,32 +365,21 @@ az vm create -n onpremVM -g onprem --image UbuntuLTS --admin-username azureuser 
 
 az network route-table create --name vm-rt --resource-group onprem
 az network route-table route create --name vm-rt --resource-group onprem --route-table-name vm-rt --address-prefix 10.0.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.4
-
 az network route-table route create --name csr1-loopback --resource-group onprem --route-table-name vm-rt --address-prefix 1.1.1.1/32 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.4
-
 az network route-table route create --name csr1-vti --resource-group onprem --route-table-name vm-rt --address-prefix 192.168.1.1/32 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.4
-
 az network route-table route create --name csr3-loopback --resource-group onprem --route-table-name vm-rt --address-prefix 3.3.3.3/32 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.4
-
 az network route-table route create --name csr3-vti --resource-group onprem --route-table-name vm-rt --address-prefix 192.168.1.3/32 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.4
-
 az network vnet subnet update --name testVMSubnet --vnet-name onprem --resource-group onprem --route-table vm-rt
 
 ##Create a route table for the CSR side VM subnet. Routes include VTIs of both CSRs as well as the loopbacks for CSRs##
 
 az network route-table create --name vm-rt --resource-group CSR
 az network route-table route create --name vm-rt --resource-group CSR --route-table-name vm-rt --address-prefix 10.100.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.0.2.100
-
 az network route-table route create --name csr1-loopback --resource-group CSR --route-table-name vm-rt --address-prefix 1.1.1.1/32 --next-hop-type VirtualAppliance --next-hop-ip-address 10.0.2.100
-
 az network route-table route create --name csr1-vti --resource-group CSR --route-table-name vm-rt --address-prefix 192.168.1.1/32 --next-hop-type VirtualAppliance --next-hop-ip-address 10.0.2.100
-
 az network route-table route create --name csr3-loopback --resource-group CSR --route-table-name vm-rt --address-prefix 3.3.3.3/32 --next-hop-type VirtualAppliance --next-hop-ip-address 10.0.2.100
-
 az network route-table route create --name csr3-vti --resource-group CSR --route-table-name vm-rt --address-prefix 192.168.1.3/32 --next-hop-type VirtualAppliance --next-hop-ip-address 10.0.2.100
-
 az network vnet subnet update --name testVMSubnet --vnet-name CSR --resource-group CSR --route-table vm-rt
-
 </pre>
 
 
