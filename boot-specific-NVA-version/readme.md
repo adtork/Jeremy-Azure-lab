@@ -1,4 +1,4 @@
-# How to find and use a specific NVA image. In this example, we will search Azure East for a Cisco ASAv version.
+# How to find and use a specific NVA image. Examples include an ASAv and CSR in Azure region East. 
 
 **Fill in Azure region to find available publishers.**
 <pre lang="...">
