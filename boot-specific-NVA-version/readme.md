@@ -45,14 +45,50 @@ az vm create --resource-group onprem --location eastus --name ASA1 --size Standa
 </pre>
 **CSR example**
 <pre lang="...">
-$locName="West US"
+$locName="East US"
 Get-AzureRMVMImagePublisher -Location $locName | Select PublisherName
-$pubName="Cisco"
-Get-AzureRMVMImageOffer -Location $locName -Publisher $pubName | Select Offer
+-output truncated
 
-$offerName="cisco-csr-1000v"
-Get-AzureRMVMImageSku -Location $locName -Publisher $pubName -Offer $offerName | Select Skus
+PS Azure:\> $pubName="Cisco"
+Azure:/
+PS Azure:\> Get-AzureRMVMImageOffer -Location $locName -Publisher $pubName | Select Offer
 
-$skuName="16_10-byol"
-Get-AzureRMVMImage -Location $locName -Publisher $pubName -Offer $offerName -Sku $skuName | Select Version
-</pre>
+Offer
+-----
+cisco-asav
+cisco-csr-1000v
+cisco-fmcv
+cisco-ftdv
+cisco-meraki-vmx100
+cisco-ngfwv-vm-test-unsupported
+cisco_cloud_vedge_17_2_4
+cos65
+cos72
+cos72_main_dev
+uos14
+vwaas-azure
+
+PS Azure:\> $offerName="cisco-csr-1000v"
+Azure:/
+PS Azure:\> Get-AzureRMVMImageSku -Location $locName -Publisher $pubName -Offer $offerName | Select Skus
+
+Skus
+----
+16_10-byol
+16_10-payg-ax
+16_10-payg-sec
+16_4
+16_5
+16_6
+16_7
+16_9-byol
+3_16
+csr-azure-byol
+
+PS Azure:\> $skuName="16_10-byol"
+Azure:/
+PS Azure:\> Get-AzureRMVMImage -Location $locName -Publisher $pubName -Offer $offerName -Sku $skuName | Select Version
+
+Version
+-------
+16.10.120190108
