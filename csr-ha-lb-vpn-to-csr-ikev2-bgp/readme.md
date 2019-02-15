@@ -1,5 +1,5 @@
-
-# Objectives and Initial Setup- Draft
+# HA CSRs in Azure with ECMP load shared IKEv2 tunnels
+**Objectives and Initial Setup- Draft**
 This lab guide shows how to configure highly available load balanced Cisco CSRs. Each CSR in Azure utilizes BGP over IKEv2 tunnel to a CSR located in a VNET that simulates an on prem environment. The test VM subnet on the Azure side will have UDRs pointed to an Azure Standard Load Balancer with a backend pool of the inside interfaces of CSR1 and CSR2. Traffic is load balanced across the 2 CSRs with the health probe monitoring the inside interfaces. In the event of a failure on CSR1 or CSR2, the load balancer will only steer traffic to the healthy CSR. BGP is also enabled between CSR1 and CSR2 providing tunnel redundancy if one of the tunnels goes down
 The main goal of this lab is to quickly stand up a sandbox environment for functionality testing. The test VMs will be able to ping each other, all CSR interfaces including VTIs/loopbacks. Basic BGP prefix filters are in place to control route advertisement. Other methods could be used to filter routes. The entire environment is built on Azure and does not require any hardware. </br>
 
