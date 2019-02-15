@@ -6,12 +6,11 @@ The main goal of this lab is to quickly stand up a sandbox environment for funct
 **Topology**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/dual%20csr%20vpn.PNG)
 
-**BGP Layout**
-![alt text](https://github.com/jwrightazure/lab/blob/master/images/dual-csrbgp-layout.PNG)
-
-
 **Lab IPs**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/labip.PNG)
+
+**BGP Layout**
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/dual-csrbgp-layout.PNG)
 
 **Requirements:**
 - A valid Azure subscription account. If you don’t have one, you can create your free azure account (https://azure.microsoft.com/en-us/free/) today.
