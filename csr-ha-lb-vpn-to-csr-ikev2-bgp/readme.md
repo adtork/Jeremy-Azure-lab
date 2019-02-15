@@ -150,7 +150,7 @@ interface Tunnel1
  tunnel mode ipsec ipv4
  tunnel destination CSR3PublicIP
  tunnel protection ipsec profile vti-1
- bfd interval 500 min_rx 500 multiplier 3
+
 
 !ikev2 proposal can be changed to match your requirements
 crypto ikev2 proposal to-csr3-proposal 
@@ -201,7 +201,6 @@ router bgp 65001
  neighbor 192.168.1.3 ebgp-multihop 255
  neighbor 192.168.1.3 update-source Tunnel11
  neighbor 192.168.101.2 remote-as 65001
- neighbor 192.168.101.2 fall-over bfd
  !
  address-family ipv4
   network 1.1.1.1 mask 255.255.255.255
@@ -210,6 +209,7 @@ router bgp 65001
   neighbor 192.168.1.3 activate
   neighbor 192.168.101.2 activate
   neighbor 192.168.101.2 next-hop-self
+  network 192.168.101.0 mask 255.255.255.252
  exit-address-family
 
 !summary route to null for BGP propagation
@@ -252,7 +252,6 @@ interface Tunnel1
  tunnel mode ipsec ipv4
  tunnel destination CSR3PublicIP2
  tunnel protection ipsec profile vti-1
- bfd interval 500 min_rx 500 multiplier 3
 
 crypto ikev2 proposal to-csr3-proposal 
  encryption aes-cbc-256
@@ -301,7 +300,6 @@ router bgp 65001
  neighbor 192.168.1.33 ebgp-multihop 255
  neighbor 192.168.1.33 update-source Tunnel11
  neighbor 192.168.101.1 remote-as 65001
- neighbor 192.168.101.1 fall-over bfd
  !
  address-family ipv4
   network 2.2.2.2 mask 255.255.255.255
@@ -310,6 +308,7 @@ router bgp 65001
   neighbor 192.168.1.33 activate
   neighbor 192.168.101.1 activate
   neighbor 192.168.101.1 next-hop-self
+  network 192.168.101.0 mask 255.255.255.252
  exit-address-family
 !
 ip route 10.0.0.0 255.255.0.0 Null0
