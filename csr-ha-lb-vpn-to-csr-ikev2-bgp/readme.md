@@ -22,3 +22,15 @@ Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name 
 Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "16_10-byol" | Set-AzureRmMarketplaceTerms -Accept
 </pre>
 
+**Step 1:** Login via Azure CLI. EX: I have Azure CLI on Windows 10. Open a command prompt and enter “az login”. It will prompt you for Azure credentials. All commands moving forward are done through Azure CLI and Cisco CLI via SSH.
+
+**Step 2:** Create resource group, VNET + address space and subnets for CSR VNET in East US:
+<pre lang="...">
+az group create --name CSR --location "EastUS"
+az network vnet create --name CSR --resource-group CSR --address-prefix 10.0.0.0/16
+az network vnet subnet create --address-prefix 10.0.1.0/24 --name InsideSubnet --resource-group CSR --vnet-name CSR 
+az network vnet subnet create --address-prefix 10.0.0.0/24 --name OutsideSubnet --resource-group CSR --vnet-name CSR
+az network vnet subnet create --address-prefix 10.0.2.0/24 --name lbSubnet --resource-group CSR --vnet-name CSR
+az network vnet subnet create --address-prefix 10.0.10.0/24 --name testVMSubnet --resource-group CSR --vnet-name CSR
+</pre>
+
