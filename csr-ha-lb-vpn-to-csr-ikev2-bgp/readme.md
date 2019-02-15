@@ -7,6 +7,7 @@ The main goal of this lab is to quickly stand up a sandbox environment for funct
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/dual%20csr%20vpn.PNG)
 
 **Lab IPs**
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/labip.PNG)
 
 **Requirements:**
 - A valid Azure subscription account. If you don’t have one, you can create your free azure account (https://azure.microsoft.com/en-us/free/) today.
