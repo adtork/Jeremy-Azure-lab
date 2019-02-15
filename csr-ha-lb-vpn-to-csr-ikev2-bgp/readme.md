@@ -122,7 +122,7 @@ az network public-ip show -g onprem -n CSR3PublicIP --query "{address: ipAddress
 az network public-ip show -g onprem -n CSR3PublicIP2 --query "{address: ipAddress}"
 </pre>
 **Step 14:** SSH to CSR1PublicIP. Username=azureuser pw=Msft123Msft123
-Paste in the following commands AFTER replacing all references to “CSR3PublicIP” with the public IP address of CSR3PublicIP:
+Paste in the following commands AFTER replacing all references to “CSR3PublicIP” and "CSR2PublicIP" with the public IP address of CSR3PublicIP and CSR2PublicIP:
 <pre lang="...">
 int gi1
 no ip nat outside
@@ -151,7 +151,7 @@ interface Tunnel1
  load-interval 30
  tunnel source GigabitEthernet1
  tunnel mode ipsec ipv4
- tunnel destination CSR3PublicIP
+ tunnel destination CSR2PublicIP
  tunnel protection ipsec profile vti-1
 
 
@@ -166,8 +166,8 @@ crypto ikev2 policy to-csr3-policy
  proposal to-csr3-proposal
 !
 crypto ikev2 keyring to-csr3-keyring
- peer 20.36.248.190
-  address 20.36.248.190
+ peer CSR3PublicIP
+  address CSR3PublicIP
   pre-shared-key Msft123Msft123
 !
 crypto ikev2 profile to-csr3-profile
@@ -194,7 +194,7 @@ interface Tunnel11
  ip tcp adjust-mss 1350
  tunnel source 10.0.0.4
  tunnel mode ipsec ipv4
- tunnel destination 20.36.248.190
+ tunnel destination CSR3PublicIP
  tunnel protection ipsec profile to-csr3-IPsecProfile
 !
 
@@ -224,7 +224,8 @@ ip route 168.63.129.16 255.255.255.255 10.0.1.1
 !route CSR3 VTI/tunnel11 IP over the tunnel to form BGP peering
 ip route 192.168.1.3 255.255.255.255 Tunnel11
 </pre>
-**Step 15:** SSH to CSR2PublicIP. Username=azureuser pw=Msft123Msft123 Paste in the following commands AFTER replacing all references to “CSR3PublicIP2” with the public IP address of CSR3PublicIP2:
+**Step 15:** SSH to CSR2PublicIP. Username=azureuser pw=Msft123Msft123 
+Paste in the following commands AFTER replacing all references to “CSR3PublicIP2” and "CSR1Public" with the public IP address of CSR3PublicIP2 and CSR1PublicIp:
 <pre lang="...">
 int gi1
 no ip nat outside
@@ -253,7 +254,7 @@ interface Tunnel1
  load-interval 30
  tunnel source GigabitEthernet1
  tunnel mode ipsec ipv4
- tunnel destination CSR3PublicIP2
+ tunnel destination CSR1PublicIP
  tunnel protection ipsec profile vti-1
 
 crypto ikev2 proposal to-csr3-proposal 
@@ -266,8 +267,8 @@ crypto ikev2 policy to-csr3-policy
  proposal to-csr3-proposal
 !
 crypto ikev2 keyring to-csr3-keyring
- peer 20.41.63.48
-  address 20.41.63.48
+ peer CSR3PublicIP2
+  address CSR3PublicIP2
   pre-shared-key Msft123Msft123
 !
 crypto ikev2 profile to-csr3-profile
@@ -294,7 +295,7 @@ interface Tunnel11
  ip tcp adjust-mss 1350
  tunnel source 10.0.0.5
  tunnel mode ipsec ipv4
- tunnel destination 20.41.63.48
+ tunnel destination CSR3PublicIP2
  tunnel protection ipsec profile to-csr3-IPsecProfile
 !
 router bgp 65001
