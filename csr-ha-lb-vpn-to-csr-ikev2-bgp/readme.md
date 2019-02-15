@@ -1,5 +1,5 @@
 
-# Objectives and Initial Setup
+# Objectives and Initial Setup- Draft
 This lab guide shows how to configure highly available load balanced Cisco CSRs. Each CSR in Azure utilizes BGP over IKEv2 tunnel to a CSR located in a VNET that simulates an on prem environment. The test VM subnet on the Azure side will have UDRs pointed to an Azure Standard Load Balancer with a backend pool of the inside interfaces of CSR1 and CSR2. Traffic is load balanced across the 2 CSRs with the health probe monitoring the inside interfaces. In the event of a failure on CSR1 or CSR2, the load balancer will only steer traffic to the healthy CSR. BGP is also enabled between CSR1 and CSR2 providing tunnel redundancy if one of the tunnels goes down
 The main goal of this lab is to quickly stand up a sandbox environment for functionality testing. The test VMs will be able to ping each other, all CSR interfaces including VTIs/loopbacks. Basic BGP prefix filters are in place to control route advertisement. Other methods could be used to filter routes. The entire environment is built on Azure and does not require any hardware. </br>
 
@@ -117,4 +117,351 @@ az network public-ip show -g CSR -n CSR1PublicIP --query "{address: ipAddress}"
 az network public-ip show -g CSR -n CSR2PublicIP --query "{address: ipAddress}"
 az network public-ip show -g onprem -n CSR3PublicIP --query "{address: ipAddress}"
 az network public-ip show -g onprem -n CSR3PublicIP2 --query "{address: ipAddress}"
+</pre>
+**Step 14:** SSH to CSR1PublicIP. Username=azureuser pw=Msft123Msft123
+Paste in the following commands AFTER replacing all references to “CSR3PublicIP” with the public IP address of CSR3PublicIP:
+<pre lang="...">
+int gi1
+no ip nat outside
+int gi2
+no ip nat inside
+!
+crypto isakmp policy 1
+ encr aes 256
+ authentication pre-share
+crypto isakmp key Msft123Msft123 address 0.0.0.0  
+!
+!
+crypto ipsec transform-set uni-perf esp-aes 256 esp-sha-hmac 
+ mode tunnel
+!
+!
+crypto ipsec profile vti-1
+ set security-association lifetime kilobytes disable
+ set security-association lifetime seconds 86400
+ set transform-set uni-perf 
+ set pfs group2
+!
+!
+interface Tunnel1
+ ip address 192.168.101.1 255.255.255.252
+ load-interval 30
+ tunnel source GigabitEthernet1
+ tunnel mode ipsec ipv4
+ tunnel destination CSR3PublicIP
+ tunnel protection ipsec profile vti-1
+ bfd interval 500 min_rx 500 multiplier 3
+
+!ikev2 proposal can be changed to match your requirements
+crypto ikev2 proposal to-csr3-proposal 
+ encryption aes-cbc-256
+ integrity sha1
+ group 2
+!
+crypto ikev2 policy to-csr3-policy 
+ match address local 10.0.0.4
+ proposal to-csr3-proposal
+!
+crypto ikev2 keyring to-csr3-keyring
+ peer 20.36.248.190
+  address 20.36.248.190
+  pre-shared-key Msft123Msft123
+!
+crypto ikev2 profile to-csr3-profile
+ match address local 10.0.0.4
+ match identity remote address 10.100.0.4 255.255.255.255 
+ authentication remote pre-share
+ authentication local pre-share
+ keyring local to-csr3-keyring
+ lifetime 3600
+ dpd 10 5 on-demand
+!
+crypto ipsec transform-set to-csr3-TransformSet esp-gcm 256 
+ mode tunnel
+!
+crypto ipsec profile to-csr3-IPsecProfile
+ set transform-set to-csr3-TransformSet 
+ set ikev2-profile to-csr3-profile
+!
+interface Loopback1
+ ip address 1.1.1.1 255.255.255.255
+!
+interface Tunnel11
+ ip address 192.168.1.1 255.255.255.255
+ ip tcp adjust-mss 1350
+ tunnel source 10.0.0.4
+ tunnel mode ipsec ipv4
+ tunnel destination 20.36.248.190
+ tunnel protection ipsec profile to-csr3-IPsecProfile
+!
+
+router bgp 65001
+ bgp log-neighbor-changes
+ neighbor 192.168.1.3 remote-as 65003
+ neighbor 192.168.1.3 ebgp-multihop 255
+ neighbor 192.168.1.3 update-source Tunnel11
+ neighbor 192.168.101.2 remote-as 65001
+ neighbor 192.168.101.2 fall-over bfd
+ !
+ address-family ipv4
+  network 1.1.1.1 mask 255.255.255.255
+  network 10.0.0.0 mask 255.255.0.0
+  network 192.168.1.1 mask 255.255.255.255
+  neighbor 192.168.1.3 activate
+  neighbor 192.168.101.2 activate
+  neighbor 192.168.101.2 next-hop-self
+ exit-address-family
+
+!summary route to null for BGP propagation
+ip route 10.0.0.0 255.255.0.0 Null0
+!route for test vm subnet back out the inside interface. .1 is the Azure Fabric
+ip route 10.0.10.0 255.255.255.0 10.0.1.1
+!route Azure load balancer probes back out the inside interface
+ip route 168.63.129.16 255.255.255.255 10.0.1.1
+!route CSR3 VTI/tunnel11 IP over the tunnel to form BGP peering
+ip route 192.168.1.3 255.255.255.255 Tunnel11
+</pre>
+**Step 15:** SSH to CSR2PublicIP. Username=azureuser pw=Msft123Msft123 Paste in the following commands AFTER replacing all references to “CSR3PublicIP2” with the public IP address of CSR3PublicIP2:
+<pre lang="...">
+int gi1
+no ip nat outside
+int gi2
+no ip nat inside
+!
+crypto isakmp policy 1
+ encr aes 256
+ authentication pre-share
+crypto isakmp key Msft123Msft123 address 0.0.0.0  
+!
+!
+crypto ipsec transform-set uni-perf esp-aes 256 esp-sha-hmac 
+ mode tunnel
+!
+!
+crypto ipsec profile vti-1
+ set security-association lifetime kilobytes disable
+ set security-association lifetime seconds 86400
+ set transform-set uni-perf 
+ set pfs group2
+!
+!
+interface Tunnel1
+ ip address 192.168.101.2 255.255.255.252
+ load-interval 30
+ tunnel source GigabitEthernet1
+ tunnel mode ipsec ipv4
+ tunnel destination CSR3PublicIP2
+ tunnel protection ipsec profile vti-1
+ bfd interval 500 min_rx 500 multiplier 3
+
+crypto ikev2 proposal to-csr3-proposal 
+ encryption aes-cbc-256
+ integrity sha1
+ group 2
+!
+crypto ikev2 policy to-csr3-policy 
+ match address local 10.0.0.5
+ proposal to-csr3-proposal
+!
+crypto ikev2 keyring to-csr3-keyring
+ peer 20.41.63.48
+  address 20.41.63.48
+  pre-shared-key Msft123Msft123
+!
+crypto ikev2 profile to-csr3-profile
+ match address local 10.0.0.5
+ match identity remote address 10.100.2.4 255.255.255.255 
+ authentication remote pre-share
+ authentication local pre-share
+ keyring local to-csr3-keyring
+ lifetime 3600
+ dpd 10 5 on-demand
+!
+crypto ipsec transform-set to-csr3-TransformSet esp-gcm 256 
+ mode tunnel
+!
+crypto ipsec profile to-csr3-IPsecProfile
+ set transform-set to-csr3-TransformSet 
+ set ikev2-profile to-csr3-profile
+!
+interface Loopback1
+ ip address 2.2.2.2 255.255.255.255
+!
+interface Tunnel11
+ ip address 192.168.1.2 255.255.255.255
+ ip tcp adjust-mss 1350
+ tunnel source 10.0.0.5
+ tunnel mode ipsec ipv4
+ tunnel destination 20.41.63.48
+ tunnel protection ipsec profile to-csr3-IPsecProfile
+!
+router bgp 65001
+ bgp log-neighbor-changes
+ neighbor 192.168.1.33 remote-as 65003
+ neighbor 192.168.1.33 ebgp-multihop 255
+ neighbor 192.168.1.33 update-source Tunnel11
+ neighbor 192.168.101.1 remote-as 65001
+ neighbor 192.168.101.1 fall-over bfd
+ !
+ address-family ipv4
+  network 2.2.2.2 mask 255.255.255.255
+  network 10.0.0.0 mask 255.255.0.0
+  network 192.168.1.2 mask 255.255.255.255
+  neighbor 192.168.1.33 activate
+  neighbor 192.168.101.1 activate
+  neighbor 192.168.101.1 next-hop-self
+ exit-address-family
+!
+ip route 10.0.0.0 255.255.0.0 Null0
+ip route 10.0.10.0 255.255.255.0 10.0.1.1
+ip route 168.63.129.16 255.255.255.255 10.0.1.1
+ip route 192.168.1.33 255.255.255.255 Tunnel11
+</pre>
+**Step 16:** SSH to CSR3PublicIP. Username=azureuser pw=Msft123Msft123
+Paste in the following commands AFTER replacing all references to “CSR1PublicIP” and “CSR2PublicIP” with the public IP address of CSR1PublicIP and CSR2PublicIP.
+<pre lang="...">
+int gi1
+no ip nat outside
+int gi2
+no ip nat inside
+int gi3
+ip address dhcp
+no shut
+!
+crypto ikev2 proposal to-csr1-proposal 
+ encryption aes-cbc-256
+ integrity sha1
+ group 2
+crypto ikev2 proposal to-csr2-proposal 
+ encryption aes-cbc-256
+ integrity sha1
+ group 2
+!
+crypto ikev2 policy to-csr1-policy 
+ match address local 10.100.0.4
+ proposal to-csr1-proposal
+crypto ikev2 policy to-csr2-policy 
+ match address local 10.100.2.4
+ proposal to-csr1-proposal
+!
+crypto ikev2 keyring to-csr1-keyring
+ peer CSR1PublicIP
+  address CSR1PublicIP
+  pre-shared-key Msft123Msft123
+ !
+!
+crypto ikev2 keyring to-csr2-keyring
+ peer CSR2PublicIP
+  address CSR2PublicIP
+  pre-shared-key Msft123Msft123
+!
+crypto ikev2 profile to-csr1-profile
+ match address local 10.100.0.4
+ match identity remote address 10.0.0.4 255.255.255.255 
+ authentication remote pre-share
+ authentication local pre-share
+ keyring local to-csr1-keyring
+ lifetime 3600
+ dpd 10 5 on-demand
+!
+crypto ikev2 profile to-csr2-profile
+ match address local 10.100.2.4
+ match identity remote address 10.0.0.5 255.255.255.255 
+ authentication remote pre-share
+ authentication local pre-share
+ keyring local to-csr2-keyring
+ lifetime 3600
+ dpd 10 5 on-demand
+!
+crypto ipsec transform-set to-csr1-TransformSet esp-gcm 256 
+ mode tunnel
+crypto ipsec transform-set to-csr2-TransformSet esp-gcm 256 
+ mode tunnel
+!
+crypto ipsec profile to-CSR1PublicIPsecProfile
+ set transform-set to-csr1-TransformSet 
+ set ikev2-profile to-csr1-profile
+!
+crypto ipsec profile to-CSR2PublicIPsecProfile
+ set transform-set to-csr2-TransformSet 
+ set ikev2-profile to-csr2-profile
+!
+interface Loopback1
+ ip address 3.3.3.3 255.255.255.255
+!
+interface Tunnel11
+ ip address 192.168.1.3 255.255.255.255
+ ip tcp adjust-mss 1350
+ tunnel source 10.100.0.4
+ tunnel mode ipsec ipv4
+ tunnel destination CSR1PublicIP
+ tunnel protection ipsec profile to-CSR1PublicIPsecProfile
+!
+interface Tunnel12
+ ip address 192.168.1.33 255.255.255.255
+ ip tcp adjust-mss 1350
+ tunnel source 10.100.2.4
+ tunnel mode ipsec ipv4
+ tunnel destination CSR2PublicIP
+ tunnel protection ipsec profile to-CSR2PublicIPsecProfile
+
+
+router bgp 65003
+ bgp log-neighbor-changes
+ neighbor 192.168.1.1 remote-as 65001
+ neighbor 192.168.1.1 ebgp-multihop 255
+ neighbor 192.168.1.1 update-source Tunnel11
+ neighbor 192.168.1.2 remote-as 65001
+ neighbor 192.168.1.2 ebgp-multihop 255
+ neighbor 192.168.1.2 update-source Tunnel12
+ !
+ address-family ipv4
+ maximum-paths 4
+  network 3.3.3.3 mask 255.255.255.255
+  network 10.100.0.0 mask 255.255.0.0
+  network 192.168.1.3 mask 255.255.255.255
+  network 192.168.1.33 mask 255.255.255.255
+  neighbor 192.168.1.1 activate
+  neighbor 192.168.1.2 activate
+ exit-address-family
+
+ip route 10.100.0.0 255.255.0.0 Null0
+ip route 10.100.10.0 255.255.255.0 10.100.1.1
+ip route CSR2PublicIP 255.255.255.255 10.100.2.1
+ip route 192.168.1.1 255.255.255.255 Tunnel11
+ip route 192.168.1.2 255.255.255.255 Tunnel12
+</pre>
+**Step 16:** At this point you should have an IKEv2 tunnel from CSR1 and CSR2 to CSR3. Here are a few commands and expected outputs. It’s important you have reachability across the tunnels before moving onto step 17.
+**Step 17:** Create NSG for the test VM in the CSR VNET
+<pre lang="...">
+az network nsg create --resource-group CSR --name Azure-VM-NSG --location EastUS
+az network nsg rule create --resource-group CSR --nsg-name Azure-VM-NSG --name Allow-SSH-All --access Allow --protocol Tcp --direction Inbound --priority 120 --source-address-prefix Internet --source-port-range "*" --destination-address-prefix "*" --destination-port-range 22
+az network nsg rule create --resource-group CSR --nsg-name Azure-VM-NSG --name Allow-Tens --access Allow --protocol "*" --direction Inbound --priority 130 --source-address-prefix 10.0.0.0/8 --source-port-range "*" --destination-address-prefix "*" --destination-port-range "*"
+</pre>
+**Step 18:** Create the Public IP/NIC/private IP/NSG/VM in the CSR VNET:
+<pre lang="...">
+az network public-ip create --name AzureVMPubIP --resource-group CSR --location EastUS --allocation-method Dynamic
+az network nic create --resource-group CSR -n AzureVMNIC --location EastUS --subnet testVMSubnet --private-ip-address 10.0.10.10 --vnet-name CSR --public-ip-address AzureVMPubIP --network-security-group Azure-VM-NSG --ip-forwarding true
+az vm create -n AzureVM -g CSR --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics AzureVMNIC --no-wait
+</pre>
+**Step 19:** Repeat steps 17 and 18 for the VM in the onprem VNET:
+<pre lang="...">
+az network nsg create --resource-group onprem --name onprem-VM-NSG --location EastUS2
+az network nsg rule create --resource-group onprem --nsg-name onprem-VM-NSG --name Allow-SSH-All --access Allow --protocol Tcp --direction Inbound --priority 120 --source-address-prefix Internet --source-port-range "*" --destination-address-prefix "*" --destination-port-range 22
+az network nsg rule create --resource-group onprem --nsg-name onprem-VM-NSG --name Allow-Tens --access Allow --protocol "*" --direction Inbound --priority 130 --source-address-prefix 10.0.0.0/8 --source-port-range "*" --destination-address-prefix "*" --destination-port-range "*"
+az network public-ip create --name onpremVMPubIP --resource-group onprem --location EastUS2 --allocation-method Dynamic
+az network nic create --resource-group onprem -n onpremVMNIC --location EastUS2 --subnet testVMSubnet --private-ip-address 10.100.10.10 --vnet-name onprem --public-ip-address onpremVMPubIP --network-security-group onprem-VM-NSG --ip-forwarding true
+az vm create -n onpremVM -g onprem --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics onpremVMNIC --no-wait
+</pre>
+**Step 20:** Create route table for the onprem VNET and steer all necessary traffic to 10.100.1.4 (CSR# inside). You will need to add a static route to each route table pointing your machine IP to next hop Internet if you want to SSH to the VMs from the Internet.
+<pre lang="...">
+az network route-table create --name vm-rt --resource-group onprem
+az network route-table route create --name vm-rt --resource-group onprem --route-table-name vm-rt --address-prefix 0.0.0.0/0 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.4
+az network vnet subnet update --name testVMSubnet --vnet-name onprem --resource-group onprem --route-table vm-rt
+</pre>
+**Step 21:** Create route table for the onprem VNET and steer all necessary traffic to 10.0.2.100 (LB VIP):
+<pre lang="...">
+az network route-table create --name vm-rt --resource-group CSR
+az network route-table route create --name vm-rt --resource-group CSR --route-table-name vm-rt --address-prefix 0.0.0.0/0 --next-hop-type VirtualAppliance --next-hop-ip-address 10.0.2.100
+az network vnet subnet update --name testVMSubnet --vnet-name CSR --resource-group CSR --route-table vm-rt
 </pre>
