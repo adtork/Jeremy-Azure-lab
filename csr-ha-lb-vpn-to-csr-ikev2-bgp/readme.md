@@ -207,6 +207,8 @@ router bgp 65001
  neighbor 192.168.101.2 remote-as 65001
  !
  address-family ipv4
+  neighbor 192.168.1.3 soft-reconfiguration inbound 
+  neighbor 192.168.101.2 soft-reconfiguration inbound
   network 1.1.1.1 mask 255.255.255.255
   network 10.0.0.0 mask 255.255.0.0
   network 192.168.1.1 mask 255.255.255.255
@@ -308,6 +310,8 @@ router bgp 65001
  neighbor 192.168.101.1 remote-as 65001
  !
  address-family ipv4
+  neighbor 192.168.1.33 soft-reconfiguration inbound 
+  neighbor 192.168.101.2 soft-reconfiguration inbound 
   network 2.2.2.2 mask 255.255.255.255
   network 10.0.0.0 mask 255.255.0.0
   network 192.168.1.2 mask 255.255.255.255
@@ -423,6 +427,8 @@ router bgp 65003
  !
  address-family ipv4
  maximum-paths 4
+  neighbor 192.168.1.1 soft-reconfiguration inbound 
+  neighbor 192.168.1.2 soft-reconfiguration inbound 
   network 3.3.3.3 mask 255.255.255.255
   network 10.100.0.0 mask 255.255.0.0
   network 192.168.1.3 mask 255.255.255.255
