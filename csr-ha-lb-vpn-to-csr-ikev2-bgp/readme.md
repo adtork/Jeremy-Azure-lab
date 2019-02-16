@@ -444,6 +444,182 @@ ip route 192.168.1.1 255.255.255.255 Tunnel11
 ip route 192.168.1.2 255.255.255.255 Tunnel12
 </pre>
 **Step 16:** At this point you should have an IKEv2 tunnel from CSR1 and CSR2 to CSR3. Here are a few commands and expected outputs. It’s important you have reachability across the tunnels before moving onto step 17.
+<pre lang="...">
+CSR3#sh ip bgp sum
+BGP router identifier 3.3.3.3, local AS number 65003
+BGP table version is 82, main routing table version 82
+10 network entries using 2480 bytes of memory
+16 path entries using 2304 bytes of memory
+6 multipath network entries and 12 multipath paths
+3/3 BGP path/bestpath attribute entries using 864 bytes of memory
+1 BGP AS-PATH entries using 24 bytes of memory
+0 BGP route-map cache entries using 0 bytes of memory
+0 BGP filter-list cache entries using 0 bytes of memory
+BGP using 5672 total bytes of memory
+BGP activity 15/5 prefixes, 33/17 paths, scan interval 60 secs
+10 networks peaked at 23:35:37 Feb 15 2019 UTC (00:40:15.497 ago).
+
+Neighbor        V           AS MsgRcvd MsgSent   TblVer  InQ OutQ Up/Down  State/PfxRcd
+192.168.1.1     4        65001      23      28       82    0    0 00:11:58        6
+192.168.1.2     4        65001      54      59       82    0    0 00:41:26        6
+CSR3#sh ip bgp
+BGP table version is 82, local router ID is 3.3.3.3
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal, 
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter, 
+              x best-external, a additional-path, c RIB-compressed, 
+              t secondary path, L long-lived-stale,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *m   1.1.1.1/32       192.168.1.2                            0 65001 i
+ *>                    192.168.1.1              0             0 65001 i
+ *>   2.2.2.2/32       192.168.1.1                            0 65001 i
+ *m                    192.168.1.2              0             0 65001 i
+ *>   3.3.3.3/32       0.0.0.0                  0         32768 i
+ *>   10.0.0.0/16      192.168.1.1              0             0 65001 i
+ *m                    192.168.1.2              0             0 65001 i
+ *>   10.100.0.0/16    0.0.0.0                  0         32768 i
+ rm   192.168.1.1/32   192.168.1.2                            0 65001 i
+ r>                    192.168.1.1              0             0 65001 i
+ rm   192.168.1.2/32   192.168.1.2              0             0 65001 i
+ r>                    192.168.1.1                            0 65001 i
+ *>   192.168.1.3/32   0.0.0.0                  0         32768 i
+ *>   192.168.1.33/32  0.0.0.0                  0         32768 i
+ *>   192.168.101.0/30 192.168.1.1              0             0 65001 i
+ *m                    192.168.1.2              0             0 65001 i
+CSR3#sh ip route bgp
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area 
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, m - OMP
+       n - NAT, Ni - NAT inside, No - NAT outside, Nd - NAT DIA
+       i - IS-IS, su - IS-IS summary, L1 - IS-IS level-1, L2 - IS-IS level-2
+       ia - IS-IS inter area, * - candidate default, U - per-user static route
+       H - NHRP, G - NHRP registered, g - NHRP registration summary
+       o - ODR, P - periodic downloaded static route, l - LISP
+       a - application route
+       + - replicated route, % - next hop override, p - overrides from PfR
+
+Gateway of last resort is 10.100.0.1 to network 0.0.0.0
+
+      1.0.0.0/32 is subnetted, 1 subnets
+B        1.1.1.1 [20/0] via 192.168.1.2, 00:06:14
+                 [20/0] via 192.168.1.1, 00:06:14
+      2.0.0.0/32 is subnetted, 1 subnets
+B        2.2.2.2 [20/0] via 192.168.1.2, 00:06:14
+                 [20/0] via 192.168.1.1, 00:06:14
+      10.0.0.0/8 is variably subnetted, 9 subnets, 3 masks
+B        10.0.0.0/16 [20/0] via 192.168.1.2, 00:06:14
+                     [20/0] via 192.168.1.1, 00:06:14
+      192.168.101.0/30 is subnetted, 1 subnets
+B        192.168.101.0 [20/0] via 192.168.1.2, 00:06:14
+                       [20/0] via 192.168.1.1, 00:06:14
+CSR3#sh ip bgp neighbors 192.168.1.1    
+BGP neighbor is 192.168.1.1,  remote AS 65001, external link
+  BGP version 4, remote router ID 1.1.1.1
+  BGP state = Established, up for 00:12:29
+####truncated
+
+CSR3#sh ip bgp neighbors 192.168.1.1 advertised-routes 
+BGP table version is 82, local router ID is 3.3.3.3
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal, 
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter, 
+              x best-external, a additional-path, c RIB-compressed, 
+              t secondary path, L long-lived-stale,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>   1.1.1.1/32       192.168.1.1              0             0 65001 i
+ *>   2.2.2.2/32       192.168.1.1                            0 65001 i
+ *>   3.3.3.3/32       0.0.0.0                  0         32768 i
+ *>   10.0.0.0/16      192.168.1.1              0             0 65001 i
+ *>   10.100.0.0/16    0.0.0.0                  0         32768 i
+ r>   192.168.1.1/32   192.168.1.1              0             0 65001 i
+ r>   192.168.1.2/32   192.168.1.1                            0 65001 i
+ *>   192.168.1.3/32   0.0.0.0                  0         32768 i
+ *>   192.168.1.33/32  0.0.0.0                  0         32768 i
+ *>   192.168.101.0/30 192.168.1.1              0             0 65001 i
+
+CSR3#sh ip bgp neighbors 192.168.1.2 advertised-routes 
+BGP table version is 82, local router ID is 3.3.3.3
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal, 
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter, 
+              x best-external, a additional-path, c RIB-compressed, 
+              t secondary path, L long-lived-stale,
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>   1.1.1.1/32       192.168.1.1              0             0 65001 i
+ *>   2.2.2.2/32       192.168.1.1                            0 65001 i
+ *>   3.3.3.3/32       0.0.0.0                  0         32768 i
+ *>   10.0.0.0/16      192.168.1.1              0             0 65001 i
+ *>   10.100.0.0/16    0.0.0.0                  0         32768 i
+ r>   192.168.1.1/32   192.168.1.1              0             0 65001 i
+ r>   192.168.1.2/32   192.168.1.1                            0 65001 i
+ *>   192.168.1.3/32   0.0.0.0                  0         32768 i
+ *>   192.168.1.33/32  0.0.0.0                  0         32768 i
+ *>   192.168.101.0/30 192.168.1.1              0             0 65001 i
+
+Total number of prefixes 10 
+CSR3#sh tcp brief
+TCB       Local Address               Foreign Address             (state)
+7FE78EE10030  192.168.1.33.19751         192.168.1.2.179             ESTAB
+7FE78B5C3FC0  192.168.1.3.179            192.168.1.1.27247           ESTAB
+7FE7928069F8  10.100.0.4.22              47.196.196.91.60396         ESTAB
+
+CSR3#sh run | s router bgp
+router bgp 65003
+ bgp router-id 3.3.3.3
+ bgp log-neighbor-changes
+ neighbor 192.168.1.1 remote-as 65001
+ neighbor 192.168.1.1 ebgp-multihop 255
+ neighbor 192.168.1.1 update-source Tunnel11
+ neighbor 192.168.1.2 remote-as 65001
+ neighbor 192.168.1.2 ebgp-multihop 255
+ neighbor 192.168.1.2 update-source Tunnel12
+ !
+ address-family ipv4
+  network 3.3.3.3 mask 255.255.255.255
+  network 10.100.0.0 mask 255.255.0.0
+  network 192.168.1.3 mask 255.255.255.255
+  network 192.168.1.33 mask 255.255.255.255
+  neighbor 192.168.1.1 activate
+  neighbor 192.168.1.2 activate
+  maximum-paths 4
+ exit-address-family
+
+CSR3#sh run | s route 
+router bgp 65003
+ bgp router-id 3.3.3.3
+ bgp log-neighbor-changes
+ neighbor 192.168.1.1 remote-as 65001
+ neighbor 192.168.1.1 ebgp-multihop 255
+ neighbor 192.168.1.1 update-source Tunnel11
+ neighbor 192.168.1.2 remote-as 65001
+ neighbor 192.168.1.2 ebgp-multihop 255
+ neighbor 192.168.1.2 update-source Tunnel12
+ !
+ address-family ipv4
+  network 3.3.3.3 mask 255.255.255.255
+  network 10.100.0.0 mask 255.255.0.0
+  network 192.168.1.3 mask 255.255.255.255
+  network 192.168.1.33 mask 255.255.255.255
+  neighbor 192.168.1.1 activate
+  neighbor 192.168.1.2 activate
+  maximum-paths 4
+ exit-address-family
+ip route 10.100.0.0 255.255.0.0 Null0
+ip route 10.100.10.0 255.255.255.0 10.100.1.1
+ip route 20.185.209.94 255.255.255.255 10.100.2.1
+ip route 192.168.1.1 255.255.255.255 Tunnel11
+ip route 192.168.1.2 255.255.255.255 Tunnel12
+ip route vrf GS 0.0.0.0 0.0.0.0 GigabitEthernet1 10.100.0.1 global
+CSR3#
+</pre>
+
 **Step 17:** Create NSG for the test VM in the CSR VNET
 <pre lang="...">
 az network nsg create --resource-group CSR --name Azure-VM-NSG --location EastUS
