@@ -469,8 +469,7 @@ az network route-table route create --name vm-rt --resource-group CSR --route-ta
 az network vnet subnet update --name testVMSubnet --vnet-name CSR --resource-group CSR --route-table vm-rt
 </pre>
 **Step 22:** Test scenario ideas:<br>
--Run multiple traceroutes sourcing from the Azure side VM to the on prem VM. You will see that the first hop hashes between 10.0.1.4 and 10.0.1.5. 
-- Initiate ping from VM to VM and:
-	-reload CSR1, packet drop should be minimal if flow was hashed to CSR1
+-Run multiple traceroutes sourcing from the Azure side VM to the on prem VM. You will see that the first hop hashes between 10.0.1.4 and 10.0.1.5. Initiate ping from VM to VM and:
+-reload CSR1, packet drop should be minimal if flow was hashed to CSR1
 - once CSR1 is back up with BGP peering to CSR3, drop int tu11 on CSR1. This will show that the traffic continues to flow regardless of which CSR the LB chooses since there is a BGP relationship between CSR1 and CSR2. 
 - initiate the previous 2 tests, this time using CSR2
