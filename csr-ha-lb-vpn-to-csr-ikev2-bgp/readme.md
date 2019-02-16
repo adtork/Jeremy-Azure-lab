@@ -199,6 +199,7 @@ interface Tunnel11
 !
 
 router bgp 65001
+ bgp router-id 1.1.1.1
  bgp log-neighbor-changes
  neighbor 192.168.1.3 remote-as 65003
  neighbor 192.168.1.3 ebgp-multihop 255
@@ -300,6 +301,7 @@ interface Tunnel11
 !
 router bgp 65001
  bgp log-neighbor-changes
+ bgp router-id 2.2.2.2
  neighbor 192.168.1.33 remote-as 65003
  neighbor 192.168.1.33 ebgp-multihop 255
  neighbor 192.168.1.33 update-source Tunnel11
@@ -411,6 +413,7 @@ interface Tunnel12
 
 router bgp 65003
  bgp log-neighbor-changes
+ bgp router-id 3.3.3.3
  neighbor 192.168.1.1 remote-as 65001
  neighbor 192.168.1.1 ebgp-multihop 255
  neighbor 192.168.1.1 update-source Tunnel11
