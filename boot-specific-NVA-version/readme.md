@@ -1,4 +1,4 @@
-# How to find and use a specific NVA image. Examples include an ASAv and CSR in Azure region East. 
+# How to find and use a specific NVA image. Examples include an Cisco ASAv/CSR and Palo Alto Networks in Azure region East. 
 
 **Fill in Azure region to find available publishers.**
 <pre lang="...">
@@ -92,3 +92,16 @@ PS Azure:\> Get-AzureRMVMImage -Location $locName -Publisher $pubName -Offer $of
 Version
 -------
 16.10.120190108
+
+**PAN VM Series Example**
+$locName="East US"
+Get-AzureRMVMImagePublisher -Location $locName | Select PublisherName
+
+$pubName="paloaltonetworks"
+Get-AzureRMVMImageOffer -Location $locName -Publisher $pubName | Select Offer
+
+$offerName="vmseries1"
+Get-AzureRMVMImageSku -Location $locName -Publisher $pubName -Offer $offerName | Select Skus
+
+$skuName="byol"
+Get-AzureRMVMImage -Location $locName -Publisher $pubName -Offer $offerName -Sku $skuName | Select Version
