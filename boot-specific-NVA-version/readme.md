@@ -92,8 +92,10 @@ PS Azure:\> Get-AzureRMVMImage -Location $locName -Publisher $pubName -Offer $of
 Version
 -------
 16.10.120190108
+</pre>
 
 **PAN VM Series Example**
+<pre lang="...">
 $locName="East US"
 Get-AzureRMVMImagePublisher -Location $locName | Select PublisherName
 
@@ -105,3 +107,4 @@ Get-AzureRMVMImageSku -Location $locName -Publisher $pubName -Offer $offerName |
 
 $skuName="byol"
 Get-AzureRMVMImage -Location $locName -Publisher $pubName -Offer $offerName -Sku $skuName | Select Version
+</pre>
