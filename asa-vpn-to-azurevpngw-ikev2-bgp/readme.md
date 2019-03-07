@@ -114,7 +114,7 @@ interface GigabitEthernet0/1
  no shut
 
 !By default, ASAv has default route (burned in) pointing out the Mgmt interface. Route Azure VPN GW out the outside interface which we're using for VPN termination
-route OUTSIDE "insert AZ VPN GW Public IP" 255.255.255.255 10.1.0.1 1
+route OUTSIDE ""Azure-VNGpubip"" 255.255.255.255 10.1.0.1 1
 
 !route traffic from the ASAv destin for the on prem subnet to the fabric
 route inside 10.1.10.0 255.255.255.0 10.1.1.1 1
@@ -161,39 +161,14 @@ interface Tunnel11
  nameif vti-to-onprem
  ip address 192.168.2.1 255.255.255.0 
  tunnel source interface OUTSIDE
- tunnel destination "insert AZ VPN GW Public IP"
+ tunnel destination ""Azure-VNGpubip""
  tunnel mode ipsec ipv4
  tunnel protection ipsec profile Azure-Ipsec-PROF-to-onprem
  no shut
 
-object network AZURE-GW
- host "insert AZ VPN GW Public IP"
-object network ASA-IP
- host "insert ASA Public IP"
-object network AnyNets
- subnet 0.0.0.0 0.0.0.0
-object network obj_any
- subnet 0.0.0.0 0.0.0.0
-object network VTI-IP
- host 192.168.2.1
-object-group network AZURE-ASA-WAN-IP
- network-object object ASA-IP
-
-access-list Azure-ACL extended permit ip object obj_any object obj_any log debugging 
-access-list OUTSIDE_access_in extended permit ip object obj_any object obj_any log debugging 
-access-list INSIDE_access_in extended permit ip object obj_any object obj_any log debugging 
-
-mtu OUTSIDE 1400
-mtu INSIDE 1500
-sysopt connection tcpmss 1350
-sysopt connection preserve-vpn-flows
-
-nat (INSIDE,OUTSIDE) source static obj_any obj_any destination static obj_any obj_any no-proxy-arp route-lookup
-access-group OUTSIDE_access_in in interface OUTSIDE
-access-group INSIDE_access_in in interface INSIDE
 
 !route traffic for Azure over the tunnel to the tunnel interface
-route vti-to-onprem 10.0.0.254 255.255.255.255 "insert AZ VPN GW Public IP" 1
+route vti-to-onprem 10.0.0.254 255.255.255.255 "Azure-VNGpubip" 1
 
 crypto ikev2 enable OUTSIDE
 crypto ikev2 notify invalid-selectors
@@ -202,14 +177,14 @@ group-policy AzureGroupPolicy internal
 group-policy AzureGroupPolicy attributes
  vpn-tunnel-protocol ikev2 l2tp-ipsec 
 dynamic-access-policy-record DfltAccessPolicy
-tunnel-group "insert AZ VPN GW Public IP" type ipsec-l2l
-tunnel-group "insert AZ VPN GW Public IP" general-attributes
+tunnel-group "Azure-VNGpubip" type ipsec-l2l
+tunnel-group "Azure-VNGpubip" general-attributes
  default-group-policy AzureGroupPolicy
-tunnel-group "insert AZ VPN GW Public IP" ipsec-attributes
+tunnel-group "Azure-VNGpubip" ipsec-attributes
  ikev2 remote-authentication pre-shared-key Msft123Msft123
  ikev2 local-authentication pre-shared-key Msft123Msft123
 no tunnel-group-map enable peer-ip
-tunnel-group-map default-group "insert AZ VPN GW Public IP"
+tunnel-group-map default-group "Azure-VNGpubip"
 !
 class-map inspection_default
  match default-inspection-traffic
@@ -227,8 +202,6 @@ router bgp 65002
   no auto-summary
   no synchronization
  exit-address-family
-
-
 </pre>
 
 **Generate interesting traffic to initiate tunnel**</br>
