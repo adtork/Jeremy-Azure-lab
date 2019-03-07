@@ -99,7 +99,7 @@ az network local-gateway create --gateway-ip-address "insert ASA Public IP" --na
 az network vpn-connection create --name to-onprem --resource-group Hub --vnet-gateway1 Azure-VNG -l eastus --shared-key Msft123Msft123 --local-gateway2 to-onprem --enable-bgp
 </pre>
 
-**SSH to ASAv public IP. Public IPs in the below config are an example.**
+**SSH to ASAv public IP. Change any reference of the Azure VPN gateway to the public IP address from previous commands.**
 <pre lang="...">
 interface GigabitEthernet0/0
  nameif outside
