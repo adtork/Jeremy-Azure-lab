@@ -1,4 +1,4 @@
-# Azure Networking Lab- Active/Active IKEv2 tunnels between Azure VPN Gateway and On Prem ASA
+# Azure Networking Lab- Active/Active Azure VPN Gateway VPN to On Prem ASA- IKEv2+BGP
 
 This lab guide illustrates how to build active/active IPSEC VPN tunnels w/IKEv2 between a Cisco ASAv and the Azure VPN gateway with BGP. This is for lab testing purposes only and should not be considered production configuration. NAT, ACLs and security proposals shown can be narrowed down if need be. All Azure configs are done in Azure CLI so you can change them as needed to match your environment. The on prem VNET is to simulate on prem connectivity and requires no hardware.
 
