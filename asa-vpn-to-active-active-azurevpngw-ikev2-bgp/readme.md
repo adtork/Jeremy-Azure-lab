@@ -279,4 +279,4 @@ ASA1(config-router-af)# network 2.2.2.2 mask 255.255.255.255
 ASA1(config-router-af)# network 3.3.3.3 mask 255.255.255.255
 </pre>
 
-**You should be able to ping and drop one of the tunnels (ex: int tu11). If the traffic was taking the tunnel you dropped, you will see an ~30 second drop in traffic as the fabric refreshes routes**
+**You should be able to ping and drop one of the tunnels (ex: int tu11). If the traffic was taking the tunnel you dropped, you will see an ~30 second drop in traffic as the fabric refreshes routes.**
