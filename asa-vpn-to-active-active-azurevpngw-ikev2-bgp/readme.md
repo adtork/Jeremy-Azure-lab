@@ -12,10 +12,10 @@ Assumptions:
 
 # Base Topology
 The lab deploys an active/active Azure VPN gateway into a VNET. We will also deploy a Cisco ASA in a seperate VNET to simulate on prem.
-![alt text](https://)
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/active%20active%20vpn%20to%20asa%20topo.PNG)
 
 # BGP peering 
-![alt text](https://)
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/active%20active%20vpn%20to%20asa%20bgp.PNG)
 
 **Build Resource Groups, VNETs and Subnets**
 az group create --name Hub --location eastus
