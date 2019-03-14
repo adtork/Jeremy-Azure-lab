@@ -34,6 +34,7 @@ az network public-ip create --name Azure-VNGpubip --resource-group Hub --allocat
 </pre>
 
 **Build Azure VPN Gateways. Deployment will take some time. Azure side BGP ASN is 65001.**
+<pre lang="...">
 az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpubip --resource-group Hub --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait --asn 65001
 </pre>
 
