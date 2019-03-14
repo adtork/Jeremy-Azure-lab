@@ -120,6 +120,12 @@ az network vnet-gateway list-advertised-routes -g Hub -n Azure-VNG --peer 192.16
 az network vnet-gateway list-learned-routes -g Hub -n Azure-VNG
 </pre>
 
-# At this point, the Hub and On Prem VMs should be able to talk to each other via the tunnel.
+**At this point, the Hub and On Prem VMs should be able to talk to each other via the tunnel.**
 
 **Manually add a new address space 1.1.1.0/24 to the Hub VNET. Validate PAN's Untrust VR routing table sees the new prefix.**
+- In the PAN GUI, select the Network tab
+- Select Virtual Routers on the left
+- Under the Runtime Stats, select More Runtime Stats for the Untrust Virtual Router
+- Select the BGP tab
+- Select the Peer tab and validate the connection is established
+- Select the Local RIB tab to validate what Azure VPN Gateway BGP routes are received
