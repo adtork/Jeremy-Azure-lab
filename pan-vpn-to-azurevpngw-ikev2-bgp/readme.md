@@ -1,6 +1,6 @@
 # Azure Networking Lab- IPSEC VPN (IKEv2) between Palo Alto Networks Firewall and Azure VPN Gateway with BGP
 
-This lab guide illustrates how to build a basic IPSEC VPN tunnel w/IKEv2 between a Palo Alto Network firewall and the Azure VPN gateway with BGP. This is for lab testing purposes only and should not be considered production configuration. Security policies and configurations can be nfurther optimized if need be. All Azure configs are done in Azure CLI so you can change them as needed to match your environment. The lab uses an on prem VNET to simulate on prem connectivity. All PAN firewall configurations are provided via the XML file in Github.
+This lab guide illustrates how to build a basic IPSEC VPN tunnel w/IKEv2 between a Palo Alto Network firewall and the Azure VPN gateway with BGP. This is for lab testing purposes only and should not be considered production configuration. Security policies and configurations can be further optimized if need be. All Azure configs are done in Azure CLI so you can change them as needed to match your environment. The lab uses an on prem VNET to simulate on prem connectivity. All PAN firewall configurations are provided via the XML file in Github.
 
 Assumptions:
 - A valid Azure subscription account. If you don’t have one, you can create your free azure account (https://azure.microsoft.com/en-us/free/) today.
