@@ -95,7 +95,7 @@ az network vpn-connection create --name to-onprem --resource-group Hub --vnet-ga
 </pre>
 
 **HTTPS to the PAN management address.**
-- Download Firewall XML file: 
+- Download Firewall XML file: https://github.com/jwrightazure/lab/blob/master/pan-vpn-to-azurevpngw-ikev2-bgp/PAN-IKEv2-BGP.xml
 - Open the XML file and replace references to "Azure-VNGpubip1" with the public IP addresses for the Azure VPN gateway and save.
 
 **Validate VPN connection status in Azure CLI**
