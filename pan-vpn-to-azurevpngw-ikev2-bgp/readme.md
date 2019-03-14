@@ -93,9 +93,17 @@ az network local-gateway create --gateway-ip-address "PAN1VPNPublicIP" --name to
 az network vpn-connection create --name to-onprem --resource-group Hub --vnet-gateway1 Azure-VNG -l eastus --shared-key Msft123Msft123 --local-gateway2 to-onprem --enable-bgp
 </pre>
 
-**HTTPS to the PAN management address.**
+**Firewall configuration**
 - Download Firewall XML file: https://github.com/jwrightazure/lab/blob/master/pan-vpn-to-azurevpngw-ikev2-bgp/PAN-IKEv2-BGP.xml
 - Open the XML file and replace references to "Azure-VNGpubip1" with the public IP addresses for the Azure VPN gateway and save.
+- HTTPS to the firewall
+- Select Device tab
+- Select Operations tab
+- Select Import Named Configuration Snapshot. Upload the firewall XML file.
+- Select Load Named Configuration Snapshot. Select the firewall XML you previously uploaded.
+- Select Commit (top right) and then commit the configuration
+
+
 
 **Validate VPN connection status in Azure CLI**
 <pre lang="...">
@@ -115,11 +123,3 @@ az network vnet-gateway list-learned-routes -g Hub -n Azure-VNG
 # At this point, the Hub and On Prem VMs should be able to talk to each other via the tunnel.
 
 **Manually add a new address space 1.1.1.0/24 to the Hub VNET. Validate PAN's Untrust VR routing table sees the new prefix.**
-
-
-
-
-
-
-
-
