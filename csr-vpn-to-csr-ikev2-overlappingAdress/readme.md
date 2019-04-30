@@ -8,11 +8,9 @@ This lab guide shows how to configure site to site VPN between a CSR in Azure to
 **Topology**
 ![alt text](https:https://github.com/jwrightazure/lab/blob/master/images/vasi%20topo.PNG)
 
-**Lab IPs**
+**VASI Forwarding**
 ![alt text](https:)
 
-**BGP Layout**
-![alt text](https)
 
 **Requirements:**
 - A valid Azure subscription account. If you don’t have one, you can create your free azure account (https://azure.microsoft.com/en-us/free/) today.
