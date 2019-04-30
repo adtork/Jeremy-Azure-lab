@@ -9,7 +9,7 @@ This lab guide shows how to configure site to site VPN between a CSR in Azure to
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/vasi%20topo.PNG)
 
 **VASI Forwarding**
-![alt text](https:)
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/vasi%20forwarding.PNG)
 
 
 **Requirements:**
