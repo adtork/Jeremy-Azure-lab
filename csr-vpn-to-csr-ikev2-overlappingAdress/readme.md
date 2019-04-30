@@ -1,5 +1,3 @@
-vasi github
-
 # Site to site VPN between a CSR in Azure to 2 remote branches with overlapping address space. 
 
 **Objectives and Initial Setup**</br>
