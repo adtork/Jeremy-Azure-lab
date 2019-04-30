@@ -2,7 +2,7 @@ vasi github
 
 # Site to site VPN between a CSR in Azure to 2 remote branches with overlapping address space. 
 
-**Objectives and Initial Setup (Draft)**</br>
+**Objectives and Initial Setup**</br>
 This lab guide shows how to configure site to site VPN between a CSR in Azure to 2 remote branches. The remote branches have overlapping address space and there's no ability to control NAT at each branch. All configurations must be implemented on the headend CSR in Azure. Branch A and B both have an address space of 10.100/16. The challenge is how to uniquely identify each branch tunnel and apply the correct NAT+routing. The lab will demonstrate how to make Branch A appear as 10.101 and Branch B appear as 10.102 post encryption on the Azure side CSR through the use of VRF-Aware Software Infrastructure (VASI) NAT. In this particular lab, the branches must initiate the connections. The test VM subnet on the Azure side will have UDRs pointed to an Azure Standard Load Balancer with a backend pool of the inside interfaces of CSR1 (future will have HA CSRs). The main goal of this lab is to quickly stand up a sandbox environment for functionality testing. The routing configration is only an example and could be solved many ways. The entire environment is built on Azure and does not require any hardware. </br>
 
 **Topology**
