@@ -59,7 +59,7 @@ az network nsg rule create --resource-group CSR --nsg-name Azure-CSR-NSG --name 
 az vm availability-set create --resource-group CSR --name myAvailabilitySet --platform-fault-domain-count 2 --platform-update-domain-count 2
 </pre>
 
-**Step 6:** Create Public IP, 2 NICs (outside/inside), assign static private IPs, apply NSG, add inside subnet NIC for CSR1 to the load balancer backend pool, creat CSR VM:
+**Step 6:** Create Public IP, 2 NICs (outside/inside), assign static private IPs, apply NSG, add inside subnet NIC for CSR1 to the load balancer backend pool, create CSR VM:
 <pre lang="...">
 az network public-ip create --name CSR1PublicIP --resource-group CSR --idle-timeout 30 --allocation-method Static --sku standard
 az network public-ip create --name CSR1PublicIP2 --resource-group CSR --idle-timeout 30 --allocation-method Static --sku standard
@@ -362,8 +362,8 @@ az network nsg rule create --resource-group BranchB --nsg-name BranchB-CSR-NSG -
 az network nsg rule create --resource-group BranchB --nsg-name BranchB-CSR-NSG --name Allow-Out --access Allow --protocol "*" --direction Outbound --priority 140 --source-address-prefix "*" --source-port-range "*" --destination-address-prefix "*" --destination-port-range "*"
 
 az network public-ip create --name CSR3PublicIP --resource-group BranchB --idle-timeout 30 --allocation-method Static --sku standard
-az network nic create --name CSR3OutsideInterface -g BranchB --subnet OutsideSubnet --vnet BranchB --public-ip-address CSR3PublicIP --private-ip-address 10.100.0.4 --ip-forwarding true --network-security-group BranchB-CSR-NSG
-az network nic create --name CSR3InsideInterface -g BranchB --subnet InsideSubnet --vnet BranchB --ip-forwarding true --private-ip-address 10.100.1.4 --network-security-group BranchB-CSR-NSG
+az network nic create --name CSR3OutsideInterface -g BranchB --subnet OutsideSubnet --vnet BranchB --public-ip-address CSR3PublicIP --private-ip-address 10.100.0.5 --ip-forwarding true --network-security-group BranchB-CSR-NSG
+az network nic create --name CSR3InsideInterface -g BranchB --subnet InsideSubnet --vnet BranchB --ip-forwarding true --private-ip-address 10.100.1.5 --network-security-group BranchB-CSR-NSG
 az vm create --resource-group BranchB --location WestUS2 --name CSR3-BranchB --size Standard_DS3_v2 --nics CSR3OutsideInterface CSR3InsideInterface  --image cisco:cisco-csr-1000v:16_10-byol:16.10.120190108  --admin-username azureuser --admin-password Msft123Msft123 --no-wait
 
 az network nsg create --resource-group BranchB --name BranchB-VM-NSG --location WestUS2
@@ -374,7 +374,7 @@ az network nic create --resource-group BranchB -n BranchBVMNIC --location WestUS
 az vm create -n BranchBVM -g BranchB --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics BranchBVMNIC --no-wait
 
 az network route-table create --name vm-rt --resource-group BranchB
-az network route-table route create --name vm-rt --resource-group BranchB --route-table-name vm-rt --address-prefix 0.0.0.0/0 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.4
+az network route-table route create --name vm-rt --resource-group BranchB --route-table-name vm-rt --address-prefix 0.0.0.0/0 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.5
 az network vnet subnet update --name testVMSubnet --vnet-name BranchB --resource-group BranchB --route-table vm-rt
 
 az network public-ip show -g BranchB -n CSR3PublicIP --query "{address: ipAddress}"
@@ -406,7 +406,7 @@ crypto ikev2 keyring to-BranchB-keyring
 !
 crypto ikev2 profile to-BranchB-profile
  match address local 10.0.0.4
- match identity remote address 10.100.0.4 255.255.255.255 
+ match identity remote address 10.100.0.5 255.255.255.255 
  authentication remote pre-share
  authentication local pre-share
  keyring local to-BranchB-keyring
@@ -497,7 +497,7 @@ crypto ikev2 proposal to-azure-proposal
  group 2
 !
 crypto ikev2 policy to-azure-policy 
- match address local 10.100.0.4
+ match address local 10.100.0.5
  proposal to-azure-proposal
 !
 crypto ikev2 keyring to-azure-keyring
@@ -508,7 +508,7 @@ crypto ikev2 keyring to-azure-keyring
 !
 !
 crypto ikev2 profile to-azure-profile
- match address local 10.100.0.4
+ match address local 10.100.0.5
  match identity remote address 10.0.0.4 255.255.255.255 
  authentication remote pre-share
  authentication local pre-share
@@ -530,7 +530,7 @@ interface Loopback1
 interface Tunnel12
  ip address 192.168.10.2 255.255.255.255
  ip tcp adjust-mss 1350
- tunnel source 10.100.0.4
+ tunnel source 10.100.0.5
  tunnel mode ipsec ipv4
  tunnel destination CSR1PublicIP
  tunnel protection ipsec profile to-CSR1PublicIPsecProfile
