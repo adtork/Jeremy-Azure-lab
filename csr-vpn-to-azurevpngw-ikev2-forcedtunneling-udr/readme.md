@@ -2,13 +2,13 @@
 
 This lab guide illustrates how to build a basic IPSEC VPN tunnel w/IKEv2 between a Cisco CSR and the Azure VPN gateway with forced tunneling. Forced tunneling is an Azure term for steering a default route over VPN (this lab) or Expressroute (not this lab). The goal of this lab is for the Azure VM to traverse the IPSEC tunnel to the on prem CSR for all traffic including Internet. Key points with forced tunneling and the Azure VPN GW:
 
--You can use User Defined Routes (UDR) or BGP to steer a default path over VPN
--UDR or BGP mathod requires a route based VPN type
--UDR method requires defining a "default site" on the Azure VPN GW. You have to configure this with Powershell or Azure CLI. Azure portal does not support this configuration at this point
--Injecting a default over VPN via BGP does not require you to define a default site
--Do not apply a 0/0 UDR on the gateway subnet
--Do not apply an NSG to the gateway subnet
--Do not turn off BGP on the gateway subnet
+ - You can use User Defined Routes (UDR) or BGP to steer a default path over VPN
+ - UDR or BGP mathod requires a route based VPN type
+ - UDR method requires defining a "default site" on the Azure VPN GW. You have to configure this with Powershell or Azure CLI. Azure      portal does not support this configuration at this point
+ - Injecting a default over VPN via BGP does not require you to define a default site
+ - Do not apply a 0/0 UDR on the gateway subnet
+ - Do not apply an NSG to the gateway subnet
+ - Do not turn off BGP on the gateway subnet
 
 At the end of this lab, the 2 VMs will be able to ping each other over the tunnel. The on prem VM will be able to access the Internet through NAT on the CSR. The Hub VM will also have Internet access by following the default route over the tunnel where the CSR will provide NAT. All lab configs are done in Azure CLI so you can change them as needed to match your environment. There is no hardware reuored for this lab.
 
