@@ -193,9 +193,9 @@ az network vnet subnet update --name HubVM --vnet-name Hub --resource-group Hub 
 </pre>
 
 Verification:
-  -On prem should be able to ping the Azure VM 10.0.10.10
-  -Azure VM should be able to ping the on prem VM 10.1.10.10
-  -On prem should be able to ping 8.8.8.8. CSR providing outbound Internet connectivity
-  -Azure VM should be able to ping 8.8.8.8. Traffic will follow the default route over the tunnel. CSR providing outbound Internet connectivity
-  -Validate effective route table on Azure VM shows a default route pointed to the Azure VPN GW (displayed as Virtual Network Gateway)
-  -Validate effective route table on on prem VM shows a default route pointed to the CSR inside interface (diasplayed as virtual appliance 10.1.1.4)
+  - On prem should be able to ping the Azure VM 10.0.10.10
+  - Azure VM should be able to ping the on prem VM 10.1.10.10
+  - On prem should be able to ping 8.8.8.8. CSR providing outbound Internet connectivity
+  - Azure VM should be able to ping 8.8.8.8. Traffic will follow the default route over the tunnel. CSR providing outbound Internet connectivity
+  - Validate effective route table on Azure VM shows a default route pointed to the Azure VPN GW (displayed as Virtual Network Gateway)
+  - Validate effective route table on on prem VM shows a default route pointed to the CSR inside interface (diasplayed as virtual appliance 10.1.1.4)
