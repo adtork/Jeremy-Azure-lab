@@ -58,7 +58,8 @@ Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-asav" -Name "asav
 Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-asav" -Name "asav-azure-byol" | Set-AzureRmMarketplaceTerms -Accept
 </pre>
 
-**Build ASAv in the on prem VNET. It specifies a specific image that you can change. See [this article](../boot-specific-NVA-version/readme.md) for how to get current versions.**<pre lang="...">
+**Build ASAv in the on prem VNET. It specifies a specific image that you can change. See [this article](../boot-specific-NVA-version/readme.md) for how to get current versions.**
+<pre lang="...">
 az network public-ip create --name ASA1MgmtIP --resource-group onprem --idle-timeout 30 --allocation-method Static
 az network public-ip create --name ASA1VPNPublicIP --resource-group onprem --idle-timeout 30 --allocation-method Static
 az network nic create --name ASA1MgmtInterface -g onprem --subnet twonet --vnet onprem --public-ip-address ASA1MgmtIP --private-ip-address 10.1.2.4 --ip-forwarding true
