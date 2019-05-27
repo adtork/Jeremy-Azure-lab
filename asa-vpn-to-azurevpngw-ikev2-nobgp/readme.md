@@ -52,14 +52,13 @@ az network public-ip create --name Azure-VNGpubip --resource-group Hub --allocat
 az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpubip --resource-group Hub --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait 
 </pre>
 
-**Before deploying ASA in the next step, you may have to accept license agreement unless you have used it before. You can accomplish this through deploying a ASA in the portal or Powershell commands**
+**Before deploying ASA in the next step, you may have to accept license agreement unless you have used it before. You can accomplish this through deploying a ASA in the portal or Powershell commands. This is a sample for a Cisco ASA. See [this article](../boot-specific-NVA-version/readme.md) for how to modify this depending on the license you want to be using.**
 <pre lang="...">
-Sample Powershell for ASA:
 Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-asav" -Name "asav-azure-byol"
 Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-asav" -Name "asav-azure-byol" | Set-AzureRmMarketplaceTerms -Accept
 </pre>
 
-**Build on prem ASAv. ASAv image is specified from the Marketplace in this example.**
+**Build ASAv in the on prem VNET. It specifies a specific image that you can change. See [this article](../boot-specific-NVA-version/readme.md) for how to get current versions.**
 <pre lang="...">
 az network public-ip create --name ASA1MgmtIP --resource-group onprem --idle-timeout 30 --allocation-method Static
 az network public-ip create --name ASA1VPNPublicIP --resource-group onprem --idle-timeout 30 --allocation-method Static
