@@ -52,21 +52,20 @@ az network public-ip create --name Azure-VNGpubip --resource-group Hub --allocat
 az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpubip --resource-group Hub --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait 
 </pre>
 
-**Before deploying ASA in the next step, you may have to accept license agreement unless you have used it before. You can accomplish this through deploying a ASA in the portal or Powershell commands**
+**Before deploying ASA in the next step, you may have to accept license agreement unless you have used it before. You can accomplish this through deploying a ASA in the portal or Powershell commands. This is a sample for a Cisco ASA. See [this article](../boot-specific-NVA-version/readme.md) for how to modify this depending on the license you want to be using.**
 <pre lang="...">
-Sample Powershell for CSR:
-Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "16_10-byol"
-Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "16_10-byol" | Set-AzureRmMarketplaceTerms -Accept
+Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-asav" -Name "asav-azure-byol"
+Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-asav" -Name "asav-azure-byol" | Set-AzureRmMarketplaceTerms -Accept
 </pre>
 
-**Build on prem ASAv. ASAv image is specified from the Marketplace in this example.**
+**Build ASAv in the on prem VNET. It specifies a specific image that you can change. See [this article](../boot-specific-NVA-version/readme.md) for how to get current versions.**
 <pre lang="...">
 az network public-ip create --name ASA1MgmtIP --resource-group onprem --idle-timeout 30 --allocation-method Static
 az network public-ip create --name ASA1VPNPublicIP --resource-group onprem --idle-timeout 30 --allocation-method Static
 az network nic create --name ASA1MgmtInterface -g onprem --subnet twonet --vnet onprem --public-ip-address ASA1MgmtIP --private-ip-address 10.1.2.4 --ip-forwarding true
 az network nic create --name ASA1OutsideInterface -g onprem --subnet zeronet --vnet onprem --public-ip-address ASA1VPNPublicIP --private-ip-address 10.1.0.4 --ip-forwarding true
 az network nic create --name ASA1InsideInterface -g onprem --subnet onenet --vnet onprem --private-ip-address 10.1.1.4 --ip-forwarding true
-az vm create --resource-group onprem --location eastus --name ASA1 --size Standard_D3_v2 --nics ASA1MgmtInterface ASA1OutsideInterface ASA1InsideInterface  --image cisco:cisco-asav:asav-azure-byol:910.1.0 --admin-username azureuser --admin-password Msft123Msft123
+az vm create --resource-group onprem --location eastus --name ASA1 --size Standard_D3_v2 --nics ASA1MgmtInterface ASA1OutsideInterface ASA1InsideInterface  --image cisco:cisco-asav:asav-azure-byol:910.1.17 --admin-username azureuser --admin-password Msft123Msft123
 </pre>
 
 **After the gateway and ASAv have been created, document the public IP address for both. Value will be null until it has been successfully provisioned.**

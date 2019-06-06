@@ -45,13 +45,13 @@ az network public-ip create --name Azure-VNGpubip2 --resource-group Hub --alloca
 az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpubip1 Azure-VNGpubip2 --resource-group Hub --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait --asn 65001
 </pre>
 
-**Before deploying ASA in the next step, you may have to accept license agreement unless you have used it before. You can accomplish this through deploying a ASA in the portal or Powershell commands. This is a sample for a Cisco CSR**
+**Before deploying ASA in the next step, you may have to accept license agreement unless you have used it before. You can accomplish this through deploying a ASA in the portal or Powershell commands. This is a sample for a Cisco ASA. See [this article](../boot-specific-NVA-version/readme.md) for how to modify this depending on the license you want to be using.**
 <pre lang="...">
-Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "16_10-byol"
-Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "16_10-byol" | Set-AzureRmMarketplaceTerms -Accept
+Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-asav" -Name "asav-azure-byol"
+Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-asav" -Name "asav-azure-byol" | Set-AzureRmMarketplaceTerms -Accept
 </pre>
 
-**Build ASAv in the on prem VNET. It specifies a specific image that you can change**
+**Build ASAv in the on prem VNET. It specifies a specific image that you can change. See [this article](../boot-specific-NVA-version/readme.md) for how to get current versions.**
 <pre lang="...">
 az network public-ip create --name ASA1MgmtIP --resource-group onprem --idle-timeout 30 --allocation-method Static
 az network public-ip create --name ASA1VPNPublicIP1 --resource-group onprem --idle-timeout 30 --allocation-method Static
@@ -60,7 +60,7 @@ az network nic create --name ASA1MgmtInterface -g onprem --subnet threenet --vne
 az network nic create --name ASA1OutsideInterface -g onprem --subnet zeronet --vnet onprem --public-ip-address ASA1VPNPublicIP1 --private-ip-address 10.1.0.4 --ip-forwarding true
 az network nic create --name ASA1InsideInterface -g onprem --subnet onenet --vnet onprem --private-ip-address 10.1.1.4 --ip-forwarding true
 az network nic create --name ASA1OutsideInterface2 -g onprem --subnet twonet --vnet onprem --public-ip-address ASA1VPNPublicIP2 --private-ip-address 10.1.2.4 --ip-forwarding true
-az vm create --resource-group onprem --location eastus --name ASA1 --size Standard_D3_v2 --nics ASA1MgmtInterface ASA1OutsideInterface ASA1OutsideInterface2 ASA1InsideInterface  --image cisco:cisco-asav:asav-azure-byol:910.1.11 --admin-username azureuser --admin-password Msft123Msft123
+az vm create --resource-group onprem --location eastus --name ASA1 --size Standard_D3_v2 --nics ASA1MgmtInterface ASA1OutsideInterface ASA1OutsideInterface2 ASA1InsideInterface  --image cisco:cisco-asav:asav-azure-byol:910.1.17 --admin-username azureuser --admin-password Msft123Msft123
 </pre>
 
 **Build Azure side Linux VM**
