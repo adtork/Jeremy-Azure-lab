@@ -207,17 +207,17 @@ Verification before layered NSG:
   - Azure VM should be able to ping 8.8.8.8. Traffic will follow the default route over the tunnel. CSR providing outbound Internet connectivity
   - Validate effective route table on Azure VM shows a default route pointed to the Azure VPN GW (displayed as Virtual Network Gateway)
   - Validate effective route table on on prem VM shows a default route pointed to the CSR inside interface (displayed as virtual appliance 10.1.1.4)
-
+#
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/rt1.png)
 
 
-Azure Internet:
+#Azure Internet:
   - Shut down tunnel 11 on the CSR which will stop the advertisement of 0/0
   ![alt text](https://github.com/jwrightazure/lab/blob/master/images/rt2.png)
   - Verify Azure VM is going out local Internet
   - After verifying local Internet, enable tunnel 11 on the CSR. Internet will now go over the tunnel
 
-Configure layered NSGs to stop Internet access for the Azure VM when BGP is down:
+#Configure layered NSGs to stop Internet access for the Azure VM when BGP is down:
   - Locate the NSG configured for the Auze VM "Azure-VM-NSG". Note it allows Internet access by default
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/nsg1.png)
  
