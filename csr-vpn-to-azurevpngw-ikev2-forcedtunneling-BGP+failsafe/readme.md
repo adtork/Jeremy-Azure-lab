@@ -226,11 +226,15 @@ Verification before layered NSG:
 **NSG1**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/nsg1.PNG)
  
-  - Configured outbound layered NSG"
+**Configured outbound layered NSG**
   
-**Layered NSGs**
+**Allow Internet if BGP**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/nsg2.PNG)
+
+**Deny Internet if BGP if down**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/nsg3.PNG)
+
+**NSG Layout**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/nsg4.PNG)
 
   - Shut down tunnel 11 on the CSR which will stop the advertisement of 0/0
