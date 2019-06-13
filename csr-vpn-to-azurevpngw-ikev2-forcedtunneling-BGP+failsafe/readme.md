@@ -10,7 +10,7 @@ This lab guide illustrates how to build a basic IPSEC VPN tunnel w/IKEv2 between
  - Do not apply an NSG to the GatewaySubnet
  - Do not turn off BGP on the GatewaySubnet
 
-VMs in a VNET have access to the Internet by default (0/0->Internet). At the end of this lab, the 2 VMs will be able to ping each other over the tunnel. The on prem VM will be able to access the Internet through NAT on the CSR. The Hub VM will also have Internet access by following the default route over the tunnel where the CSR will provide NAT. A layered Network Security Group (NSG) will be used to deny Internet if BGP is down. A default route with a UDR with next hop "none" will not solve this problem since it will win the tie break vs the default route advertised by BGP.
+VMs in a VNET have access to the Internet by default (0/0->Internet). At the end of this lab, the 2 VMs will be able to ping each other over the tunnel. The on prem VM will be able to access the Internet through NAT on the CSR. The Hub VM will also have Internet access by following the default route over the tunnel where the CSR will provide NAT. A layered Network Security Group (NSG) will be used to deny Internet if BGP is down. A default route with a UDR with next hop "none" will not solve this problem since it will win the tie break vs the default route advertised by BGP. BGP routes get tagged with a VirtualNetwork tag.
 
 All lab configs are done in Azure CLI so you can change them as needed to match your environment. There is no hardware reuored for this lab. The layered NSGs will be configured through the portal as it's easier to visual.
 
