@@ -209,7 +209,7 @@ Verification before layered NSG:
   - Validate effective route table on on prem VM shows a default route pointed to the CSR inside interface (displayed as virtual appliance 10.1.1.4)
   
 **RT1**
-![alt text](https://github.com/jwrightazure/lab/blob/master/images/rt1.png)
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/rt1.PNG)
 
 
 #Azure Internet:
