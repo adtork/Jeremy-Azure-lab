@@ -213,7 +213,7 @@ Verification before layered NSG:
 
 Azure Internet:
   - Shut down tunnel 11 on the CSR which will stop the advertisement of 0/0
-![alt text](https://github.com/jwrightazure/lab/blob/master/images/rt2.png)
+  ![alt text](https://github.com/jwrightazure/lab/blob/master/images/rt2.png)
   - Verify Azure VM is going out local Internet
   - After verifying local Internet, enable tunnel 11 on the CSR. Internet will now go over the tunnel
 
