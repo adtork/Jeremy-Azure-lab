@@ -216,7 +216,7 @@ Verification before layered NSG:
   - Shut down tunnel 11 on the CSR which will stop the advertisement of 0/0
   
 **RT2**
-  ![alt text](https://github.com/jwrightazure/lab/blob/master/images/rt2.png)
+  ![alt text](https://github.com/jwrightazure/lab/blob/master/images/rt2.PNG)
   - Verify Azure VM is going out local Internet
   - After verifying local Internet, enable tunnel 11 on the CSR. Internet will now go over the tunnel
 
@@ -224,14 +224,14 @@ Verification before layered NSG:
   - Locate the NSG configured for the Auze VM "Azure-VM-NSG". Note it allows Internet access by default
   
 **NSG1**
-![alt text](https://github.com/jwrightazure/lab/blob/master/images/nsg1.png)
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/nsg1.PNG)
  
   - Configured outbound layered NSG"
   
 **Layered NSGs**
-![alt text](https://github.com/jwrightazure/lab/blob/master/images/nsg2.png)
-![alt text](https://github.com/jwrightazure/lab/blob/master/images/nsg3.png)
-![alt text](https://github.com/jwrightazure/lab/blob/master/images/nsg4.png)
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/nsg2.PNG)
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/nsg3.PNG)
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/nsg4.PNG)
 
   - Shut down tunnel 11 on the CSR which will stop the advertisement of 0/0
   - Internet access will now be denied
