@@ -211,16 +211,14 @@ Verification before layered NSG:
 **RT1**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/rt1.PNG)
 
-
-#Azure Internet:
-  - Shut down tunnel 11 on the CSR which will stop the advertisement of 0/0
+Shut down tunnel 11 on the CSR which will stop the advertisement of 0/0
   
 **RT2**
   ![alt text](https://github.com/jwrightazure/lab/blob/master/images/rt2.PNG)
   - Verify Azure VM is going out local Internet
   - After verifying local Internet, enable tunnel 11 on the CSR. Internet will now go over the tunnel
 
-#Configure layered NSGs to stop Internet access for the Azure VM when BGP is down:
+**Configure layered NSGs to stop Internet access for the Azure VM when BGP is down:**
   - Locate the NSG configured for the Auze VM "Azure-VM-NSG". Note it allows Internet access by default
   
 **NSG1**
@@ -237,8 +235,8 @@ Verification before layered NSG:
 **NSG Layout**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/nsg4.PNG)
 
-  - Shut down tunnel 11 on the CSR which will stop the advertisement of 0/0
-  - Internet access will now be denied
+- Shut down tunnel 11 on the CSR which will stop the advertisement of 0/0
+- Internet access will now be denied
 
 
 
