@@ -241,4 +241,88 @@ Success rate is 100 percent (5/5), round-trip min/avg/max = 3/3/5 ms
 Core#
 </pre>
 
-
+**All router BGP configs**
+<pre lang="...">
+Core#sh run | s bgp
+router bgp 65001
+ bgp router-id 1.1.1.1
+ bgp log-neighbor-changes
+ neighbor 10.1.1.2 remote-as 65002
+ !
+ address-family ipv4
+  network 1.1.1.1 mask 255.255.255.255
+  network 10.100.0.0 mask 255.255.255.0
+  network 10.101.0.0 mask 255.255.255.0
+  network 10.102.0.0 mask 255.255.255.0
+  network 10.103.0.0 mask 255.255.255.0
+  network 10.104.0.0 mask 255.255.255.0
+  network 10.105.0.0 mask 255.255.255.0
+  neighbor 10.1.1.2 activate
+  neighbor 10.1.1.2 soft-reconfiguration inbound
+ exit-address-family
+ 
+ ASR#sh run | s bgp
+router bgp 65002
+ bgp router-id 2.2.2.2
+ bgp log-neighbor-changes
+ neighbor 10.1.1.1 remote-as 65001
+ neighbor 10.1.1.6 remote-as 12076
+ neighbor 10.1.1.10 remote-as 12076
+ !
+ address-family ipv4
+  network 2.2.2.2 mask 255.255.255.255
+  aggregate-address 10.0.0.0 255.0.0.0 as-set summary-only
+  neighbor 10.1.1.1 activate
+  neighbor 10.1.1.1 prefix-list filter-vnet out
+  neighbor 10.1.1.6 activate
+  neighbor 10.1.1.10 activate
+ exit-address-family
+ 
+ Azure#sh run | s bgp
+router bgp 12076
+ bgp router-id 3.3.3.3
+ bgp log-neighbor-changes
+ neighbor 10.1.1.5 remote-as 65002
+ neighbor 10.1.1.14 remote-as 65515
+ !
+ address-family ipv4
+  network 3.3.3.3 mask 255.255.255.255
+  neighbor 10.1.1.5 activate
+  neighbor 10.1.1.5 soft-reconfiguration inbound
+  neighbor 10.1.1.14 activate
+  neighbor 10.1.1.14 soft-reconfiguration inbound
+ exit-address-family
+ 
+ Azure2#sh run | s bgp
+router bgp 12076
+ bgp router-id 4.4.4.4
+ bgp log-neighbor-changes
+ neighbor 10.1.1.9 remote-as 65002
+ neighbor 10.1.1.18 remote-as 65515
+ !
+ address-family ipv4
+  network 4.4.4.4 mask 255.255.255.255
+  neighbor 10.1.1.9 activate
+  neighbor 10.1.1.9 soft-reconfiguration inbound
+  neighbor 10.1.1.18 activate
+  neighbor 10.1.1.18 soft-reconfiguration inbound
+ exit-address-family
+ 
+ VNET#sh run | s bgp
+router bgp 65515
+ bgp router-id 5.5.5.5
+ bgp log-neighbor-changes
+ neighbor 10.1.1.13 remote-as 12076
+ neighbor 10.1.1.17 remote-as 12076
+ !
+ address-family ipv4
+  network 5.5.5.5 mask 255.255.255.255
+  network 172.16.0.0 mask 255.255.255.0
+  network 172.16.1.0 mask 255.255.255.0
+  neighbor 10.1.1.13 activate
+  neighbor 10.1.1.13 soft-reconfiguration inbound
+  neighbor 10.1.1.17 activate
+  neighbor 10.1.1.17 soft-reconfiguration inbound
+  maximum-paths 2
+ exit-address-family
+</pre>
