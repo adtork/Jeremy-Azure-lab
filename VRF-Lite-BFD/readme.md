@@ -1,10 +1,10 @@
 # Azure Networking Lab- Expressroute- VRF Lite + BGP
 This lab guide shows how to enable VRF lite and Bidirectional Forwarding Detection (BFD) protocol for Expressroute. BFD is a detection protocol that is designed to provide fast path failure detection times. A traditional single Expressroute circuit has 2 physical paths (A and B) between the provider and the Microsoft edge routers (MSEE). BFD for Expressroute provides significantly faster failover times vs relying on BGP reconvergence. This lab simulates a L2 circuit and you have switched the appropriate VLANs.
 
-Notes:
--BFD is enabled by default on all new private peering circuits
--You can enable BFD on an existing ER circuit by resetting (not destroying) your circuit on the Azure side
--Verify your edge termination device supports BFD enabled BGP
+# Notes:
+- BFD is enabled by default on all new private peering circuits
+- You can enable BFD on an existing ER circuit by resetting (not destroying) your circuit on the Azure side
+- Verify your edge termination device supports BFD enabled BGP
 
 # Base Topology
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/vrf%20lite%20and%20bfd.PNG)
