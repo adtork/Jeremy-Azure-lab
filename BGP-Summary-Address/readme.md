@@ -8,6 +8,7 @@ This lab guide illustrates how to control basic BGP prefix control in/out of Azu
 - Loopback100 advertisement is only for testing purposes
 - Core router will advertise several loopbacks. The VNET router will initially see all of the advertised prefixes. 
 - The simulated VNET will advertise 172.16.0.0/24 and 172.16.1.0/24 (and loopback100)
+- Routers Azure and Azure removes the private ASN before sending updates to the ASR
 
 
 
@@ -44,16 +45,16 @@ RPKI validation codes: V valid, I invalid, N Not found
  *>   2.2.2.2/32       10.1.1.2                 0             0 65002 i
  *>   3.3.3.3/32       10.1.1.2                               0 65002 12076 i
  *>   4.4.4.4/32       10.1.1.2                               0 65002 12076 i
- *>   5.5.5.5/32       10.1.1.2                               0 65002 12076 65515 i
+ *>   5.5.5.5/32       10.1.1.2                               0 65002 12076 i
  *>   10.100.0.0/24    0.0.0.0                  0         32768 i
  *>   10.101.0.0/24    0.0.0.0                  0         32768 i
  *>   10.102.0.0/24    0.0.0.0                  0         32768 i
  *>   10.103.0.0/24    0.0.0.0                  0         32768 i
  *>   10.104.0.0/24    0.0.0.0                  0         32768 i
  *>   10.105.0.0/24    0.0.0.0                  0         32768 i
- *>   172.16.0.0/24    10.1.1.2                               0 65002 12076 65515 i
+ *>   172.16.0.0/24    10.1.1.2                               0 65002 12076 i
      Network          Next Hop            Metric LocPrf Weight Path
- *>   172.16.1.0/24    10.1.1.2                               0 65002 12076 65515 i
+ *>   172.16.1.0/24    10.1.1.2                               0 65002 12076 i
 Core#ping 5.5.5.5 source lo100
 Type escape sequence to abort.
 Sending 5, 100-byte ICMP Echos to 5.5.5.5, timeout is 2 seconds:
@@ -231,7 +232,7 @@ RPKI validation codes: V valid, I invalid, N Not found
  *>   10.103.0.0/24    0.0.0.0                  0         32768 i
  *>   10.104.0.0/24    0.0.0.0                  0         32768 i
  *>   10.105.0.0/24    0.0.0.0                  0         32768 i
- *>   172.16.0.0/24    10.1.1.2                               0 65002 12076 65515 i
+ *>   172.16.0.0/24    10.1.1.2                               0 65002 12076 i
 Core#ping 172.16.0.1 source lo100
 Type escape sequence to abort.
 Sending 5, 100-byte ICMP Echos to 172.16.0.1, timeout is 2 seconds:
@@ -288,6 +289,7 @@ router bgp 12076
  address-family ipv4
   network 3.3.3.3 mask 255.255.255.255
   neighbor 10.1.1.5 activate
+  neighbor 10.1.1.5 remove-private-as
   neighbor 10.1.1.5 soft-reconfiguration inbound
   neighbor 10.1.1.14 activate
   neighbor 10.1.1.14 soft-reconfiguration inbound
@@ -303,6 +305,7 @@ router bgp 12076
  address-family ipv4
   network 4.4.4.4 mask 255.255.255.255
   neighbor 10.1.1.9 activate
+  neighbor 10.1.1.9 remove-private-as
   neighbor 10.1.1.9 soft-reconfiguration inbound
   neighbor 10.1.1.18 activate
   neighbor 10.1.1.18 soft-reconfiguration inbound
