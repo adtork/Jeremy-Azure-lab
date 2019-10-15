@@ -16,7 +16,7 @@ This lab shows the basic configs for Expressroute Private Peering and a few veri
 - Loopbacks are for lab only
 
 # Base Topology
-![alt text]()
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/ER%20private%20peering%20basic%20configs.PNG)
 
 **Relevant CE configs- note summary address 10/8 that is being sent to Azure and ECMP going to the VNET prefix 172.16.0.0/24**
 <pre lang="...">
