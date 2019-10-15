@@ -1,4 +1,4 @@
-# Azure Networking Lab- Basic Expressroute Configurations
+# Azure Networking Lab- Basic Expressroute Configurations- Private Peering
 This lab shows the basic configs for Expressroute Private Peering and a few verification commands. Customers do not have access to the Microsoft Edge routers (MSEEs) or the VNET "router" in Azure. The lab includes configurations for the simulated MSEEs and VNET router. 
 
 # Notes:
