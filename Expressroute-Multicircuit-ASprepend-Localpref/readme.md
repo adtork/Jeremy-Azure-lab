@@ -21,7 +21,7 @@ This lab shows the basic configs for multi-circuit Expressroute Private Peering 
 - clearing any BGP peering is not shown
 
 # Base Topology
-![alt text](https://github.com/jwrightazure/lab/blob/master/images/ER%20private%20peering%20basic%20configs.PNG)
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/er%20multicircuit.PNG)
 
 **Core paths to both VNET prefixes (172.16.0.0/24 and 172.16.1.0/24) before changing AS path or local pref. Notice it is ECMP load sharing to both CE1 and CE2. VNET1 has 4 ECMP paths to CE prefixes (192.168.0.0/24 and 192.168.1.0/24)**
 <pre lang="...">
