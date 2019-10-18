@@ -1,7 +1,7 @@
 # Azure Networking Lab- Basic Multi-Circuit Expressroute Private Peering Configurations- BGP AS PAth Prepending/Local Preference
 This lab shows the basic configs for multi-circuit Expressroute Private Peering with BGP AS Path Prepending and BGP Local Preference. Customers do not have access to the Microsoft Edge routers (MSEEs) or the VNET "router" in Azure. The lab includes configurations for the simulated MSEEs and VNET routers. 
 
-- CE is advertising 192.168.0.0/24 and 192.168.1.0.0, VNETs are advertising 172.16.0.0/24 and 172.16.1.0/24
+- "Core" is advertising 192.168.0.0/24 and 192.168.1.0.0, VNETs are advertising 172.16.0.0/24 and 172.16.1.0/24
 
 - The goal of the lab is for traffic sourced from the Core router destination 172.16.0.0/24 to use CE1 (Expressroute Circuit 1) as the primary exit point with a backup path through CE2 (Expressroute Circuit 2). Traffic sourced from the Core router to destination 172.16.1.0/24 should use CE2 as the primary exit point with a backup path through CE1. BGP Local preference is used to influence path selection. 
 
