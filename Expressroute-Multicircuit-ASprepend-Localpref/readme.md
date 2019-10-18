@@ -375,3 +375,1206 @@ Success rate is 100 percent (5/5), round-trip min/avg/max = 4/5/7 ms
 
 </pre>
 
+**All router configs**
+<pre lang="...">
+Core#sh run
+Building configuration...
+
+ip vrf private-peering
+ rd 10:1
+
+interface Loopback0
+ ip vrf forwarding private-peering
+ ip address 1.1.1.1 255.255.255.255
+!
+interface Loopback1
+ ip vrf forwarding private-peering
+ ip address 192.168.0.1 255.255.255.0
+!
+interface Loopback2
+ ip vrf forwarding private-peering
+ ip address 192.168.1.1 255.255.255.0
+!
+interface GigabitEthernet0/0
+ ip vrf forwarding private-peering
+ ip address 10.1.12.1 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ ip vrf forwarding private-peering
+ ip address 10.1.13.1 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router bgp 65001
+ bgp router-id 1.1.1.1
+ bgp log-neighbor-changes
+ !
+ address-family ipv4 vrf private-peering
+  network 1.1.1.1 mask 255.255.255.255
+  network 192.168.0.0
+  network 192.168.1.0
+  neighbor 10.1.12.2 remote-as 65001
+  neighbor 10.1.12.2 activate
+  neighbor 10.1.12.2 next-hop-self
+  neighbor 10.1.12.2 soft-reconfiguration inbound
+  neighbor 10.1.12.2 prefix-list to-azure out
+  neighbor 10.1.13.2 remote-as 65001
+  neighbor 10.1.13.2 activate
+  neighbor 10.1.13.2 next-hop-self
+  neighbor 10.1.13.2 soft-reconfiguration inbound
+  neighbor 10.1.13.2 prefix-list to-azure out
+  maximum-paths 4
+  maximum-paths ibgp 4
+ exit-address-family
+!
+
+ip prefix-list to-azure seq 5 permit 1.1.1.1/32
+ip prefix-list to-azure seq 10 permit 192.168.0.0/24
+ip prefix-list to-azure seq 15 permit 192.168.1.0/24
+ipv6 ioam timestamp
+
+alias exec vp show ip bgp vpnv4 vrf private-peering
+
+CE1#term length 0
+CE1#sh run
+Building configuration...
+
+Current configuration : 4689 bytes
+!
+! Last configuration change at 14:21:37 UTC Fri Oct 18 2019
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname CE1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+ip vrf private-peering
+ rd 10:1
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip vrf forwarding private-peering
+ ip address 2.2.2.2 255.255.255.255
+!
+interface GigabitEthernet0/0
+ ip vrf forwarding private-peering
+ ip address 10.1.12.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ ip vrf forwarding private-peering
+ ip address 10.1.23.1 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ ip vrf forwarding private-peering
+ ip address 10.1.24.1 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ ip vrf forwarding private-peering
+ ip address 10.1.25.1 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router bgp 65001
+ bgp router-id 2.2.2.2
+ bgp log-neighbor-changes
+ !
+ address-family ipv4 vrf private-peering
+  network 2.2.2.2 mask 255.255.255.255
+  neighbor 10.1.12.1 remote-as 65001
+  neighbor 10.1.12.1 activate
+  neighbor 10.1.12.1 next-hop-self
+  neighbor 10.1.12.1 soft-reconfiguration inbound
+  neighbor 10.1.23.2 remote-as 65001
+  neighbor 10.1.23.2 activate
+  neighbor 10.1.23.2 next-hop-self
+  neighbor 10.1.23.2 soft-reconfiguration inbound
+  neighbor 10.1.24.2 remote-as 12076
+  neighbor 10.1.24.2 activate
+  neighbor 10.1.24.2 soft-reconfiguration inbound
+  neighbor 10.1.24.2 route-map 172-16-0-local-pref in
+  neighbor 10.1.24.2 route-map prepend out
+  neighbor 10.1.25.2 remote-as 12076
+  neighbor 10.1.25.2 activate
+  neighbor 10.1.25.2 soft-reconfiguration inbound
+  neighbor 10.1.25.2 route-map 172-16-0-local-pref in
+  neighbor 10.1.25.2 route-map prepend out
+  maximum-paths 4
+  maximum-paths ibgp 4
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+ip prefix-list 172-16-0-local-pref seq 5 permit 172.16.0.0/24
+!
+ip prefix-list prepend-192-168-1 seq 20 permit 192.168.1.0/24
+ipv6 ioam timestamp
+!
+route-map 172-16-0-local-pref permit 10
+ match ip address prefix-list 172-16-0-local-pref
+ set local-preference 150
+!
+route-map 172-16-0-local-pref permit 20
+!
+route-map prepend permit 10
+ match ip address prefix-list prepend-192-168-1
+ set as-path prepend 65001 65001 65001
+!
+route-map prepend permit 20
+!
+!
+!
+control-plane
+!
+alias exec vp show ip bgp vpnv4 vrf private-peering
+
+CE2#sh run
+Building configuration...
+
+Current configuration : 4689 bytes
+!
+! Last configuration change at 14:05:09 UTC Fri Oct 18 2019
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname CE2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+ip vrf private-peering
+ rd 10:1
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip vrf forwarding private-peering
+ ip address 3.3.3.3 255.255.255.255
+!
+interface GigabitEthernet0/0
+ ip vrf forwarding private-peering
+ ip address 10.1.13.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ ip vrf forwarding private-peering
+ ip address 10.1.23.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ ip vrf forwarding private-peering
+ ip address 10.1.26.1 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ ip vrf forwarding private-peering
+ ip address 10.1.27.1 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router bgp 65001
+ bgp router-id 3.3.3.3
+ bgp log-neighbor-changes
+ !
+ address-family ipv4 vrf private-peering
+  network 3.3.3.3 mask 255.255.255.255
+  neighbor 10.1.13.1 remote-as 65001
+  neighbor 10.1.13.1 activate
+  neighbor 10.1.13.1 next-hop-self
+  neighbor 10.1.13.1 soft-reconfiguration inbound
+  neighbor 10.1.23.1 remote-as 65001
+  neighbor 10.1.23.1 activate
+  neighbor 10.1.23.1 next-hop-self
+  neighbor 10.1.23.1 soft-reconfiguration inbound
+  neighbor 10.1.26.2 remote-as 12076
+  neighbor 10.1.26.2 activate
+  neighbor 10.1.26.2 soft-reconfiguration inbound
+  neighbor 10.1.26.2 route-map 172-16-1-local-pref in
+  neighbor 10.1.26.2 route-map prepend out
+  neighbor 10.1.27.2 remote-as 12076
+  neighbor 10.1.27.2 activate
+  neighbor 10.1.27.2 soft-reconfiguration inbound
+  neighbor 10.1.27.2 route-map 172-16-1-local-pref in
+  neighbor 10.1.27.2 route-map prepend out
+  maximum-paths 4
+  maximum-paths ibgp 4
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+ip prefix-list 172-16-1-local-pref seq 5 permit 172.16.1.0/24
+!
+ip prefix-list prepend-192-168-0 seq 20 permit 192.168.0.0/24
+ipv6 ioam timestamp
+!
+route-map 172-16-1-local-pref permit 10
+ match ip address prefix-list 172-16-1-local-pref
+ set local-preference 150
+!
+route-map 172-16-1-local-pref permit 20
+!
+route-map prepend permit 10
+ match ip address prefix-list prepend-192-168-0
+ set as-path prepend 65001 65001 65001
+!
+route-map prepend permit 20
+!
+!
+!
+control-plane
+!
+alias exec vp show ip bgp vpnv4 vrf private-peering
+
+
+MSEE1#sh run
+Building configuration...
+
+Current configuration : 3783 bytes
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname MSEE1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+ip vrf private-peering
+ rd 10:1
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip vrf forwarding private-peering
+ ip address 4.4.4.4 255.255.255.255
+!
+interface GigabitEthernet0/0
+ ip vrf forwarding private-peering
+ ip address 10.1.24.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ ip vrf forwarding private-peering
+ ip address 10.1.48.1 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ ip vrf forwarding private-peering
+ ip address 10.1.49.1 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router bgp 12076
+ bgp router-id 4.4.4.4
+ bgp log-neighbor-changes
+ !
+ address-family ipv4 vrf private-peering
+  network 4.4.4.4 mask 255.255.255.255
+  neighbor 10.1.24.1 remote-as 65001
+  neighbor 10.1.24.1 activate
+  neighbor 10.1.24.1 remove-private-as
+  neighbor 10.1.24.1 soft-reconfiguration inbound
+  neighbor 10.1.48.2 remote-as 65515
+  neighbor 10.1.48.2 activate
+  neighbor 10.1.48.2 soft-reconfiguration inbound
+  neighbor 10.1.49.2 remote-as 65515
+  neighbor 10.1.49.2 activate
+  neighbor 10.1.49.2 soft-reconfiguration inbound
+  maximum-paths 4
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+ipv6 ioam timestamp
+!
+!
+!
+control-plane
+!
+alias exec vp show ip bgp vpnv4 vrf private-peering
+
+MSEE2#sh run
+Building configuration...
+
+Current configuration : 3783 bytes
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname MSEE2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+ip vrf private-peering
+ rd 10:1
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip vrf forwarding private-peering
+ ip address 5.5.5.5 255.255.255.255
+!
+interface GigabitEthernet0/0
+ ip vrf forwarding private-peering
+ ip address 10.1.25.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ ip vrf forwarding private-peering
+ ip address 10.1.58.1 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ ip vrf forwarding private-peering
+ ip address 10.1.59.1 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router bgp 12076
+ bgp router-id 5.5.5.5
+ bgp log-neighbor-changes
+ !
+ address-family ipv4 vrf private-peering
+  network 5.5.5.5 mask 255.255.255.255
+  neighbor 10.1.25.1 remote-as 65001
+  neighbor 10.1.25.1 activate
+  neighbor 10.1.25.1 remove-private-as
+  neighbor 10.1.25.1 soft-reconfiguration inbound
+  neighbor 10.1.58.2 remote-as 65515
+  neighbor 10.1.58.2 activate
+  neighbor 10.1.58.2 soft-reconfiguration inbound
+  neighbor 10.1.59.2 remote-as 65515
+  neighbor 10.1.59.2 activate
+  neighbor 10.1.59.2 soft-reconfiguration inbound
+  maximum-paths 4
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+ipv6 ioam timestamp
+!
+!
+!
+control-plane
+!
+alias exec vp show ip bgp vpnv4 vrf private-peering
+
+
+MSEE3#sh run
+Building configuration...
+
+Current configuration : 3731 bytes
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname MSEE3
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+ip vrf private-peering
+ rd 10:1
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip vrf forwarding private-peering
+ ip address 6.6.6.6 255.255.255.255
+!
+interface GigabitEthernet0/0
+ ip vrf forwarding private-peering
+ ip address 10.1.26.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ ip vrf forwarding private-peering
+ ip address 10.1.68.1 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ ip vrf forwarding private-peering
+ ip address 10.1.69.1 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router bgp 12076
+ bgp router-id 6.6.6.6
+ bgp log-neighbor-changes
+ !
+ address-family ipv4 vrf private-peering
+  network 6.6.6.6 mask 255.255.255.255
+  neighbor 10.1.26.1 remote-as 65001
+  neighbor 10.1.26.1 activate
+  neighbor 10.1.26.1 remove-private-as
+  neighbor 10.1.26.1 soft-reconfiguration inbound
+  neighbor 10.1.68.2 remote-as 65515
+  neighbor 10.1.68.2 activate
+  neighbor 10.1.68.2 soft-reconfiguration inbound
+  neighbor 10.1.69.2 remote-as 65515
+  neighbor 10.1.69.2 activate
+  neighbor 10.1.69.2 soft-reconfiguration inbound
+  maximum-paths 4
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+ipv6 ioam timestamp
+!
+!
+!
+control-plane
+!
+
+
+MSEE4#sh run
+Building configuration...
+
+Current configuration : 3731 bytes
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname MSEE4
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+ip vrf private-peering
+ rd 10:1
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip vrf forwarding private-peering
+ ip address 7.7.7.7 255.255.255.255
+!
+interface GigabitEthernet0/0
+ ip vrf forwarding private-peering
+ ip address 10.1.27.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ ip vrf forwarding private-peering
+ ip address 10.1.78.1 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ ip vrf forwarding private-peering
+ ip address 10.1.79.1 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router bgp 12076
+ bgp router-id 7.7.7.7
+ bgp log-neighbor-changes
+ !
+ address-family ipv4 vrf private-peering
+  network 7.7.7.7 mask 255.255.255.255
+  neighbor 10.1.27.1 remote-as 65001
+  neighbor 10.1.27.1 activate
+  neighbor 10.1.27.1 remove-private-as
+  neighbor 10.1.27.1 soft-reconfiguration inbound
+  neighbor 10.1.78.2 remote-as 65515
+  neighbor 10.1.78.2 activate
+  neighbor 10.1.78.2 soft-reconfiguration inbound
+  neighbor 10.1.79.2 remote-as 65515
+  neighbor 10.1.79.2 activate
+  neighbor 10.1.79.2 soft-reconfiguration inbound
+  maximum-paths 4
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+ipv6 ioam timestamp
+!
+!
+!
+control-plane
+!
+
+VNET1#sh run
+Building configuration...
+
+Current configuration : 4329 bytes
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname VNET1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+ip vrf private-peering
+ rd 10:1
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip vrf forwarding private-peering
+ ip address 8.8.8.8 255.255.255.255
+!
+interface Loopback100
+ ip vrf forwarding private-peering
+ ip address 172.16.0.1 255.255.255.0
+!
+interface GigabitEthernet0/0
+ ip vrf forwarding private-peering
+ ip address 10.1.48.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ ip vrf forwarding private-peering
+ ip address 10.1.58.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ ip vrf forwarding private-peering
+ ip address 10.1.68.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ ip vrf forwarding private-peering
+ ip address 10.1.78.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router bgp 65515
+ bgp router-id 8.8.8.8
+ bgp log-neighbor-changes
+ !
+ address-family ipv4 vrf private-peering
+  network 8.8.8.8 mask 255.255.255.255
+  network 172.16.0.0 mask 255.255.255.0
+  neighbor 10.1.48.1 remote-as 12076
+  neighbor 10.1.48.1 activate
+  neighbor 10.1.48.1 soft-reconfiguration inbound
+  neighbor 10.1.48.1 prefix-list VNET-OUT out
+  neighbor 10.1.58.1 remote-as 12076
+  neighbor 10.1.58.1 activate
+  neighbor 10.1.58.1 soft-reconfiguration inbound
+  neighbor 10.1.58.1 prefix-list VNET-OUT out
+  neighbor 10.1.68.1 remote-as 12076
+  neighbor 10.1.68.1 activate
+  neighbor 10.1.68.1 soft-reconfiguration inbound
+  neighbor 10.1.68.1 prefix-list VNET-OUT out
+  neighbor 10.1.78.1 remote-as 12076
+  neighbor 10.1.78.1 activate
+  neighbor 10.1.78.1 soft-reconfiguration inbound
+  neighbor 10.1.78.1 prefix-list VNET-OUT out
+  maximum-paths 4
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+ip prefix-list VNET-OUT seq 5 permit 172.16.0.0/24
+ip prefix-list VNET-OUT seq 10 permit 8.8.8.8/32
+ipv6 ioam timestamp
+!
+!
+!
+control-plane
+!
+alias exec vp show ip bgp vpnv4 vrf private-peering
+
+VNET2#sh run
+Building configuration...
+
+Current configuration : 4329 bytes
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname VNET2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+ip vrf private-peering
+ rd 10:1
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip vrf forwarding private-peering
+ ip address 9.9.9.9 255.255.255.255
+!
+interface Loopback100
+ ip vrf forwarding private-peering
+ ip address 172.16.1.1 255.255.255.0
+!
+interface GigabitEthernet0/0
+ ip vrf forwarding private-peering
+ ip address 10.1.49.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ ip vrf forwarding private-peering
+ ip address 10.1.59.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ ip vrf forwarding private-peering
+ ip address 10.1.69.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ ip vrf forwarding private-peering
+ ip address 10.1.79.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router bgp 65515
+ bgp router-id 9.9.9.9
+ bgp log-neighbor-changes
+ !
+ address-family ipv4 vrf private-peering
+  network 9.9.9.9 mask 255.255.255.255
+  network 172.16.1.0 mask 255.255.255.0
+  neighbor 10.1.49.1 remote-as 12076
+  neighbor 10.1.49.1 activate
+  neighbor 10.1.49.1 soft-reconfiguration inbound
+  neighbor 10.1.49.1 prefix-list VNET-OUT out
+  neighbor 10.1.59.1 remote-as 12076
+  neighbor 10.1.59.1 activate
+  neighbor 10.1.59.1 soft-reconfiguration inbound
+  neighbor 10.1.59.1 prefix-list VNET-OUT out
+  neighbor 10.1.69.1 remote-as 12076
+  neighbor 10.1.69.1 activate
+  neighbor 10.1.69.1 soft-reconfiguration inbound
+  neighbor 10.1.69.1 prefix-list VNET-OUT out
+  neighbor 10.1.79.1 remote-as 12076
+  neighbor 10.1.79.1 activate
+  neighbor 10.1.79.1 soft-reconfiguration inbound
+  neighbor 10.1.79.1 prefix-list VNET-OUT out
+  maximum-paths 4
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+!
+ip prefix-list VNET-OUT seq 5 permit 172.16.1.0/24
+ip prefix-list VNET-OUT seq 10 permit 9.9.9.9/32
+ipv6 ioam timestamp
+!
+!
+!
+control-plane
+!
+
+
+</pre>
