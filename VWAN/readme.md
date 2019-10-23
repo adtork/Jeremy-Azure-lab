@@ -104,7 +104,7 @@ az VM create -n VNET20VM -g VNET20 --image UbuntuLTS --admin-username azureuser 
 
 **Validate "provisioningstate" of the VPN GWs are successful. Do not continue if provisioning was not successful. The VPN appliances can take 30+ minutes to create.**
 <pre lang="...">
-az network vpn-gateway list --resource-group VWANWEST
+az network vpn-gateway list --resource-group VWANWEST | findstr provisioningState
 </pre>
 
 **Build a connection between the VWAN hub and VNET10/20. Replace XX with your subscription.**
