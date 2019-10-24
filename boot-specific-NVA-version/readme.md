@@ -94,6 +94,32 @@ Version
 16.10.120190108
 </pre>
 
+**CSR example quick**
+<pre lang="...">
+$locName="East US"
+Get-AzureRMVMImagePublisher -Location $locName | Select PublisherName
+$pubName="Cisco"
+Get-AzureRMVMImageOffer -Location $locName -Publisher $pubName | Select Offer
+$offerName="cisco-csr-1000v"
+Get-AzureRMVMImageSku -Location $locName -Publisher $pubName -Offer $offerName | Select Skus
+
+Skus
+----
+16_10-byol
+16_10-payg-ax
+16_10-payg-sec
+16_4
+16_5
+16_6
+16_7
+16_9-byol
+3_16
+csr-azure-byol
+
+PS Azure:\> $skuName="16_10-byol"
+Azure:/
+PS Azure:\> Get-AzureRMVMImage -Location $locName -Publisher $pubName -Offer $offerName -Sku $skuName | Select Version
+</pre>
 **PAN VM Series Example**
 <pre lang="...">
 $locName="East US"
