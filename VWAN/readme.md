@@ -12,6 +12,7 @@ Note:
 -  All VM have Internet access, username/passwords are azureuser/Msft123Msft123
 -NO NSGs are used
 - When deleting the lab, make sure to gracefully delete VWAN components (connections, sites, vwan hub) and not the entire VWAN resource group. The other resource groups can be completely deleted.  
+- VWAN is in ASN 65515, DC1 is ASN 65001, DC2 is ASN 65002
 
 # Base Topology
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/vwan%20static%20routes.PNG)
