@@ -9,9 +9,9 @@ Assumptions:
 Note:
 - Azure CLI and Cloud Shell for VWAN are in preview and require the "virtual-wan" extension. You can view the extensions by running "az extension list-available --output table". Install the extension "az extension add --name virtual-wan".
 
--All VM have Internet access, username/passwords are azureuser/Msft123Msft123
+-  All VM have Internet access, username/passwords are azureuser/Msft123Msft123
 -NO NSGs are used
--When deleting the lab, make sure to gracefully delete VWAN components (connections, sites, vwan hub) and not the entire VWAN resource group. The other resource groups can be completely deleted.  
+- When deleting the lab, make sure to gracefully delete VWAN components (connections, sites, vwan hub) and not the entire VWAN resource group. The other resource groups can be completely deleted.  
 
 # Base Topology
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/vwan%20static%20routes.PNG)
