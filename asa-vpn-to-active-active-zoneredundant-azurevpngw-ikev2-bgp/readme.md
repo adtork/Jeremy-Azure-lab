@@ -68,14 +68,14 @@ az vm create --resource-group onprem --location westus2 --name ASA1 --size Stand
 <pre lang="...">
 az network public-ip create --name HubVMPubIP --resource-group Hub --location westus2 --allocation-method Dynamic
 az network nic create --resource-group Hub -n HubVMNIC --location westus2 --subnet HubVM --private-ip-address 10.0.10.10 --vnet-name Hub --public-ip-address HubVMPubIP
-az vm create -n HubVM -g Hub --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics HubVMNIC
+az vm create -n HubVM -g Hub --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics HubVMNIC --no-wait
 </pre>
 
 **Build on prem Linux VM**
 <pre lang="...">
 az network public-ip create --name onpremVMPubIP --resource-group onprem --location westus2 --allocation-method Dynamic
 az network nic create --resource-group onprem -n onpremVMNIC --location westus2 --subnet VM --private-ip-address 10.1.10.10 --vnet-name onprem --public-ip-address onpremVMPubIP
-az vm create -n onpremVM -g onprem --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics onpremVMNIC
+az vm create -n onpremVM -g onprem --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics onpremVMNIC --no-wait
 </pre>
 
 **After the gateway and ASAv have been created, document the public IP address for both. Value will be null until it has been successfully provisioned. Please note that the ASA VPN interfaces and management interface are different**
