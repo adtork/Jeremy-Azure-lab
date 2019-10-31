@@ -80,6 +80,7 @@ az vm create -n onpremVM -g onprem --image UbuntuLTS --admin-username azureuser 
 
 **After the gateway and ASAv have been created, document the public IP address for both. Value will be null until it has been successfully provisioned. Please note that the ASA VPN interfaces and management interface are different**
 <pre lang="...">
+az network vnet-gateway list --resource-group HUB -o table
 az network public-ip show -g Hub -n Azure-VNGpubip1 --query "{address: ipAddress}"
 az network public-ip show -g Hub -n Azure-VNGpubip2 --query "{address: ipAddress}"
 az network public-ip show -g onprem -n ASA1VPNPublicIP1 --query "{address: ipAddress}"
