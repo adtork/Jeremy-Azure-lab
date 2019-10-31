@@ -61,7 +61,7 @@ az network nic create --name ASA1MgmtInterface -g onprem --subnet threenet --vne
 az network nic create --name ASA1OutsideInterface -g onprem --subnet zeronet --vnet onprem --public-ip-address ASA1VPNPublicIP1 --private-ip-address 10.1.0.4 --ip-forwarding true
 az network nic create --name ASA1InsideInterface -g onprem --subnet onenet --vnet onprem --private-ip-address 10.1.1.4 --ip-forwarding true
 az network nic create --name ASA1OutsideInterface2 -g onprem --subnet twonet --vnet onprem --public-ip-address ASA1VPNPublicIP2 --private-ip-address 10.1.2.4 --ip-forwarding true
-az vm create --resource-group onprem --location westus2 --name ASA1 --size Standard_D3_v2 --nics ASA1MgmtInterface ASA1OutsideInterface ASA1OutsideInterface2 ASA1InsideInterface  --image cisco:cisco-asav:asav-azure-byol:910.1.17 --admin-username azureuser --admin-password Msft123Msft123
+az vm create --resource-group onprem --location westus2 --name ASA1 --size Standard_D3_v2 --nics ASA1MgmtInterface ASA1OutsideInterface ASA1OutsideInterface2 ASA1InsideInterface  --image cisco:cisco-asav:asav-azure-byol:913.1.0 --admin-username azureuser --admin-password Msft123Msft123 --no-wait
 </pre>
 
 **Build Azure side Linux VM**
