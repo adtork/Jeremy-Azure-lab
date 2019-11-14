@@ -38,7 +38,7 @@ az network nsg rule create --resource-group CSR --nsg-name Azure-CSR-NSG --name 
 az network public-ip create --name CSR1PublicIP --resource-group CSR --idle-timeout 30 --allocation-method Static --sku standard
 az network nic create --name CSR1OutsideInterface -g CSR --subnet OutsideSubnet --vnet CSR --public-ip-address CSR1PublicIP --private-ip-address 10.0.0.4 --ip-forwarding true --network-security-group Azure-CSR-NSG
 az network nic create --name CSR1InsideInterface -g CSR --subnet InsideSubnet --vnet CSR --ip-forwarding true --private-ip-address 10.0.1.4 --network-security-group Azure-CSR-NSG
-az vm create --resource-group CSR --location westus --name CSR1 --size Standard_D2_v2 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:16_10-byol:16.10.120190108 --admin-username azureuser --admin-password Msft123Msft123 --no-wait
+az vm create --resource-group CSR --location westus --name CSR1 --size Standard_D2_v2 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:16_12-byol:16.12.120190816 --admin-username azureuser --admin-password Msft123Msft123 --no-wait
 </pre>
 
 **Create onprem VNET and subnets**
@@ -65,7 +65,7 @@ az network nsg rule create --resource-group onprem --nsg-name onprem-CSR-NSG --n
 az network public-ip create --name CSR3PublicIP --resource-group onprem --idle-timeout 30 --allocation-method Static --sku standard
 az network nic create --name CSR3OutsideInterface -g onprem --subnet OutsideSubnet --vnet onprem --public-ip-address CSR3PublicIP --private-ip-address 10.100.0.4 --ip-forwarding true --network-security-group onprem-CSR-NSG
 az network nic create --name CSR3InsideInterface -g onprem --subnet InsideSubnet --vnet onprem --ip-forwarding true --private-ip-address 10.100.1.4 --network-security-group onprem-CSR-NSG
-az vm create --resource-group onprem --location westus2 --name CSR3 --size Standard_D2_v2 --nics CSR3OutsideInterface CSR3InsideInterface  --image cisco:cisco-csr-1000v:16_10-byol:16.10.120190108  --admin-username azureuser --admin-password Msft123Msft123 --no-wait
+az vm create --resource-group onprem --location westus2 --name CSR3 --size Standard_D2_v2 --nics CSR3OutsideInterface CSR3InsideInterface  --image cisco:cisco-csr-1000v:16_12-byol:16.12.120190816  --admin-username azureuser --admin-password Msft123Msft123 --no-wait
 </pre>
 
 **Create NSG for Azure side test VM**
