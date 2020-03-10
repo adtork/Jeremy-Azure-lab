@@ -16,7 +16,7 @@ Important points to consider:
 Caveats- Private link is not supported. FP configuration requires Powershell (portal in the future). UDRs on the Gateway subnet do not work as usual. Please check the documentation
 
 # Base Topology
-![alt text](https://github.com/jwrightazure/lab/blob/master/images/fp%20topo.png)
+![alt text](https://github.com/jwrightazure/lab/blob/master/im11ages/fp%20topo.png)
 
 Scenarios:
 - Build FP during creation of a connection between the ER GW and ER Circuit. 
