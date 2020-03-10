@@ -42,7 +42,7 @@ Set-AzVirtualNetworkGatewayConnection -VirtualNetworkGatewayConnection $connecti
 $connection.ExpressRouteGatewayBypass 
 </pre>
 
-**After conn1 is built, all VNETs will be able to communicate including on prem. Notice that traffic between the remote VNET and the Hub VM (Connection has FP) shows direct communication. If the ER GW was in path, it would be represented by "*" which will be shown later.
+**After conn1 is built, all VNETs will be able to communicate including on prem. Notice that traffic between the remote VNET and the Hub VM (Connection has FP) shows direct communication. If the ER GW was in path, it would be represented by "*" which will be shown later.**
 <pre lang="...">
 azureuser@remote-vm:~$ traceroute 10.255.10.4
 traceroute to 10.255.10.4 (10.255.10.4), 64 hops max
