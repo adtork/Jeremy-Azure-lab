@@ -59,7 +59,7 @@ traceroute to 10.254.10.4 (10.254.10.4), 64 hops max
   3   10.254.10.4  135.693ms  134.123ms  133.970ms
 </pre>
 
-**Traffic from on prem to spoke and the remote VNET is processed by the ER GWs represented by the "*". On prem to the Hub VM will be FP (no "*").**
+**Traffic from on prem to spoke and the remote VNET is processed by the ER GWs represented by *. **
 <pre lang="...">
 ##to remote VNET##
 CISCO_ROUTER#traceroute 10.253.10.4
