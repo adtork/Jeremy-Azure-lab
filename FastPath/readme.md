@@ -88,7 +88,7 @@ VRF info: (vrf in name/id, vrf out name/id)
   2 10.255.10.4 [AS 12076] 72 msec 71 msec 73 msec
 </pre>
 
-**Conn1 has been intentionally deleted and a new non-FP connection has been built. Continual traffic is being sent from the remote VNET and on prem to the Hub VM and Spoke. You will see no traffic interruption when enabling FP on an existing connection.**
+**Conn1 has been intentionally deleted and a new non-FP connection has been built. Continual traffic is being sent from the remote VNET and on prem to the Hub VM and Spoke. You will see no traffic interruption when enabling FP on an existing connection. Use the following commands to enable FP on an existing connection.**
 <pre lang="...">
 $connection = Get-AzVirtualNetworkGatewayConnection -Name "conn1" -ResourceGroupName "FP" 
 
