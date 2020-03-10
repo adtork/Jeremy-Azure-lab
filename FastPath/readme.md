@@ -1,5 +1,5 @@
 # Expressroute Fastpath - draft
-Expressroute (ER) Fastpath (FP) is a configuration option for connections between an ER Gateway (GW) and an ER circuit. Without FP, all inbound traffic to a VNET traverses the ER GW. Responses or traffic sourced from a VM will go directly to the Microsoft Edge routers (MSEEs). ER GWs can potentially become a bottleneck based on large amounts of incoming PPS/CPS/load. FP is designed to move the ER GW to the control plane only, allowing inboud requests to go directly to the VMs without traversing the ER GW improving performance for traffic sourced from on prem or other VNETs connected to the circuit.
+Expressroute (ER) Fastpath (FP) is a configuration option for connections between an ER Gateway (GW) and an ER circuit. Without FP, all inbound traffic to a VNET traverses the ER GW. Responses or traffic sourced from a VM will go directly to the Microsoft Edge routers (MSEEs). ER GWs can potentially become a bottleneck based on large amounts of incoming PPS/CPS/load. FP is designed to move the ER GW to the control plane only, allowing inboud requests to go directly to the VMs without traversing the ER GW. Enabling FP will improve performance for traffic sourced from on prem or other VNETs connected to the circuit.
 
 Important points to consider:
 - At the time of this writing, you must use Powershell to configure FP. 
