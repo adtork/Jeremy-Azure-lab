@@ -24,7 +24,7 @@ Scenarios:
 - Define a non-FP connection in the portal between the ER GW and circuit. Configure FP on existing connection, validate FP disabled, and run previous traceroute.
 
 
-**VNETs, peerings, VMs and ER GWs (and conn2) are already created to match the diagram. Use Powershell to build an FP connection between ER GW1 and the circuit. I'm using an ER circuit in a seperate subscription so I'm using an authorization token. $id is the path to the ER circuit (XXXXX is the subscription). "AuthorizationKey" (YYYYY) is the key generated from the authorization process.**
+**VNETs, peerings, VMs and ER GWs (and conn2) are already created to match the diagram. Use Powershell to build an FP connection between ER GW1 and the circuit. The ER circuit is in a seperate subscription so an authorization token is used. $id is the path to the ER circuit (XXXXX is the subscription). "AuthorizationKey" (YYYYY) is the key generated from the authorization process.**
 
 <pre lang="...">
 
