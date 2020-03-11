@@ -13,7 +13,7 @@ Important points to consider:
 
 
 
-Caveats- Private link is not supported. FP configuration requires Powershell (portal in the future). UDRs on the Gateway subnet do not work as they normally do. Please check the documentation
+Please read caveats in the documentation: https://docs.microsoft.com/en-us/azure/expressroute/about-fastpath
 
 # Base Topology
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/fp%20topo.png)
