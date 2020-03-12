@@ -29,6 +29,7 @@ In this scenario, we have 3 ER circuits with each on prem device sending a 10/8 
 - North Central: prefer ER2, secondary ER3, tertiary ER1
 - US East: prefer ER3, secondary ER2, tertiary ER3
 - Customer is responsible for controlling outbound path selection to Azure
+
 AS path prepending will not work for this scenario based on the requirements. EX: If on prem 1 send 10/8 with AS path 65001, on prem 2 send 10/8 AS path 65001,65001, on prem 3 sends 10/8 AS path 65001,65001,65001. All VNETs will select ER1 based on AS path length since we have equal prefix length advertisement and no connection weights. To solve this, you need to use connection weighting on each connection:
 
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/weightscenario3b.png)
