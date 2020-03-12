@@ -21,4 +21,16 @@ The above topology has three VNETs, two in Azure region West and one in Central.
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/weightscenario2.png)
 We now have a second ER circuit (ER2) located in Chicago. Each VNET will see ER1 and ER2 MSEEs as next hop for inter-VNET traffic. The default behavior will result in ECMP load sharing Ex: Traffic between 10.1 to 10.2 will ECMP across San Jose and Chicago MSEEs. This will be suboptimal as some traffic from West to West will traverse across the backbone and hairpin off the Chicago MSEEs. By setting the weight on conn1 between 10.1 ER GW and the San Jose ER circuit to >0, it will choose conn1 for 10.1 to 10.2.  However, 10.2 will still see San Jose and Chicago as the next hop so the response back will load share. The 10.1 ER GW will not care if the response comes from one or multiple connection paths. In order to make the flow optimal, you will need to set the weight on conn3 to >0. It’s imperative to understand how setting the weight impacts traffic flows between on prem and the VNETs. Assuming on prem1 and on prem2 are advertising 10.10 over ER1 and ER2, the 10.1 VNET will receive 10.10 from both San Jose and Chicago but will prefer conn1 since you previously configured the weight. Prepending the 10.10 prefix on either circuit is irrelevant since weight is the deciding factor when receiving it from multiple paths. Assuming weight is set on conn1, there could be a scenario where on prem2 send traffic on ER2, but the response traverses ER1. There could be a negative impact such as backhauling the traffic, appliances in path that enforce traffic symmetry etc. This could be controlled by manipulating metrics such as local preference to make sure on prem1 and on prem2 select the correct outbound path. The same applies if you were to advertise a summary route 10/8 from on prem1 and on prem2. If ER1 or conn1 were to fail, one prem1 to 10.1 would traverse ER2 (assuming on prem routing is correct) and the response will follow conn2.  
 
+# Scenario 3
+
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/weightscenario3a.png)
+In this scenario, we have 3 ER circuits with each on prem device sending a 10/8 summary route only with ASN 65001. Each VNET will see 6 next hops (2 per ER circuit) for destination 10/8. The default behavior will ECMP load share across those paths which could be suboptimal. EX: On prem 1 sends traffic to 10.1, the response could flow over any of the 3 ER circuits. Customer scenario sourcing from VNETs to destination 10/8:
+- US West: prefer ER1, secondary ER2, tertiary ER3
+- North Central: prefer ER2, secondary ER3, tertiary ER1
+- US East: prefer ER3, secondary ER2, tertiary ER3
+- Customer is responsible for controlling outbound path selection to Azure
+AS path prepending will not work for this scenario based on the requirements. EX: If on prem 1 send 10/8 with AS path 65001, on prem 2 send 10/8 AS path 65001,65001, on prem 3 sends 10/8 AS path 65001,65001,65001. All VNETs will select ER1 based on AS path length since we have equal prefix length advertisement and no connection weights. To solve this, you need to use connection weighting on each connection:
+
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/weightscenario3b.png)
+
 
