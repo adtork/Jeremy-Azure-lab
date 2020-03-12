@@ -5,7 +5,7 @@ Expressroute Weight is a configuration option that can be used to select a prefe
 - Weight is local to the ER GW and is not exchanged with other ER GWs or the Microsoft Edge Routers (MSEE)
 - Default weight is 0 with a max value of 32000
 - You can’t customize weight at a prefix/subnet level or other metric
-- It’s important to understand the impact at weight for inter-VNET communication as well as to on prem. Asymmetric/suboptimal traffic is a possibility if you do not  understand the forwarding behavior
+- It’s important to understand the impact of weight for inter-VNET communication as well as to on prem. Asymmetric/suboptimal traffic is a possibility if you do not  understand the forwarding behavior
 - VNET peering and Global Reach options are outside the scope of this document
 - Weight is configured on individual connections. Higher weight is the preferred path
 
