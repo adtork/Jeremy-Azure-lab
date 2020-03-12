@@ -33,4 +33,8 @@ AS path prepending will not work for this scenario based on the requirements. EX
 
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/weightscenario3b.png)
 
+# Scenario 4
 
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/weightscenario4.png)
+
+In this scenario, the customer has offices in San Jose and San Francisco with VNETs located in West and North Central. They are also sending a 10/8 summary route both with AS path 65001. They would like to use ER1 as the primary path from on prem 1 and on prem2 to both VNETs. ER2 is lower bandwidth and should only be used if ER1 fails. Assuming the customer is controlling outbound path selection to Azure correctly, you can solve this with AS path prepending or weight. On prem 2 could send 10/6 and prepend the path to 65001,65001. This can also be solved with weight since (again) the VNET's are receiving the same prefix length and AS path length from 2 different connections. To solve this with weight, set the connection weight on conn1 and conn3 to >0.
