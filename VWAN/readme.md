@@ -8,7 +8,7 @@ Notes:
 
 - When deleting the lab, make sure to gracefully delete VWAN components (connections, sites, vwan hub) and not the entire VWAN resource group. The other resource groups can be completely deleted.
 
-- VWAN is in ASN 65515, DC1 is ASN 65001, DC2 is ASN 65002
+- VWAN is in ASN 65515, DC1 is ASN 65001, DC2 is ASN 65002. You will see ASN 65520 for interhub AS path.
 
 - The VPN GWs take 30-45 minutes to provision. Please make sure they are done provisioning before moving further in the lab. This is called out again later in the lab as well as how to verify
 
