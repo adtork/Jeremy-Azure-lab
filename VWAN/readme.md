@@ -264,7 +264,7 @@ az network nic show-effective-route-table -g VNET10 -n VNET10VMNIC --output tabl
 az network nic show-effective-route-table -g VNET20 -n VNET20VMNIC --output table
 </pre>
 
-**Connect to CSR1 and paste in the below config. Replace "Instance0" and "Instance1" with the PIPs of VWANEAST. Make sure the static routes at the end of the config are pointing to the correct peering IP and routing across the right tunnel.**
+**Connect to CSR2 and paste in the below config. Replace "Instance0" and "Instance1" with the PIPs of VWANWEST. Make sure the static routes at the end of the config are pointing to the correct peering IP and routing across the right tunnel.**
 <pre lang="...">
 
 ip prefix-list filter-DC1-out seq 5 permit 10.101.0.0/24
