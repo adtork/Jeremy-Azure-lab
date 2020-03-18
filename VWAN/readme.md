@@ -113,7 +113,7 @@ az network vhub connection create --name toVNET20 --remote-vnet /subscriptions/X
 az network public-ip show -g DC1 -n CSR1PublicIP --query "{address: ipAddress}"
 </pre>
 
-**Build a VPN site and connection between VWANEAST and the DC1 CSR. Replace "CSR1PublicIP" with the IP address from the previous step. Remember a VPN site "connection" in Azure will build a S2S VPN from both VPN appliances in VWAN Hub VWANEAST. For BGP over IPSEC, this assumes CSR1 BGP ASN is 65001 and the VTI is 172.16.0.1 (not the PIP of the CSR). **
+**Build a VPN site and connection between VWANEAST and the DC1 CSR. Replace "CSR1PublicIP" with the IP address from the previous step. Remember a VPN site "connection" in Azure will build a S2S VPN from both VPN appliances in VWAN Hub VWANEAST. For BGP over IPSEC, this assumes CSR1 BGP ASN is 65001 and the VTI is 172.16.0.1 (not the PIP of the CSR).**
 <pre lang="...">
 az network vpn-site create --ip-address "CSR1PublicIP" --name DC1 --resource-group VWAN --location eastus2 --virtual-wan VWAN --asn 65001 --bgp-peering-address 172.16.0.1
 
