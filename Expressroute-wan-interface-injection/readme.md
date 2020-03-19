@@ -21,7 +21,7 @@ sourced from a VNET VM to destination 10/8 will go directly to the MSEEs and the
 **ER Circuit route table**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/er-route-table-primary.PNG)
 
-In the above diagram, the CPE is now advertising the 2x /30s into BGP. Azure views 172.16.1.0/30 as the "primary" path. Notice there is a secondary path tab as well. Primary and secondary is purely a naming convention for path A/B. Routing advertisement from on prem will dictate which path Azure will select. As you can see, the primary path sees 172.16.2.0/30 (path B) in it's BGP table with next hop 172.16.1.1 ASN 65100 (path A). You will see the reverse on the secondary path. You also see other prefixes connected with ASN 65515 which is reserved in Azure and represents connected VNETs. 
+In the above image, the CPE is now advertising the 2x /30s into BGP. Azure views 172.16.1.0/30 as the "primary" path. Notice there is a secondary path tab as well. Primary and secondary is purely a naming convention for path A/B. Routing advertisement from on prem will dictate which path Azure will select. As you can see, the primary path sees 172.16.2.0/30 (path B) in it's BGP table with next hop 172.16.1.1 ASN 65100 (path A). You will see the reverse on the secondary path. You also see other prefixes connected with ASN 65515 which is reserved in Azure and represents connected VNETs. 
 
 **VM effective route table**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/vm-effective-route-wan-injection.PNG)
