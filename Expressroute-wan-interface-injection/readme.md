@@ -16,7 +16,7 @@ Quick notes:
 
 The topology above shows the CPE in private ASN 65001 and the MSEEs in ASN 12076. BGP peering is established between 172.16.1.1 and .2 as well as 172.16.2.1 and .2. 
 On prem is advertising 10/8 to both peers. There is an existing connection between the ER GW in the VNET and the MSEE routers. At this point, on prem knows about the VNET address space and the VNET knows about 10/8. If you look at the VM effective route table, it will show 2 next hops for destination 10/8. The next hop will be both MSEEs. Please note that all inbound traffic to a VNET traverses the ER GW (except for Fastpath, seperate topic) and the responses will go directly to the MSEEs. Traffic
-sourced from a VNET VM to destination will go directly to the MSEEs and the ER GW is not in path. The responses back from on prem will go through the ER GW. By default, the 2 x/30s are not in the VM effective route table. 
+sourced from a VNET VM to destination 10/8 will go directly to the MSEEs and the ER GW is not in path. The responses back from on prem will go through the ER GW. By default, the 2 x/30s are not in the VM effective route table. 
 
 **ER Circuit route table**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/er-route-table-primary.PNG)
