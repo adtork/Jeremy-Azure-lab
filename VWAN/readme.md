@@ -132,7 +132,7 @@ az network vpn-site create --ip-address "CSR2PublicIP" --name DC2 --resource-gro
 az network vpn-gateway connection create --gateway-name VWANWEST --name DC2 --remote-vpn-site DC2 --resource-group VWAN --protocol-type IKEv2 --shared-key Msft123Msft123 --enable-bgp
 </pre>
 
-**At this time, you must download the VWAN configuration in order to display the 2 public IP addresses for the VPN gateways in Azure. In the portal, search for or go to Virtual WANs, select VWANEAST, select "Download VPN configuration" at the top of the overview page. This will drop the configuration into a storage account. Download the file and document the IPs for Instance0 and Instance1 (VWAN VPN gateway public IPs). Highly recommend converting this to a JSON view. (https://jsonformatter.org/)
+**At this time, you must download the VWAN configuration in order to display the 2 public IP addresses for the VPN gateways in Azure as well as the BGP peer information for the Azure side. In the portal, search for or go to Virtual WANs, select VWANEAST, select "Download VPN configuration" at the top of the overview page. This will drop the configuration into a storage account. Download the file and document the IPs for Instance0 and Instance1 (VWAN VPN gateway public IPs). Highly recommend converting this to a JSON view. (https://jsonformatter.org/)
 
 Sample output: -gatewayConfiguration: Instance0: x.x.x.1, Instance1: x.x.x.2**
 
