@@ -22,3 +22,6 @@ The topology above shows the basic IP scheme layout. I have removed some of the 
 
 ## Routing without Microsoft peering:
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/msftpeeringbaserouting.PNG)
+
+## Base VRF setup and VRF aware NAT:
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/msftpeeringbasevrfleaking.PNG)
