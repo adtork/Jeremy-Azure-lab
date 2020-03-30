@@ -1,4 +1,4 @@
-## 1. Introduction
+## 1. Microsoft Peering Routing Example
 
 Microsoft peering [Microsoft Peering](https://docs.microsoft.com/en-us/azure/expressroute/expressroute-circuit-peerings) over Expressroute (ER) provides bi-direcitonal connectivity to Microsoft PAAS/SAAS public IPs. 
 Microsoft public IPs will be advertised to you via BGP and it's up to the customer to choose where those routes get injected (internal, DMZ etc). A common design is to have Microsoft peering routes land into an isolated DMZ VRF/routing domain. The goal of this guide is to provide a high level overview of routing behaviors before and after ER and potential gotchas associated with Microsoft peering. Configurations are done on virtual devices so IPs/ASNs etc are simulated. The lab shows traffic initiated from on prem to Microsoft only. 
