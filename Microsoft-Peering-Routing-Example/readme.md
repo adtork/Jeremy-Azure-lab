@@ -19,3 +19,6 @@ Notes:
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/msfrpeeringbasetopo.PNG)
 
 The topology above shows the basic IP scheme layout. I have removed some of the loopbacks to save space. Complete router configs will be posted as part of this guide. Core-r1 represents the on prem internal network in ASN 65001. There are 2 different VRFs (internal, internet) applied to CPE-r2 which could be the on prem router/fw. CPE-r2 owns public ASN 200, prefix 200.200/16 and is peering with Core-r1 via the local-as feature. CPE-r2 is also peering with Internet-r4 in ASN 400. R4 is advertising a default route to CPE-r2 and Microsoft as well as other routes learned vai BGP. R4 is also sending in aggregate/summary route for the 6x public /32 being learned from PAAS-SAAS-r7 which is the simulated Microsoft edge. Traffic initiated from on prem towards the Microsoft prefixes will follow the default route to r2, r2 will follow the aggregate or default, and r4 will route traffic to r7. R7 will see SIP from the NAT pool on r2 (200.200.50.10-.20). Important- r7 only sees the aggregate 200.200/16 to reach r2 (or it would follow the default). 
+
+## Routing without Microsoft peeringL
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/msftpeeringbaserouting.PNG)
