@@ -13,6 +13,7 @@ Notes:
 - After peering is established, you will not receive any Microsoft prefixes by default. In order to receive prefixes, you must attach route filters to the circuit. Filters identify certain services by name or region + BGP communities. https://docs.microsoft.com/en-us/azure/expressroute/how-to-routefilter-portal
 - Office 365 over Microsoft peering is not allowed by default. You must contact your Microsoft account team to go through a "certification" process to enable the service. Office 365 over ER https://docs.microsoft.com/en-us/azure/expressroute/expressroute-prerequisites
 - Do not send the entire public prefix you own over Microsoft peering as it could result in asymmetric traffic. 
+- Microsoft peering provides a different path to the Microsoft public resources. The resources are the same. 
 
 
 ## Lab topology without Microsoft peering:
@@ -34,3 +35,5 @@ The topology above shows the basic IP scheme layout. I have removed some of the 
 
 ## Add Expressroute and Microsoft peering VRF
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/msftpeeringaddmsftpeering.PNG)
+
+We have added a 3rd VRF to Edge-r2 named Microsoft peering. This is providing a DMZ like segment where we connect in Expressroute. Within r2 Microsoft peering VRF, we're advertising 200.200.50.0/24 which is more specific than the 200.200/16 that is being advertised to the Internet. CPE-r3 is terminating the Expressroute circuit and is peered with r2 and the Microsoft edge routers. Since r2 Microsoft peering is advertising the specific NAT pool, r7 will ultimately prefer Expressroute for traffic source from 200.200.50.0/24. With real Microsoft peering (this is a lab simulator), you would need to select the route filters that include the 6x /32s. After selected, the individual /32 will be advertised over Microsoft peering back to CPE-r3 and advertised to Edge-r2. R2 will see the more specific routes and forward them to r3. The outcome will be traffic sourcing from Core-r1 to Microsoft will follow the default route to r2 and forward over ER. If there is a failure in the ER path, traffic will fall back to using the internet. 
