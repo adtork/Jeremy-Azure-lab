@@ -31,3 +31,6 @@ The topology above shows the basic IP scheme layout. I have removed some of the 
 
 ## Traceroute showing path through the Internet
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/msftpeeringtracebefore.PNG)
+
+## Add Expressroute and Microsoft peering VRF
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/msftpeeringaddmsftpeering.PNG)
