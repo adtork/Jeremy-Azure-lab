@@ -13,7 +13,7 @@ Notes:
 - After peering is established, you will not receive any Microsoft prefixes by default. In order to receive prefixes, you must attach route filters to the circuit. Filters identify certain services by name or region + BGP communities. https://docs.microsoft.com/en-us/azure/expressroute/how-to-routefilter-portal
 - Office 365 over Microsoft peering is not allowed by default. You must contact your Microsoft account team to go through a "certification" process to enable the service. Office 365 over ER https://docs.microsoft.com/en-us/azure/expressroute/expressroute-prerequisites
 - Do not send the entire public prefix you own over Microsoft peering as it could result in asymmetric traffic. 
-- Microsoft peering provides a different path to the Microsoft public resources. The resources are the same. 
+- Microsoft peering provides a different path to the same pubic resources you are accessing over the Internet.
 
 
 ## Lab topology without Microsoft peering:
