@@ -28,3 +28,6 @@ The topology above shows the basic IP scheme layout. I have removed some of the 
 
 ## Ping verifying SIP is NAT pool
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/msftpeeringbeforeping.PNG)
+
+## Traceroute showing path through the Internet
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/msftpeeringtracebefore.PNG)
