@@ -14,5 +14,5 @@ Notes:
 - Office 365 over Microsoft peering is not allowed by default. You must contact your Microsoft account team to go through a "certification" process to enable the service. Office 365 over ER https://docs.microsoft.com/en-us/azure/expressroute/expressroute-prerequisites
 - Do not send the entire public prefix you own over Microsoft peering as it could result in asymmetric traffic. 
 
-#Lab topology without Microsoft peering:
+## Lab topology without Microsoft peering:
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/msfrpeeringbasetopo.PNG)
