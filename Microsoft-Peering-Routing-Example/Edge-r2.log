@@ -1,0 +1,235 @@
+﻿Edge-r2#sh run
+Building configuration...
+
+Current configuration : 5690 bytes
+!
+! Last configuration change at 14:07:55 UTC Mon Mar 30 2020
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname Edge-r2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!
+!
+!
+!
+!
+!
+!
+!
+ip vrf internal
+ rd 10:1
+ import map Internet_TO_VRF
+ route-target export 10:1
+ route-target import 200:1
+ route-target import 20:1
+!
+ip vrf internet
+ rd 200:1
+ route-target export 200:1
+ route-target import 10:1
+!
+ip vrf microsoft-peering
+ rd 20:1  
+ route-target export 20:1
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+redundancy
+!
+!
+! 
+!
+!
+!
+!         
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip vrf forwarding internal
+ ip address 2.2.2.2 255.255.255.255
+!
+interface Loopback1
+ ip vrf forwarding internet
+ ip address 22.22.22.22 255.255.255.255
+!
+interface Loopback2
+ ip vrf forwarding microsoft-peering
+ ip address 222.222.222.222 255.255.255.255
+!
+interface GigabitEthernet0/0
+ ip vrf forwarding microsoft-peering
+ ip address 200.200.0.1 255.255.255.0
+ ip nat outside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ ip vrf forwarding internal
+ ip address 10.1.12.2 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ ip vrf forwarding internet
+ ip address 200.200.200.1 255.255.255.0
+ ip nat outside
+ ip virtual-reassembly in
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router bgp 200
+ bgp log-neighbor-changes
+ !
+ address-family ipv4 vrf internal
+  bgp router-id 2.2.2.2
+  network 2.2.2.2 mask 255.255.255.255
+  network 10.1.12.0 mask 255.255.255.0
+  neighbor 10.1.12.1 remote-as 65001
+  neighbor 10.1.12.1 local-as 65001
+  neighbor 10.1.12.1 activate
+  neighbor 10.1.12.1 next-hop-self
+  neighbor 10.1.12.1 soft-reconfiguration inbound
+ exit-address-family
+ !
+ address-family ipv4 vrf internet
+  bgp router-id 22.22.22.22
+  network 200.200.0.0 mask 255.255.0.0
+  neighbor 200.200.200.2 remote-as 400
+  neighbor 200.200.200.2 activate
+  neighbor 200.200.200.2 soft-reconfiguration inbound
+ exit-address-family
+ !
+ address-family ipv4 vrf microsoft-peering
+  bgp router-id 222.222.222.222
+  network 200.200.50.0
+  neighbor 200.200.0.2 remote-as 200
+  neighbor 200.200.0.2 activate
+  neighbor 200.200.0.2 next-hop-self
+  neighbor 200.200.0.2 soft-reconfiguration inbound
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip nat pool nat 200.200.50.10 200.200.50.20 prefix-length 24
+ip nat inside source list nat pool nat vrf internal
+ip route vrf internet 200.200.0.0 255.255.0.0 Null0
+ip route vrf microsoft-peering 200.200.50.0 255.255.255.0 Null0
+!
+ip access-list extended nat
+ permit ip 10.0.0.0 0.255.255.255 any
+!
+!
+ip prefix-list Internal seq 10 permit 10.0.0.0/8
+!
+ip prefix-list Internet seq 10 permit 0.0.0.0/0
+ip prefix-list Internet seq 20 permit 100.100.100.100/32
+ip prefix-list Internet seq 30 permit 100.100.101.100/32
+ip prefix-list Internet seq 40 permit 100.100.102.100/32
+ip prefix-list Internet seq 50 permit 100.100.103.100/32
+ip prefix-list Internet seq 60 permit 100.100.104.100/32
+ip prefix-list Internet seq 70 permit 100.100.105.100/32
+!
+ip prefix-list msft seq 10 permit 100.100.100.100/32
+ipv6 ioam timestamp
+!
+route-map msft permit 10
+ match ip address prefix-list msft
+!         
+route-map Internal permit 10
+ match ip address prefix-list Internal
+!
+route-map Internet_TO_VRF permit 10
+ match ip address prefix-list Internet
+!
+!
+!
+control-plane
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+!
+line con 0
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+no scheduler allocate
+!         
+end
+

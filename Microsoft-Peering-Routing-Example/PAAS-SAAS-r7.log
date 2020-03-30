@@ -1,0 +1,206 @@
+﻿PAAS-SAAS-r7#sh run
+Building configuration...
+
+Current configuration : 5108 bytes
+!
+version 15.7
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname PAAS-SAAS-r7
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+!         
+!
+!
+!
+!
+!
+!
+!
+ip vrf internet
+ rd 200:1
+!
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!         
+redundancy
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip vrf forwarding internet
+ ip address 7.7.7.7 255.255.255.255
+!
+interface Loopback100
+ ip vrf forwarding internet
+ ip address 100.100.100.100 255.255.255.255
+!
+interface Loopback101
+ ip vrf forwarding internet
+ ip address 100.100.101.100 255.255.255.255
+!
+interface Loopback102
+ ip vrf forwarding internet
+ ip address 100.100.102.100 255.255.255.255
+!
+interface Loopback103
+ ip vrf forwarding internet
+ ip address 100.100.103.100 255.255.255.255
+!
+interface Loopback104
+ ip vrf forwarding internet
+ ip address 100.100.104.100 255.255.255.255
+!
+interface Loopback105
+ ip vrf forwarding internet
+ ip address 100.100.105.100 255.255.255.255
+!
+interface GigabitEthernet0/0
+ ip vrf forwarding internet
+ ip address 67.67.67.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ ip vrf forwarding internet
+ ip address 57.57.57.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ ip vrf forwarding internet
+ ip address 47.47.47.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/3
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router bgp 8075
+ bgp log-neighbor-changes
+ !
+ address-family ipv4 vrf internet
+  bgp router-id 7.7.7.7
+  network 47.47.47.0 mask 255.255.255.0
+  network 100.100.100.100 mask 255.255.255.255
+  network 100.100.101.100 mask 255.255.255.255
+  network 100.100.102.100 mask 255.255.255.255
+  network 100.100.103.100 mask 255.255.255.255
+  network 100.100.104.100 mask 255.255.255.255
+  network 100.100.105.100 mask 255.255.255.255
+  neighbor 47.47.47.1 remote-as 400
+  neighbor 47.47.47.1 activate
+  neighbor 47.47.47.1 soft-reconfiguration inbound
+  neighbor 47.47.47.1 prefix-list filter-routes out
+  neighbor 57.57.57.1 remote-as 12076
+  neighbor 57.57.57.1 activate
+  neighbor 57.57.57.1 soft-reconfiguration inbound
+  neighbor 57.57.57.1 prefix-list filter-routes out
+  neighbor 67.67.67.1 remote-as 12076
+  neighbor 67.67.67.1 activate
+  neighbor 67.67.67.1 soft-reconfiguration inbound
+  neighbor 67.67.67.1 prefix-list filter-routes out
+  maximum-paths 4
+ exit-address-family
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+ip route vrf internet 100.100.0.0 255.255.0.0 Null0
+!
+!
+ip prefix-list filter-routes seq 5 permit 100.100.100.100/32
+ip prefix-list filter-routes seq 10 permit 100.100.101.100/32
+ip prefix-list filter-routes seq 15 permit 100.100.102.100/32
+ip prefix-list filter-routes seq 20 permit 100.100.103.100/32
+ip prefix-list filter-routes seq 25 permit 100.100.104.100/32
+ip prefix-list filter-routes seq 30 permit 100.100.105.100/32
+ipv6 ioam timestamp
+!         
+!
+!
+control-plane
+!
+banner exec ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner incoming ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+banner login ^C
+**************************************************************************
+* IOSv is strictly limited to use for evaluation, demonstration and IOS  *
+* education. IOSv is provided as-is and is not supported by Cisco's      *
+* Technical Advisory Center. Any use or disclosure, in whole or in part, *
+* of the IOSv Software or Documentation to any third party for any       *
+* purposes is expressly prohibited except as otherwise authorized by     *
+* Cisco in writing.                                                      *
+**************************************************************************^C
+!
+line con 0
+line aux 0
+line vty 0 4
+ login
+ transport input none
+!
+no scheduler allocate
+!
+end
+
