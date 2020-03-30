@@ -25,3 +25,6 @@ The topology above shows the basic IP scheme layout. I have removed some of the 
 
 ## Base VRF setup and VRF aware NAT:
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/msftpeeringbasevrfleaking.PNG)
+
+## Ping verifying SIP is NAT pool
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/msftpeeringbeforeping.PNG)
