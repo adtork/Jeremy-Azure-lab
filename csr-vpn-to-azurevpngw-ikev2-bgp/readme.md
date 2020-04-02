@@ -152,7 +152,7 @@ router bgp 65002
   neighbor 10.0.0.254 update-source tunnel 11
 
   address-family ipv4
-    network 10.1.0.0 mask 255.255.0.0
+    network 10.1.10.0 mask 255.255.255.0
     neighbor 10.0.0.254 activate    
     exit
   exit
