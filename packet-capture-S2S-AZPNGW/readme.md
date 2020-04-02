@@ -185,14 +185,14 @@ az network public-ip show -g Hub -n HubVMPubIP --query "{address: ipAddress}"
 az network public-ip show -g onprem -n onpremVMPubIP --query "{address: ipAddress}"
 </pre>
 
-# At this point the VMs have connectivity to each other. We will now capture packets at the Hub VNET for the S2S tunnel we just created. 
+**At this point the VMs have connectivity to each other. We will now capture packets at the Hub VNET for the S2S tunnel we just created.** 
 
 **Create a storage account to store the capture. The resource group must be the same as the Azure VPN GW.**
 <pre lang="...">
 az storage account create -n packetcapturelabtest -g Hub -l westus --sku Standard_LRS --kind StorageV2
 </pre>
 
-# Add container for the capture to log to
+**Add container for the capture to log to**
 Open Storage explorer. navigate to your subscription, Storage Accounts, packetcapturelabtest, right click blob container and create new and name it packetcapturelabtest
 
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/container%20creation.png)
