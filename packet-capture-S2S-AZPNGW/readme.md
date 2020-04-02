@@ -232,7 +232,7 @@ Write-Host "Process has been completed - Use Storage Explorer and download $VNG 
 </pre>
 
 Refresh your blob container in Storage Explorer and drill down to the pcap file. There will be 2 folders a few directories in since Azure VPN GW is deployed in active/standby in this lab. Download the pcap and open it with Wireshark. 
-Example wireshark filtering on UDP port 4500, BGP or ICMP. You can see the outer IPSEC information as well as the inner BGP session and ICMP that is running between the VMs. 
+Below is an example of the pcap in wireshark filtering on UDP port 4500, BGP or ICMP. You can see the outer IPSEC information as well as the inner BGP session and ICMP that is running between the VMs. 
 Key IPs:
 - 2 public IPs are the Azure VPN GW and CSR for tunnel termination
 - Azure VPN GW BGP peer IP is 10.0.0.254, CSR is 192.168.1.1
