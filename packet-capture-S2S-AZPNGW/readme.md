@@ -194,6 +194,7 @@ az storage account create -n packetcapturelabtest -g Hub -l westus --sku Standar
 
 # Add container for the capture to log to
 Open Storage explorer. Navigate to your subscription, Storage Accounts, packetcapturelabtest, right click blob container and create new and name it packetcapturelabtest
+
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/container%20creation.png)
 
 **Paste the below script into Powershell. This will launch an interactive window to launch the capture. The capture is running and writing to your storage account for the amount of time you selected. You can control-c to stop it early. **
