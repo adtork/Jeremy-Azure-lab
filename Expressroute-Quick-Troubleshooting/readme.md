@@ -9,6 +9,7 @@ Quick notes:
 - ER terminates on the Microsoft edge routers and not in the VNET
 - ER GWs build a connection to the ER "circuit" (technically it's the MSEEs)
 - Communication between the ER GW and the MSEEs crosses the Microsoft Backbone
+- PowerShell- https://github.com/PowerShell/PowerShell#get-powershell
 
 
 
