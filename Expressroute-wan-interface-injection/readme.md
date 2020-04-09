@@ -11,7 +11,7 @@ Quick notes:
 - MSEEs will respond to ping if it has a valid route
 
 
-**VWAN Topology**
+**WAN Topology**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/er-wan-injection.PNG)
 
 The topology above shows the CPE in private ASN 65001 and the MSEEs in ASN 12076. BGP peering is established between 172.16.1.1 and .2 as well as 172.16.2.1 and .2. 
