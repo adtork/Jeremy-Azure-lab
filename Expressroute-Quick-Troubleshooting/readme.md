@@ -64,7 +64,7 @@ ip prefix-list filter-secondary seq 10 permit 192.168.1.0/24
 ip prefix-list filter-secondary seq 15 permit 172.16.1.0/30
 </pre>
 
-**Within Powershell, configure your variables (Sub ID, Resource Group, ER Circuit name). Replace XYZ with your subcription ID.
+**Within Powershell, configure your variables (Sub ID, Resource Group, ER Circuit name). Replace XYZ with your subcription ID.**
 <pre lang="...">
 # Variables
 $SubID = 'XYZ'
