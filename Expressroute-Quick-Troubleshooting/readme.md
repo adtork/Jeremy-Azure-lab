@@ -105,3 +105,131 @@ Protocol  Address          Age (min)  Hardware Addr   Type   Interface
 Internet  172.16.1.1              -   0050.56b4.d8aa  ARPA   GigabitEthernet2
 Internet  172.16.1.2            156   f40f.1b7f.6670  ARPA   GigabitEthernet2
 </pre>
+
+**Verify secondary path ARP. MAC addresses listed should match on prem interfaces**
+<pre lang="...">
+Get-AzExpressRouteCircuitARPTable -ResourceGroupName $RG -ExpressRouteCircuitName $cktname -PeeringType AzurePrivatePeering -DevicePath Secondary | Format-Table
+
+##Output##
+Age InterfaceProperty IpAddress  MacAddress
+--- ----------------- ---------  ----------
+ 98 On-Prem           172.16.2.1 0050.56b4.7658
+  0 Microsoft         172.16.2.2 5087.89fd.ca70
+
+##Validate MAC address on the CSR matches the output##
+CISCO_ROUTER#sh arp gi3
+Protocol  Address          Age (min)  Hardware Addr   Type   Interface
+Internet  172.16.2.1              -   0050.56b4.7658  ARPA   GigabitEthernet3
+Internet  172.16.2.2            101   5087.89fd.ca70  ARPA   GigabitEthernet3
+</pre>
+
+**Get Azure ASN, defined on prem ASN and peering info**
+<pre lang="...">
+$ckt = Get-AzExpressRouteCircuit -Name $cktname -ResourceGroupName $RG
+Get-AzexpressRouteCircuitPeeringConfig -Name "AzurePrivatePeering" -ExpressRouteCircuit $ckt | Select-Object AzureASN,PeerASN,PrimaryPeerAddressPrefix,SecondaryPeerAddressPrefix | Format-Table
+
+##Output##
+AzureASN PeerASN PrimaryPeerAddressPrefix SecondaryPeerAddressPrefix
+-------- ------- ------------------------ --------------------------
+   12076   65100 172.16.1.0/30            172.16.2.0/30
+</pre>
+
+**Validate peer on primary path in AS 65100(on prem), BGP uptime and the number of prefixes on prem is advertising**
+<pre lang="...">
+Get-AzExpressRouteCircuitRouteTableSummary -ResourceGroupName $RG -ExpressRouteCircuitName $cktname -DevicePath 'Primary' -PeeringType AzurePrivatePeering | where-object {$_.AsProperty -eq “65100”} | Format-Table
+
+##Output##
+Neighbor   V AsProperty UpDown StatePfxRcd
+--------   - ---------- ------ -----------
+172.16.1.1 4      65100 1d13h  3
+</pre>
+
+**Validate peer on secondary path in AS 65100(on prem), BGP uptime and the number of prefixes on prem is advertising**
+<pre lang="...">
+Get-AzExpressRouteCircuitRouteTableSummary -ResourceGroupName $RG -ExpressRouteCircuitName $cktname -DevicePath 'Secondary' -PeeringType AzurePrivatePeering | where-object {$_.AsProperty -eq “65100”} | Format-Table
+
+##Output##
+Neighbor   V AsProperty UpDown StatePfxRcd
+--------   - ---------- ------ -----------
+172.16.2.1 4      65100 1d13h  3
+</pre>
+
+**Validate what routes Azure is receiving from on prem on the Primary path**
+<pre lang="...">
+Get-AzExpressRouteCircuitRouteTable -ResourceGroupName $RG -ExpressRouteCircuitName $cktname -DevicePath 'Primary' -PeeringType AzurePrivatePeering| where-object {$_.Path -eq “65100”} | Format-Table
+
+##Output##
+Network       NextHop    LocPrf Weight Path
+-------       -------    ------ ------ ----
+2.2.2.2/32    172.16.1.1             0 65100
+172.16.2.0/30 172.16.1.1             0 65100
+192.168.1.0   172.16.1.1             0 65100
+</pre>
+
+**Validate what routes Azure is receiving from on prem on the Secondary path**
+<pre lang="...">
+Get-AzexpressRouteCircuitRouteTable -ResourceGroupName $RG -ExpressRouteCircuitName $cktname -DevicePath 'Secondary' -PeeringType AzurePrivatePeering| where-object {$_.Path -eq “65100”} | Format-Table
+
+##Output##
+Network       NextHop    LocPrf Weight Path
+-------       -------    ------ ------ ----
+2.2.2.2/32    172.16.2.1             0 65100
+172.16.1.0/30 172.16.2.1             0 65100
+192.168.1.0   172.16.2.1             0 65100
+</pre>
+
+**Validate what VNET address spaces are seen on the Primary path(router)**
+<pre lang="...">
+Get-AzExpressRouteCircuitRouteTable -ResourceGroupName $RG -ExpressRouteCircuitName $cktname -DevicePath 'Primary' -PeeringType AzurePrivatePeering| where-object {$_.Path -eq “65515”} | Format-Table
+
+##Output##
+Network       NextHop      LocPrf Weight Path
+-------       -------      ------ ------ ----
+10.1.0.0/20   10.1.0.13                0 65515
+10.1.0.0/20   10.1.0.12*               0 65515
+10.1.16.0/20  10.1.0.13                0 65515
+10.1.16.0/20  10.1.0.12*               0 65515
+10.1.32.0/20  10.1.0.13                0 65515
+10.1.32.0/20  10.1.0.12*               0 65515
+10.1.48.0/20  10.1.0.13                0 65515
+10.1.48.0/20  10.1.0.12*               0 65515
+10.50.0.0/20  10.50.1.13               0 65515
+10.50.0.0/20  10.50.1.12*              0 65515
+10.50.16.0/20 10.50.1.12               0 65515
+10.50.16.0/20 10.50.1.13*              0 65515
+10.255.0.0/16 10.255.0.13              0 65515
+10.255.0.0/16 10.255.0.12*             0 65515
+</pre>
+
+**Validate what VNET address spaces are seen on the Secondary path(router)**
+<pre lang="...">
+Get-AzExpressRouteCircuitRouteTable -ResourceGroupName $RG -ExpressRouteCircuitName $cktname -DevicePath 'Secondary' -PeeringType AzurePrivatePeering| where-object {$_.Path -eq “65515”} | Format-Table
+
+##Output##
+Network       NextHop      LocPrf Weight Path
+-------       -------      ------ ------ ----
+10.1.0.0/20   10.1.0.13                0 65515
+10.1.0.0/20   10.1.0.12*               0 65515
+10.1.16.0/20  10.1.0.13                0 65515
+10.1.16.0/20  10.1.0.12*               0 65515
+10.1.32.0/20  10.1.0.13                0 65515
+10.1.32.0/20  10.1.0.12*               0 65515
+10.1.48.0/20  10.1.0.13                0 65515
+10.1.48.0/20  10.1.0.12*               0 65515
+10.50.0.0/20  10.50.1.12               0 65515
+10.50.0.0/20  10.50.1.13*              0 65515
+10.50.16.0/20 10.50.1.12               0 65515
+10.50.16.0/20 10.50.1.13*              0 65515
+10.255.0.0/16 10.255.0.12              0 65515
+10.255.0.0/16 10.255.0.13*             0 65515
+</pre>
+
+**Validate paths are sending/receiving traffic**
+<pre lang="...">
+Get-AzExpressRouteCircuitStats -ResourceGroupName $RG -ExpressRouteCircuitName $cktname -PeeringType 'AzurePrivatePeering'
+
+##Output##
+PrimaryBytesIn PrimaryBytesOut SecondaryBytesIn SecondaryBytesOut
+-------------- --------------- ---------------- -----------------
+    3223706647      3097076399       3233188734        3067851925
+</pre>
