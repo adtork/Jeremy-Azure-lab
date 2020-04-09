@@ -1,5 +1,5 @@
 ## Expressroute Private Peering Quick Troubleshooting
-This doc provides some quick troubleshooting ideas when dealing with Expressroute (ER). From a network perspective, you are often looking for key information for L1/L2/L3. All of the output from the commands are available in the Azure portal. However, finding this information could potentially be time consuming or difficult to interpret unless you are experienced with ER operations. Powershell 7 for Windows 10 is used for this lab but can also be done in Cloud Shell in the portal. The commands shown are purely a baseline for ideas that can be expanded on. I'm a network guy, not a Powershell expert, so I'm sure there are better ways to optimize the script. I've also provided all of the commands in a Powershell script saved in this repo so you can copy it and change the attributes. Before starting the lab, document the Subscription ID that owns the ER circuit, Resource Group and the name of the ER circuit.
+This doc provides some quick troubleshooting ideas when dealing with Expressroute (ER). From a network perspective, you are often looking for key information for L1/L2/L3. All of the output from the commands are available in the Azure portal. However, finding this information could potentially be time consuming or difficult to interpret unless you are experienced with ER operations. Powershell 7 for Windows 10 is used for this lab but can also be done in Cloud Shell in the portal. The commands are shown individually and are purely a baseline for ideas that can be expanded on. I'm a network guy, not a Powershell expert, so I'm sure there are better ways to optimize the script. I've also provided all of the commands in a Powershell script (more details described later) saved in this repo so you can copy it and change the attributes. Before starting the lab, document the Subscription ID that owns the ER circuit, Resource Group and the name of the ER circuit.
 
 Quick notes:
 
@@ -233,3 +233,5 @@ PrimaryBytesIn PrimaryBytesOut SecondaryBytesIn SecondaryBytesOut
 -------------- --------------- ---------------- -----------------
     3223706647      3097076399       3233188734        3067851925
 </pre>
+
+The Powershell script to run all of these commands together. Make sure to change the variables to match your environment. The script will log to the path you specify. As you can see at the top of the script, it logs the commands to your screen and writes the commands plus the output. Simply change "Start-Transcript -Path "C:\transcripts\transcript0.txt" to a different path if need.
