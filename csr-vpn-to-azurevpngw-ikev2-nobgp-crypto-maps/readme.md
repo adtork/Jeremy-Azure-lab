@@ -1,4 +1,4 @@
-# S2S between CSR and Azure VPN Gateway using crypto maps
+# S2S VPN between CSR and Azure VPN Gateway using crypto maps
 This lab guide illustrates how to build a basic IPSEC VPN tunnel w/IKEv2 between a Cisco CSR and the Azure VPN gateway. Some edge envrionments don't have the ability to use BGP but want the flexibility to use it in the future with minimal downtime. The Azure VPN Gateway will use a route based VPN and the remote site will use ACL based crypto maps, no BGP or VTI. The local network gateway will specify the on prem prefix and be in position to enable BGP at a future time. Azure configs are done in Azure CLI so you can change them as needed to match your environment. The on prem environment is simulated in a VNET so no hardware is required.
 
 # Base Topology
