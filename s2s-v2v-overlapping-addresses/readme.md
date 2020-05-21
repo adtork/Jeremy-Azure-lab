@@ -3,6 +3,7 @@ This lab guide illustrates how to build a basic IPSEC/IKEv2 VPN tunnel between 2
 
 # Base Topology
 The lab deploys 2x CSRs in 2 different VNETs with overlapping address space. VNET1 source network will appear as 10.100/16 to VNET2. VNET2 source network will appear as 10.200/16 to VNET1. There is a one to one static NAT for VM testing over the tunnel- 10.100.1.10->10.1.1.10 in VNET1, 10.200.1.10->10.1.1.10 in VNET2. EX: The VM in VNET1 will be able to ping 10.200.1.10 over the tunnel.
+
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/s2s-overlap.PNG)
 
 **Before deploying CSR in the next step, you may have to accept license agreement unless you have used it before. You can accomplish this through deploying a CSR in the portal or Powershell commands via Cloudshell**
