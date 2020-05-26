@@ -340,6 +340,6 @@ sudo tcpdump net 10.101.0.0/16
 sudo tcpdump net 10.102.0.0/16
 </pre>
 
-At this point, the VM in VNET2 can connect to 100.100.100.100 port 81 and will be NATd to 10.0.10.10 port 80. Hub VM1 will see the source as 10.101.1.0/24. It will also be able to ping 10.0.10.10. 
+At this point, the VM in VNET2 can connect to 100.100.100.100 port 81 and will be NATd to 10.0.10.10 port 80. Hub VM1 will see the source as 10.101.1.0/24. It will also be able to ping 10.0.10.10. (Ex: from vm in vnet2, curl 100.100.100.100:81)
 
-The VM in VNET3 can connect to 100.100.100.100 port 81 and will be NATd to 10.0.10.20 port 80. Hub VM2 will see the source as 10.102.1.0/24. It will also be able to ping 10.0.10.20. You can write ACL's to restrict traffic if needed.
+The VM in VNET3 can connect to 100.100.100.100 port 81 and will be NATd to 10.0.10.20 port 80. Hub VM2 will see the source as 10.102.1.0/24. It will also be able to ping 10.0.10.20. You can write ACL's to restrict traffic if needed. (Ex: from vm in vnet3, curl 100.100.100.100:81)
