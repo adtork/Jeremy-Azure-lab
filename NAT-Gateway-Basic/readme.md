@@ -2,7 +2,7 @@
 This lab guide illustrates how to build a basic NAT Gateway in Azure and a simulated destination web server. The goal of the lab is to quickly spin up a test environment and validate basic features. All configurations are done in Azure CLI so you can manipulate fields as needed. Everything is done using Azure so no hardware is needed. 
 
 # Base Topology
-The lab deploys 2 isolated VNETs. The source VNET will have 2 Linux VM machines and a Cisco CSR. SourceVM1 will route through the CSR before going out to the Internet through NAT Gateway. SourceVM2 will not route through the CSR but will use NAT Gateway for Internet connectivity. SourceVM1, SourceVM2 and the CSR will not have a public IP (PIP). The Jump VM will be used to SSH to SourceVM1, SourceVM2 and the CSR. The SourceVM1 subnet will have a default route pointed to the "inside" interface of the CSR.
+The lab deploys 2 isolated VNETs. The source VNET will have 2 Linux VM machines and a Cisco CSR. SourceVM1 will route through the CSR before going out to the Internet through NAT Gateway. SourceVM2 will not route through the CSR but will use NAT Gateway for Internet connectivity. SourceVM1, SourceVM2 and the CSR will not have a public IP (PIP). The Jump VM will be used to SSH to SourceVM1, SourceVM2 and the CSR. The SourceVM1 subnet will have a default route pointed to the "inside" interface of the CSR. All credentials are azureuser/Msft123Msft123
 
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/basicnattopo2.PNG)
 
