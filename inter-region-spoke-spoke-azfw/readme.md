@@ -128,4 +128,16 @@ az network vnet peering update -g AZFW -n Spoke3-To-Hub2 --vnet-name Spoke3 --se
 az network vnet peering update -g AZFW -n Spoke4-To-Hub2 --vnet-name Spoke4 --set useRemoteGateways=true
 </pre>
 
+**Update GatewaySubnets to point spoke traffic to AZFW**
+<pre lang="...">
+az network route-table create --name GWSubnet-RT --resource-group AZFW --location westus2
+az network route-table route create --resource-group AZFW --name to-Spoke1 --route-table-name GWSubnet-RT --address-prefix 10.10.1.0/24 --next-hop-type VirtualAppliance --next-hop-ip-address 10.10.0.4
+az network route-table route create --resource-group AZFW --name to-Spoke2 --route-table-name GWSubnet-RT --address-prefix 10.10.2.0/24 --next-hop-type VirtualAppliance --next-hop-ip-address 10.10.0.4
+az network vnet subnet update -n GatewaySubnet -g AZFW --vnet-name Hub1 --route-table GWSubnet-RT
+az network route-table create --name GWSubnet-RT --resource-group AZFW --location eastus
+az network route-table route create --resource-group AZFW --name to-Spoke3 --route-table-name GWSubnet-RT --address-prefix 10.20.1.0/24 --next-hop-type VirtualAppliance --next-hop-ip-address 10.20.0.4
+az network route-table route create --resource-group AZFW --name to-Spoke4 --route-table-name GWSubnet-RT --address-prefix 10.10.2.0/24 --next-hop-type VirtualAppliance --next-hop-ip-address 10.20.0.4
+az network vnet subnet update -n GatewaySubnet -g AZFW --vnet-name Hub2 --route-table GWSubnet-RT
+</pre>
+
 Once the connection is built between both ERGWs and the circuit, connectvity to the CPE loopback will be accessible.
