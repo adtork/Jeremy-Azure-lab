@@ -138,7 +138,7 @@ az network route-table route create --resource-group AZFW --name to-Spoke2 --rou
 az network vnet subnet update -n GatewaySubnet -g AZFW --vnet-name Hub1 --route-table GWSubnet-RT
 az network route-table create --name GWSubnet-RT2 --resource-group AZFW --location eastus
 az network route-table route create --resource-group AZFW --name to-Spoke3 --route-table-name GWSubnet-RT2 --address-prefix 10.20.1.0/24 --next-hop-type VirtualAppliance --next-hop-ip-address 10.20.0.4
-az network route-table route create --resource-group AZFW --name to-Spoke4 --route-table-name GWSubnet-RT2 --address-prefix 10.10.2.0/24 --next-hop-type VirtualAppliance --next-hop-ip-address 10.20.0.4
+az network route-table route create --resource-group AZFW --name to-Spoke4 --route-table-name GWSubnet-RT2 --address-prefix 10.20.2.0/24 --next-hop-type VirtualAppliance --next-hop-ip-address 10.20.0.4
 az network vnet subnet update -n GatewaySubnet -g AZFW --vnet-name Hub2 --route-table GWSubnet-RT2
 </pre>
 
