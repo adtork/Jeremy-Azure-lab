@@ -53,20 +53,20 @@ az vm create -n Spoke4VM -g AZFW --image UbuntuLTS --admin-username azureuser --
 
 **Build VNET peering. Make sure to change XXXX to your subscription**
 <pre lang="...">
-az network vnet peering create -g AZFW -n Hub1-To-Hub2 --vnet-name Hub1 --allow-vnet-access --allow-forwarded-traffic --remote-vnet /subscriptions/3e954dfd-226d-4738-8ee2-5bbe9bf3b4de/resourceGroups/AZFW/providers/Microsoft.Network/virtualNetworks/Hub2 
-az network vnet peering create -g AZFW -n Hub2-To-Hub1 --vnet-name Hub2 --allow-vnet-access --allow-forwarded-traffic --remote-vnet /subscriptions/3e954dfd-226d-4738-8ee2-5bbe9bf3b4de/resourceGroups/AZFW/providers/Microsoft.Network/virtualNetworks/Hub1
+az network vnet peering create -g AZFW -n Hub1-To-Hub2 --vnet-name Hub1 --allow-vnet-access --allow-forwarded-traffic --remote-vnet /subscriptions/XXXX/resourceGroups/AZFW/providers/Microsoft.Network/virtualNetworks/Hub2 
+az network vnet peering create -g AZFW -n Hub2-To-Hub1 --vnet-name Hub2 --allow-vnet-access --allow-forwarded-traffic --remote-vnet /subscriptions/XXXX/resourceGroups/AZFW/providers/Microsoft.Network/virtualNetworks/Hub1
 
-az network vnet peering create -g AZFW -n Hub1-To-Spoke1 --vnet-name Hub1 --allow-vnet-access --allow-forwarded-traffic --allow-gateway-transit --remote-vnet /subscriptions/3e954dfd-226d-4738-8ee2-5bbe9bf3b4de/resourceGroups/AZFW/providers/Microsoft.Network/virtualNetworks/Spoke1
-az network vnet peering create -g AZFW -n Spoke1-To-Hub1 --vnet-name Spoke1 --allow-vnet-access --allow-forwarded-traffic  --remote-vnet /subscriptions/3e954dfd-226d-4738-8ee2-5bbe9bf3b4de/resourceGroups/AZFW/providers/Microsoft.Network/virtualNetworks/Hub1
+az network vnet peering create -g AZFW -n Hub1-To-Spoke1 --vnet-name Hub1 --allow-vnet-access --allow-forwarded-traffic --allow-gateway-transit --remote-vnet /subscriptions/XXXX/resourceGroups/AZFW/providers/Microsoft.Network/virtualNetworks/Spoke1
+az network vnet peering create -g AZFW -n Spoke1-To-Hub1 --vnet-name Spoke1 --allow-vnet-access --allow-forwarded-traffic  --remote-vnet /subscriptions/XXXX/resourceGroups/AZFW/providers/Microsoft.Network/virtualNetworks/Hub1
 
-az network vnet peering create -g AZFW -n Hub1-To-Spoke2 --vnet-name Hub1 --allow-vnet-access --allow-forwarded-traffic --allow-gateway-transit --remote-vnet /subscriptions/3e954dfd-226d-4738-8ee2-5bbe9bf3b4de/resourceGroups/AZFW/providers/Microsoft.Network/virtualNetworks/Spoke2
-az network vnet peering create -g AZFW -n Spoke2-To-Hub1 --vnet-name Spoke2 --allow-vnet-access --allow-forwarded-traffic --remote-vnet /subscriptions/3e954dfd-226d-4738-8ee2-5bbe9bf3b4de/resourceGroups/AZFW/providers/Microsoft.Network/virtualNetworks/Hub1
+az network vnet peering create -g AZFW -n Hub1-To-Spoke2 --vnet-name Hub1 --allow-vnet-access --allow-forwarded-traffic --allow-gateway-transit --remote-vnet /subscriptions/XXXX/resourceGroups/AZFW/providers/Microsoft.Network/virtualNetworks/Spoke2
+az network vnet peering create -g AZFW -n Spoke2-To-Hub1 --vnet-name Spoke2 --allow-vnet-access --allow-forwarded-traffic --remote-vnet /subscriptions/XXXX/resourceGroups/AZFW/providers/Microsoft.Network/virtualNetworks/Hub1
 
-az network vnet peering create -g AZFW -n Hub2-To-Spoke3 --vnet-name Hub2 --allow-vnet-access --allow-forwarded-traffic --allow-gateway-transit --remote-vnet /subscriptions/3e954dfd-226d-4738-8ee2-5bbe9bf3b4de/resourceGroups/AZFW/providers/Microsoft.Network/virtualNetworks/Spoke3
-az network vnet peering create -g AZFW -n Spoke3-To-Hub2 --vnet-name Spoke3 --allow-vnet-access --allow-forwarded-traffic --remote-vnet /subscriptions/3e954dfd-226d-4738-8ee2-5bbe9bf3b4de/resourceGroups/AZFW/providers/Microsoft.Network/virtualNetworks/Hub2
+az network vnet peering create -g AZFW -n Hub2-To-Spoke3 --vnet-name Hub2 --allow-vnet-access --allow-forwarded-traffic --allow-gateway-transit --remote-vnet /subscriptions/XXXX/resourceGroups/AZFW/providers/Microsoft.Network/virtualNetworks/Spoke3
+az network vnet peering create -g AZFW -n Spoke3-To-Hub2 --vnet-name Spoke3 --allow-vnet-access --allow-forwarded-traffic --remote-vnet /subscriptions/XXXX/resourceGroups/AZFW/providers/Microsoft.Network/virtualNetworks/Hub2
 
-az network vnet peering create -g AZFW -n Hub2-To-Spoke4 --vnet-name Hub2 --allow-vnet-access --allow-forwarded-traffic --allow-gateway-transit --remote-vnet /subscriptions/3e954dfd-226d-4738-8ee2-5bbe9bf3b4de/resourceGroups/AZFW/providers/Microsoft.Network/virtualNetworks/Spoke4
-az network vnet peering create -g AZFW -n Spoke4-To-Hub2 --vnet-name Spoke4 --allow-vnet-access --allow-forwarded-traffic --remote-vnet /subscriptions/3e954dfd-226d-4738-8ee2-5bbe9bf3b4de/resourceGroups/AZFW/providers/Microsoft.Network/virtualNetworks/Hub2
+az network vnet peering create -g AZFW -n Hub2-To-Spoke4 --vnet-name Hub2 --allow-vnet-access --allow-forwarded-traffic --allow-gateway-transit --remote-vnet /subscriptions/XXXX/resourceGroups/AZFW/providers/Microsoft.Network/virtualNetworks/Spoke4
+az network vnet peering create -g AZFW -n Spoke4-To-Hub2 --vnet-name Spoke4 --allow-vnet-access --allow-forwarded-traffic --remote-vnet /subscriptions/XXXX/resourceGroups/AZFW/providers/Microsoft.Network/virtualNetworks/Hub2
 </pre>
 
 **Create route tables for firewalls and spokes. This assumes AZFW1 is 10.10.0.4 and AZFW2 is 10.20.0.4**
