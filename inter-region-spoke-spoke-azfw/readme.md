@@ -67,7 +67,7 @@ az network vnet peering create -g AZFW -n Hub2-To-Spoke4 --vnet-name Hub2 --allo
 az network vnet peering create -g AZFW -n Spoke4-To-Hub2 --vnet-name Spoke4 --allow-vnet-access --allow-forwarded-traffic --remote-vnet /subscriptions/3e954dfd-226d-4738-8ee2-5bbe9bf3b4de/resourceGroups/AZFW/providers/Microsoft.Network/virtualNetworks/Hub2
 </pre>
 
-**Create route tables for firewalls and spokes**
+**Create route tables for firewalls and spokes. This assumes AZFW1 is 10.10.0.4 and AZFW2 is 10.20.0.4**
 <pre lang="...">
 az network route-table create --name AZFW1-RT --resource-group AZFW --location westus2
 az network route-table route create --resource-group AZFW --name to-Internet --route-table-name AZFW1-RT --address-prefix 0.0.0.0/0 --next-hop-type Internet
