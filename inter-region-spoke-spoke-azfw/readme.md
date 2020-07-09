@@ -2,7 +2,7 @@
 The lab deploys 2 hub and spoke environments in different regions. Hub1 is peered with spoke1/spoke2, all 3 VNETs in Azure region WestUS2. Hub2 is peered with spoke3/spoke4, all 3 VNETs in Azure region EastUS. Both Hubs have an Azure Firewall and the hubs are connected via Global VNET peering. Spoke1 and Spoke 2 have a default route pointed to Azure FW1. Spoke 3 and Spoke 4 have a default route pointed to Azure FW2. Spokes will use their peered Hubs regional Internet access via Azure Firewall. BGP propagation is disabled on all spokes so all traffic to on prem will flow through Azure Firewall. Summary routes are used between hubs to keep routing easy. Inter-region connectivity traverses Global VNET peering and does not hairpin of the Microsoft Edge Routers. This lab does not cover detailed Expressroute configurations.
 
 # Base Topology
-![alt text]()
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/inter-region-azfw-topo.PNG)
 Note- the entire lab uses Azure CLI. Please make sure you have the latest version and the firewall extension added. The firewall rules can be modified to be more restrictive as needed. There is a single jump VM (with a public ip) in spoke1. The other 4 VMs (1 in each spoke) do not have a public ip. You will be able to SSH from the jump VM to the other VMs to test connectivity. All VMs have a username/password of azureuser/Msft123Msft123
 
 az extension list-available --output table
