@@ -127,3 +127,5 @@ az network vnet peering update -g AZFW -n Spoke2-To-Hub1 --vnet-name Spoke2 --se
 az network vnet peering update -g AZFW -n Spoke3-To-Hub2 --vnet-name Spoke3 --set useRemoteGateways=true
 az network vnet peering update -g AZFW -n Spoke4-To-Hub2 --vnet-name Spoke4 --set useRemoteGateways=true
 </pre>
+
+Once the connection is built between both ERGWs, connectvity to the CPE loopback will be accessible.
