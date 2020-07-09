@@ -5,8 +5,10 @@ The lab deploys 2 hub and spoke environments in different regions. Hub1 is peere
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/inter-region-azfw-topo.PNG)
 Note- the entire lab uses Azure CLI. Please make sure you have the latest version and the firewall extension added. The firewall rules can be modified to be more restrictive as needed. There is a single jump VM (with a public ip) in spoke1. The other 4 VMs (1 in each spoke) do not have a public ip. You will be able to SSH from the jump VM to the other VMs to test connectivity. All VMs have a username/password of azureuser/Msft123Msft123
 
+<pre lang="...">
 az extension list-available --output table
 az extension add --name azure-firewall
+</pre>
 
 **Build all Hub and Spoke VNETs**
 <pre lang="...">
