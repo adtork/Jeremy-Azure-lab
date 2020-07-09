@@ -1,4 +1,4 @@
-# Inter-region spoke to spoke communication through Global VNET peering with Azure Firewall using regional Azure Internet + Expressroute 
+# Azure Firewall Routing Lab: Inter-region Hub and Spoke Connectivity Via Global VNET Peering, Local Azure Outbound Internet, Expressroute 
 The lab deploys 2 hub and spoke environments in different regions. Hub1 is peered with spoke1/spoke2, all 3 VNETs in Azure region WestUS2. Hub2 is peered with spoke3/spoke4, all 3 VNETs in Azure region EastUS. Both Hubs have an Azure Firewall and the hubs are connected via Global VNET peering. Spoke1 and Spoke 2 have a default route pointed to Azure FW1. Spoke 3 and Spoke 4 have a default route pointed to Azure FW2. Spokes will use their peered Hubs regional Internet access via Azure Firewall. BGP propagation is disabled on all spokes so all traffic (including to on prem) will flow through Azure Firewall. Summary routes are used between hubs to keep routing easy. Inter-region connectivity traverses Global VNET peering and does not hairpin of the Microsoft Edge Routers. This lab does not cover detailed Expressroute configurations.
 
 # Base Topology
