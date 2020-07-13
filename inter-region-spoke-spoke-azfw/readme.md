@@ -8,7 +8,7 @@ The lab deploys 2 hub and spoke environments in different regions. Hub1 is peere
 ![alt text](https://github.com/jwrightazure/lab/blob/master/inter-region-spoke-spoke-azfw/intra-routing2.PNG)
 
 # Inter-region Forwarding
-![alt text](https://github.com/jwrightazure/lab/blob/master/inter-region-spoke-spoke-azfw/inter-topo2.PNG)
+![alt text](https://github.com/jwrightazure/lab/blob/master/inter-region-spoke-spoke-azfw/inter-routing-topo2.PNG)
 
 # Internet and Expressroute Forwarding
 ![alt text](https://github.com/jwrightazure/lab/blob/master/inter-region-spoke-spoke-azfw/er-internet-topo2.PNG)
