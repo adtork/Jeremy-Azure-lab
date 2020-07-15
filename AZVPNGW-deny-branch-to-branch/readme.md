@@ -238,3 +238,5 @@ router bgp 65003
 <pre lang="...">
 az network local-gateway create --gateway-ip-address "CSR2PublicIP" --name to-Branch2 --resource-group Azure --local-address-prefixes 192.168.1.2/32 --asn 65002 --bgp-peering-address 192.168.1.2
 </pre>
+
+Branch1 and Branch2 can connect to Azure. Branch1 an Branch2 can't communicate.
