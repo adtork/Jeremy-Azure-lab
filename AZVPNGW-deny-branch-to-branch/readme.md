@@ -1,4 +1,4 @@
-# Denying Spoke To Spoke VPN Traffic With BGP When Using Azure VPN Gateway
+# Denying Spoke to Spoke VPN Traffic with BGP when using Azure VPN Gateway
 By default, 2 remote sites will be able to communicate if they connecting via S2S VPM+BGP to Azure VPN Gateway. Branch to branch communication will hairpin off of the VPN GW. Currently there are no route filtering capabilities on the VPN GW nor can you use NSGs. This lab will illustrate the default behavior as well as an option to use BGP deny spoke to spoke traffic. All Azure configurations are done with Azure CLI.
 
 # Base Topology
