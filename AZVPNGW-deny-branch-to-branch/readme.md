@@ -4,7 +4,7 @@ By default, 2 remote sites will be able to communicate if they connecting via S2
 # Base Topology
 The lab deploys a Hub Azure VNET as well as 2 VNET that simulate 2 branch locations. The Hub ASN will be 65001, branch1 is 65002 and branch2 will be 65003. Branch1/2 will use Cisco CSRs for VPN, each using a VTI with BGP over IPSEC. There will be a VM in each VNET as well branch route tables which are specific to this lab since no hardware is needed. All username/passwords are azureuser/Msft123Msft123
 
-![alt text]()
+![alt text](https://github.com/jwrightazure/lab/blob/master/AZVPNGW-deny-branch-to-branch/s2s-branch-deny-topo.PNG)
 
 **Before deploying CSR in the next step, you may have to accept license agreement unless you have used it before. You can accomplish this through deploying a CSR in the portal or Powershell commands via Cloudshell**
 <pre lang="...">
