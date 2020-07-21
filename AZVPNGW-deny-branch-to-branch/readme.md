@@ -219,7 +219,7 @@ router bgp 65003
 ip route 10.0.0.254 255.255.255.255 Tunnel 11
 </pre>
 
-**All 3 VMs should have communication at this point. Change the Branch2 CSR BGP config displayed below. Note- the customer edge did not have to change the BGP ASN. By making the ASN appear as 65002 (via local-as), the Azure VPN GW will not advertise Branch1 to Branch2 or Branch2 to Branch1 since they have matching ASNs.**
+**All 3 VMs should have communication at this point. Change the Branch2 CSR BGP config displayed below. Note- the customer edge did not have to change the BGP ASN. By making the ASN appear as 65002 (via local-as), each CSR will discard the remote branch prefix since they contain the same ASN.**
 <pre lang="...">
 router bgp 65003
  bgp log-neighbor-changes
