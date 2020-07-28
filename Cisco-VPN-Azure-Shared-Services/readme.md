@@ -8,4 +8,4 @@ Notes:
 - Azure VPN does not allow you to create multiple connections to the same public IP.
 
 # Base topology and VRF layout
-![alt text]()
+![alt text](https://github.com/jwrightazure/lab/blob/master/Cisco-VPN-Azure-Shared-Services/shared-services-topo.PNG)
