@@ -1,0 +1,74 @@
+﻿vrf definition internet
+ rd 2:2
+ !
+ address-family ipv4
+ exit-address-family
+!
+vrf definition local
+ rd 1:1   
+ !
+ address-family ipv4
+ exit-address-family
+!
+crypto ikev2 proposal prop-1 
+ encryption aes-cbc-256
+ integrity sha512
+ group 5
+!
+crypto ikev2 policy policy-1 
+ match fvrf internet
+ match address local 10.0.0.1
+ proposal prop-1
+!
+crypto ikev2 keyring keyring-1
+ peer ANY
+  address 0.0.0.0 0.0.0.0
+  pre-shared-key cisco123
+!
+crypto ikev2 profile IKEv2-Profile-1
+ match fvrf internet
+ match identity remote address 0.0.0.0 
+ authentication remote pre-share
+ authentication local pre-share
+ keyring local keyring-1
+!
+crypto ipsec transform-set transform-1 esp-aes 256 esp-sha-hmac 
+ mode transport
+!
+crypto ipsec profile IPSEC-Profile-1
+ set transform-set transform-1 
+ set ikev2-profile IKEv2-Profile-1
+!
+interface Loopback1
+ vrf forwarding local
+ ip address 1.1.1.1 255.255.255.255
+!
+interface Tunnel1
+ description Tunnel-to-Onprem
+ vrf forwarding local
+ ip address 192.168.1.1 255.255.255.255
+ tunnel source 10.0.0.1
+ tunnel destination 10.0.0.2
+ tunnel vrf internet
+ tunnel protection ipsec profile IPSEC-Profile-1
+!
+interface GigabitEthernet0/0
+ vrf forwarding internet
+ ip address 10.0.0.1 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router bgp 65001
+ bgp router-id 1.1.1.1
+ bgp log-neighbor-changes
+ !
+ address-family ipv4 vrf local
+  network 1.1.1.1 mask 255.255.255.255
+  neighbor 192.168.1.2 remote-as 65002
+  neighbor 192.168.1.2 ebgp-multihop 255
+  neighbor 192.168.1.2 update-source Tunnel1
+  neighbor 192.168.1.2 activate
+ exit-address-family
+!
+ip route vrf local 192.168.1.2 255.255.255.255 Tunnel1

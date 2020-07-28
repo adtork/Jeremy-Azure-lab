@@ -1,0 +1,14 @@
+﻿interface Loopback0
+ ip address 4.4.4.4 255.255.255.255
+!
+interface GigabitEthernet0/2
+ ip address 10.0.24.4 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router bgp 4
+ bgp router-id 4.4.4.4
+ bgp log-neighbor-changes
+ redistribute connected
+ neighbor 10.0.24.2 remote-as 65002

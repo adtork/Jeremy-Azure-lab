@@ -1,0 +1,109 @@
+﻿ip vrf Azure-DMZ
+ rd 65000:1
+ route-target export 65000:1
+ route-target import 65000:99
+ route-target import 100:100
+ route-target import 200:200
+!
+ip vrf Customer-SegmentA
+ rd 100:100
+ route-target export 100:100
+ route-target import 65000:1
+!
+ip vrf Customer-SegmentB
+ rd 200:200
+ route-target export 200:200
+ route-target import 65000:1
+!
+ip vrf Shared
+ rd 65000:99
+ route-target export 65000:99
+ route-target import 65000:1
+!
+crypto ikev2 proposal prop-1 
+ encryption aes-cbc-256
+ integrity sha512
+ group 5
+!
+crypto ikev2 policy policy-1 
+ match fvrf Shared
+ match address local 10.0.0.2
+ proposal prop-1
+!
+crypto ikev2 keyring keyring-1
+ peer ANY
+  address 0.0.0.0 0.0.0.0
+  pre-shared-key cisco123
+!
+crypto ikev2 profile IKEv2-Profile-1
+ match fvrf Shared
+ match identity remote address 0.0.0.0 
+ authentication remote pre-share
+ authentication local pre-share
+ keyring local keyring-1
+!         
+crypto ipsec transform-set transform-1 esp-aes 256 esp-sha-hmac 
+ mode transport
+!
+crypto ipsec profile IPSEC-Profile-1
+ set transform-set transform-1 
+ set ikev2-profile IKEv2-Profile-1
+!
+interface Loopback1
+ ip vrf forwarding Azure-DMZ
+ ip address 2.2.2.2 255.255.255.255
+!
+interface Tunnel1
+ description Tunnel-to-Azure
+ ip vrf forwarding Azure-DMZ
+ ip address 192.168.1.2 255.255.255.255
+ tunnel source 10.0.0.2
+ tunnel destination 10.0.0.1
+ tunnel vrf Shared
+ tunnel protection ipsec profile IPSEC-Profile-1
+!
+interface GigabitEthernet0/0
+ ip vrf forwarding Shared
+ ip address 10.0.0.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ ip vrf forwarding Customer-SegmentA
+ ip address 10.0.23.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/2
+ ip vrf forwarding Customer-SegmentB
+ ip address 10.0.24.2 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router bgp 65002
+ bgp router-id 2.2.2.2
+ bgp log-neighbor-changes
+ !
+ address-family ipv4 vrf Azure-DMZ
+  network 2.2.2.2 mask 255.255.255.255
+  neighbor 192.168.1.1 remote-as 65001
+  neighbor 192.168.1.1 ebgp-multihop 255
+  neighbor 192.168.1.1 update-source Tunnel1
+  neighbor 192.168.1.1 activate
+ exit-address-family
+ !
+ address-family ipv4 vrf Customer-SegmentA
+  neighbor 10.0.23.3 remote-as 3
+  neighbor 10.0.23.3 activate
+ exit-address-family
+ !
+ address-family ipv4 vrf Customer-SegmentB
+  neighbor 10.0.24.4 remote-as 4
+  neighbor 10.0.24.4 activate
+ exit-address-family
+!
+ip route vrf Azure-DMZ 192.168.1.1 255.255.255.255 Tunnel1
+

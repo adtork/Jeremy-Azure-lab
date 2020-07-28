@@ -1,0 +1,21 @@
+﻿interface Loopback0
+ ip address 3.3.3.3 255.255.255.255
+!
+interface GigabitEthernet0/0
+ no ip address
+ shutdown
+ duplex auto
+ speed auto
+ media-type rj45
+!
+interface GigabitEthernet0/1
+ ip address 10.0.23.3 255.255.255.0
+ duplex auto
+ speed auto
+ media-type rj45
+!
+router bgp 3
+ bgp router-id 3.3.3.3
+ bgp log-neighbor-changes
+ redistribute connected
+ neighbor 10.0.23.2 remote-as 65002
