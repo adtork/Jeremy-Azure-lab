@@ -15,10 +15,10 @@ az extension add --name azure-firewall
 </pre>
 
 # Base Topology
-![alt text](https://github.com/jwrightazure/lab/blob/master/VPN-backhaul-with-NVA/vpnbackhaultopo.PNG)
+![alt text](https://github.com/jwrightazure/lab/blob/master/VPN-backhaul-with-NVA/vpnbackhaultopo2.PNG)
 
 # Packet flow over Azure backbone
-![alt text](https://github.com/jwrightazure/lab/blob/master/VPN-backhaul-with-NVA/vpnbackhaulflow.PNG)
+![alt text](https://github.com/jwrightazure/lab/blob/master/VPN-backhaul-with-NVA/vpnbackhaulflow2.PNG)
 
 
 **You may have to accept the NVA agreement if you've never deployed this image before. You can use Cloudshell (Powershell) to run the commands. This is just an example:**
