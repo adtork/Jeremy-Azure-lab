@@ -283,4 +283,4 @@ router bgp 65001
 ip route 192.168.1.2 255.255.255.255 Tunnel 11
 </pre>
 
-At this point, there should be communication between Spoke1/Spoke2 and the on prem VM. You can also SSH to the Jump VM, from there SSH to Spoke1VM (10.2.10.10). Run curl ipconfig.io and the address should match the public IP of the Azure firewall. There will not yet be reachability between Spoke1/2 and on prem.
+At this point, there should be communication between Spoke1/Spoke2 and the on prem VM. You can also SSH to the Jump VM, from there SSH to Spoke1VM (10.2.10.10). Run curl ipconfig.io and the address should match the public IP of the Azure firewall. 
