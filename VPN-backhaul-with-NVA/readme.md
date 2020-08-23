@@ -9,6 +9,8 @@ This lab guide shows how to build a S2S VPN to the closest Azure region and leve
 
 Note- the entire lab uses Azure CLI. Please make sure you have the latest version and the firewall extension added. The firewall rules can be modified to be more restrictive as needed. There is a single jump VM (with a public ip) in Spoke1. The other 2 VMs (1 in each spoke) do not have a public ip. You will be able to SSH from the Jump VM to the other VMs to test connectivity. Onprem is also simulated with a VNET and has a test VM. Spoke1VM and Spoke2VM will have a default route pointed to the Azure firewall. CSR1 is in ASN 65001, CSR2 is in ASN 65002, both are using VTIs. All VMs have a username/password of azureuser/Msft123Msft123
 
+This lab is built with Cloud Shell (https://shell.azure.com) or Windows Subsytem for Linux (WSL2)/Ubuntu/Azure CLI
+
 <pre lang="...">
 az extension list-available --output table
 az extension add --name azure-firewall
@@ -28,112 +30,118 @@ Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name 
 Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "17_2_1-byol" | Set-AzureRmMarketplaceTerms -Accept
 </pre>
 
-**Build simulated on prem and VPN hub VNET in UK West. Also build CSR1 and CSR2.**
+**Lab Build
 <pre lang="...">
-az group create --name vpn --location eastus
-az network vnet create --name onprem --resource-group vpn --address-prefix 10.100.0.0/16 --location "UK West"
-az network vnet subnet create --address-prefix 10.100.1.0/24 --name InsideSubnet --resource-group vpn --vnet-name onprem
-az network vnet subnet create --address-prefix 10.100.0.0/24 --name OutsideSubnet --resource-group vpn --vnet-name onprem
-az network vnet subnet create --address-prefix 10.100.10.0/24 --name testVMSubnet --resource-group vpn --vnet-name onprem
+# Define Resource Group and location variables. Build simulated on prem and VPN hub VNET in UK West. Also build CSR1 and CSR2.
 
-az network vnet create --name vpnhub --resource-group vpn --address-prefix 10.0.0.0/16 --location "UK West"
-az network vnet subnet create --address-prefix 10.0.1.0/24 --name InsideSubnet --resource-group vpn --vnet-name vpnhub 
-az network vnet subnet create --address-prefix 10.0.0.0/24 --name OutsideSubnet --resource-group vpn --vnet-name vpnhub
-az network vnet subnet create --address-prefix 10.0.10.0/24 --name testVMSubnet --resource-group vpn --vnet-name vpnhub
+#!/bin/bash
+rgname="vpnlab"
+US="eastus"
+UK="ukwest"
 
-az network public-ip create --name CSR1PublicIP --resource-group vpn --idle-timeout 30 --allocation-method Static --location "UK West"
-az network nic create --name CSR1OutsideInterface -g vpn --subnet OutsideSubnet --vnet onprem --public-ip-address CSR1PublicIP --ip-forwarding true --location "UK West"
-az network nic create --name CSR1InsideInterface -g vpn --subnet InsideSubnet --vnet onprem --ip-forwarding true --location "UK West"
-az vm create --resource-group vpn --location eastus --name CSR1 --size Standard_D2_v2 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:17_2_1-byol:17.2.120200508 --admin-username azureuser --admin-password Msft123Msft123 --no-wait --location "UK West"
+az group create --name $rgname --location $US
+az network vnet create --name onprem --resource-group $rgname --address-prefix 10.100.0.0/16 --location $UK
+az network vnet subnet create --address-prefix 10.100.1.0/24 --name InsideSubnet --resource-group $rgname --vnet-name onprem
+az network vnet subnet create --address-prefix 10.100.0.0/24 --name OutsideSubnet --resource-group $rgname --vnet-name onprem
+az network vnet subnet create --address-prefix 10.100.10.0/24 --name testVMSubnet --resource-group $rgname --vnet-name onprem
 
-az network public-ip create --name CSR2PublicIP --resource-group vpn --idle-timeout 30 --allocation-method Static --location "UK West"
-az network nic create --name CSR2OutsideInterface -g vpn --subnet OutsideSubnet --vnet vpnhub --public-ip-address CSR2PublicIP --ip-forwarding true --location "UK West"
-az network nic create --name CSR2InsideInterface -g vpn --subnet InsideSubnet --vnet vpnhub --ip-forwarding true --location "UK West"
-az vm create --resource-group vpn --location eastus --name CSR2 --size Standard_D2_v2 --nics CSR2OutsideInterface CSR2InsideInterface  --image cisco:cisco-csr-1000v:17_2_1-byol:17.2.120200508 --admin-username azureuser --admin-password Msft123Msft123 --no-wait --location "UK West"
-</pre>
+az network vnet create --name vpnhub --resource-group $rgname --address-prefix 10.0.0.0/16 --location $UK
+az network vnet subnet create --address-prefix 10.0.1.0/24 --name InsideSubnet --resource-group $rgname --vnet-name vpnhub 
+az network vnet subnet create --address-prefix 10.0.0.0/24 --name OutsideSubnet --resource-group $rgname --vnet-name vpnhub
+az network vnet subnet create --address-prefix 10.0.10.0/24 --name testVMSubnet --resource-group $rgname --vnet-name vpnhub
 
-**Build Hub1, Spoke1, Spoke2 and Azure firewall in East US. Also build the Jump VM, Spoke1VM and Spoke2VM**
-<pre lang="...">
-az network vnet create --resource-group vpn --name Hub1 --location eastus --address-prefixes 10.1.0.0/24 --subnet-name AzureFirewallSubnet --subnet-prefix 10.1.0.0/26 
-az network vnet create --resource-group vpn --name Spoke1 --location eastus --address-prefixes 10.2.0.0/16  --subnet-name Spoke1VMSubnet --subnet-prefix 10.2.10.0/24 
-az network vnet subnet create --address-prefix 10.2.1.0/24 --name JumpSubnet --resource-group vpn --vnet-name Spoke1
-az network vnet create --resource-group vpn --name Spoke2 --location eastus --address-prefixes 10.3.0.0/16 --subnet-name Spoke2VMSubnet --subnet-prefix 10.3.10.0/24 
+az network public-ip create --name CSR1PublicIP --resource-group $rgname --idle-timeout 30 --allocation-method Static --location $UK
+az network nic create --name CSR1OutsideInterface --resource-group $rgname --subnet OutsideSubnet --vnet onprem --public-ip-address CSR1PublicIP --ip-forwarding true --location $UK
+az network nic create --name CSR1InsideInterface --resource-group $rgname --subnet InsideSubnet --vnet onprem --ip-forwarding true --location $UK
+az vm create --resource-group $rgname --location $UK --name CSR1 --size Standard_D2_v2 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:17_2_1-byol:17.2.120200508 --admin-username azureuser --admin-password Msft123Msft123 --no-wait 
 
-az network public-ip create --name AZFW1-pip --resource-group vpn --location eastus --allocation-method static --sku standard
-az network firewall create --name AZFW1 --resource-group vpn --location eastus
-az network firewall ip-config create --firewall-name AZFW1 --name FW-config --public-ip-address AZFW1-pip --resource-group vpn --vnet-name Hub1
-az network firewall update --name AZFW1 --resource-group vpn
+az network public-ip create --name CSR2PublicIP --resource-group $rgname --idle-timeout 30 --allocation-method Static --location $UK
+az network nic create --name CSR2OutsideInterface --resource-group $rgname --subnet OutsideSubnet --vnet vpnhub --public-ip-address CSR2PublicIP --ip-forwarding true --location $UK
+az network nic create --name CSR2InsideInterface --resource-group $rgname --subnet InsideSubnet --vnet vpnhub --ip-forwarding true --location $UK
+az vm create --resource-group $rgname --location $UK --name CSR2 --size Standard_D2_v2 --nics CSR2OutsideInterface CSR2InsideInterface  --image cisco:cisco-csr-1000v:17_2_1-byol:17.2.120200508 --admin-username azureuser --admin-password Msft123Msft123 --no-wait 
 
-az network public-ip create --name JumpVM-pip --resource-group vpn --location eastus --allocation-method Dynamic
-az network nic create --resource-group vpn -n JumpVMNIC --location eastus --subnet JumpSubnet --private-ip-address 10.2.1.10 --vnet-name Spoke1 --public-ip-address JumpVM-pip --ip-forwarding true
-az vm create -n JumpVM -g vpn --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics JumpVMNIC --no-wait --location eastus
-az network nic create --resource-group vpn -n Spoke1VMNIC --location eastus --subnet Spoke1VMSubnet --private-ip-address 10.2.10.10 --vnet-name Spoke1 --ip-forwarding true
-az vm create -n Spoke1VM -g vpn --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics Spoke1VMNIC --no-wait --location eastus
-az network nic create --resource-group vpn -n Spoke2VMNIC --location eastus --subnet Spoke2VMSubnet --private-ip-address 10.3.10.10 --vnet-name Spoke2 --ip-forwarding true
-az vm create -n Spoke2VM -g vpn --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics Spoke2VMNIC --no-wait --location eastus
-</pre>
 
-**Build VNET peering. Replace XXXXX with your subscription**
-<pre lang="...">
-az network vnet peering create -g vpn -n Hub1-To-vpnhub --vnet-name Hub1 --allow-vnet-access --allow-forwarded-traffic --remote-vnet /subscriptions/XXXXX/resourceGroups/vpn/providers/Microsoft.Network/virtualNetworks/vpnhub
-az network vnet peering create -g vpn -n vpnhub-to-Hub1 --vnet-name vpnhub --allow-vnet-access --allow-forwarded-traffic --remote-vnet /subscriptions/XXXXX/resourceGroups/vpn/providers/Microsoft.Network/virtualNetworks/Hub1
-az network vnet peering create -g vpn -n Hub1-to-Spoke1 --vnet-name Hub1 --allow-vnet-access --allow-forwarded-traffic --remote-vnet /subscriptions/XXXXX/resourceGroups/vpn/providers/Microsoft.Network/virtualNetworks/Spoke1
-az network vnet peering create -g vpn -n Hub1-to-Spoke2 --vnet-name Hub1 --allow-vnet-access --allow-forwarded-traffic --remote-vnet /subscriptions/XXXXX/resourceGroups/vpn/providers/Microsoft.Network/virtualNetworks/Spoke2
-az network vnet peering create -g vpn -n Spoke1-to-Hub1 --vnet-name Spoke1 --allow-vnet-access --allow-forwarded-traffic --remote-vnet /subscriptions/XXXXX/resourceGroups/vpn/providers/Microsoft.Network/virtualNetworks/Hub1
-az network vnet peering create -g vpn -n Spoke2-to-Hub1 --vnet-name Spoke2 --allow-vnet-access --allow-forwarded-traffic --remote-vnet /subscriptions/XXXXX/resourceGroups/vpn/providers/Microsoft.Network/virtualNetworks/Hub1
-</pre>
+# Build Hub1, Spoke1, Spoke2 and Azure firewall in East US. Also build the Jump VM, Spoke1VM and Spoke2VM
 
-**Build route table for Azure firewall to send 10.100/16 to the CSR. Also build route table for the inside CSR2 interface to route Spoke1/2 to Azure firewall.**
-<pre lang="...">
-az network route-table create --name AZFW1-RT --resource-group vpn --location eastus
-az network route-table route create --resource-group vpn --name to-Internet --route-table-name AZFW1-RT --address-prefix 0.0.0.0/0 --next-hop-type Internet
-az network route-table route create --resource-group vpn --name to-onprem --route-table-name AZFW1-RT --address-prefix 10.100.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.0.1.4
-az network vnet subnet update -n AzureFirewallSubnet -g vpn --vnet-name Hub1 --address-prefixes 10.1.0.0/26 --route-table AZFW1-RT
+az network vnet create --resource-group $rgname --name Hub1 --address-prefixes 10.1.0.0/24 --subnet-name AzureFirewallSubnet --subnet-prefix 10.1.0.0/26 --location $US
+az network vnet create --resource-group $rgname --name Spoke1 --address-prefixes 10.2.0.0/16  --subnet-name Spoke1VMSubnet --subnet-prefix 10.2.10.0/24 --location $US
+az network vnet subnet create --address-prefix 10.2.1.0/24 --name JumpSubnet --resource-group $rgname --vnet-name Spoke1
+az network vnet create --resource-group $rgname --name Spoke2 --address-prefixes 10.3.0.0/16 --subnet-name Spoke2VMSubnet --subnet-prefix 10.3.10.0/24 --location $US
 
-az network route-table create --name CSR2inside-RT --resource-group vpn --location "UK West"
-az network route-table route create --resource-group vpn --name to-spoke1 --route-table-name CSR2inside-RT --address-prefix 10.2.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.1.0.4
-az network route-table route create --resource-group vpn --name to-spoke2 --route-table-name CSR2inside-RT --address-prefix 10.3.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.1.0.4
-az network vnet subnet update -n InsideSubnet -g vpn --vnet-name vpnhub --address-prefixes 10.0.1.0/24 --route-table CSR2inside-RT 
-</pre>
+az network public-ip create --name AZFW1-pip --resource-group $rgname --location $US --allocation-method static --sku standard
+az network firewall create --name AZFW1 --resource-group $rgname --location $US
+az network firewall ip-config create --firewall-name AZFW1 --name FW-config --public-ip-address AZFW1-pip --resource-group $rgname --vnet-name Hub1
+az network firewall update --name AZFW1 --resource-group $rgname
 
-**Build route table for Spoke1/2 VM subnets with a default route to Azure firewall**
-<pre lang="...">
-az network route-table create --name Spoke1-RT --resource-group vpn --location eastus --disable-bgp-route-propagation
-az network route-table route create --resource-group vpn --name Default-Route --route-table-name Spoke1-RT --address-prefix 0.0.0.0/0 --next-hop-type VirtualAppliance --next-hop-ip-address 10.1.0.4
-az network vnet subnet update -n Spoke1VMSubnet -g vpn --vnet-name Spoke1 --address-prefixes 10.2.10.0/24 --route-table Spoke1-RT
+az network public-ip create --name JumpVM-pip --resource-group $rgname --location $US --allocation-method Dynamic
+az network nic create --resource-group $rgname -n JumpVMNIC --location $US --subnet JumpSubnet --private-ip-address 10.2.1.10 --vnet-name Spoke1 --public-ip-address JumpVM-pip --ip-forwarding true
+az vm create -n JumpVM --resource-group $rgname --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics JumpVMNIC --no-wait --location $US
+az network nic create --resource-group $rgname -n Spoke1VMNIC --location $US --subnet Spoke1VMSubnet --private-ip-address 10.2.10.10 --vnet-name Spoke1 --ip-forwarding true
+az vm create -n Spoke1VM --resource-group $rgname --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics Spoke1VMNIC --no-wait --location $US
+az network nic create --resource-group $rgname -n Spoke2VMNIC --location $US --subnet Spoke2VMSubnet --private-ip-address 10.3.10.10 --vnet-name Spoke2 --ip-forwarding true
+az vm create -n Spoke2VM --resource-group $rgname --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics Spoke2VMNIC --no-wait --location $US
 
-az network route-table create --name Spoke2-RT --resource-group vpn --location eastus --disable-bgp-route-propagation
-az network route-table route create --resource-group vpn --name Default-Route --route-table-name Spoke2-RT --address-prefix 0.0.0.0/0 --next-hop-type VirtualAppliance --next-hop-ip-address 10.1.0.4
-az network vnet subnet update -n Spoke2VMSubnet -g vpn --vnet-name Spoke2 --address-prefixes 10.3.10.0/24 --route-table Spoke2-RT
-</pre>
 
-**Create a basic Azure firewall rule to allow 10/8 to any. Adjust as needed.**
-<pre lang="...">
-az network firewall network-rule create --resource-group vpn --firewall-name AZFW1 --collection-name AZFW1-rules --priority 100 --action Allow --name Allow-All --protocols Any --source-addresses 10.0.0.0/8 --destination-addresses * --destination-ports *
-</pre>
+# Find VNET ID and create VNET peering. 
 
-**Create a test VM in the on prem network and routes for Spoke1/2.**
-<pre lang="...">
-az network public-ip create --name onpremVMPubIP --resource-group vpn --location "UK West" --allocation-method Static
-az network nic create --resource-group vpn -n onpremVMNIC --location "UK West" --subnet testVMSubnet --private-ip-address 10.100.10.10 --vnet-name onprem --public-ip-address onpremVMPubIP --ip-forwarding true
-az vm create -n onpremVM -g vpn --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics onpremVMNIC --no-wait --location "UK West"
+Hub1Id=$(az network vnet show --resource-group $rgname --name Hub1 --query id --out tsv)
+vpnhubId=$(az network vnet show --resource-group $rgname --name vpnhub --query id --out tsv)
+Spoke1Id=$(az network vnet show --resource-group $rgname --name Spoke1 --query id --out tsv)
+Spoke2Id=$(az network vnet show --resource-group $rgname --name Spoke2 --query id --out tsv)
+az network vnet peering create --name Hub1-To-vpnhub --resource-group $rgname --vnet-name Hub1 --remote-vnet $vpnhubId --allow-vnet-access
+az network vnet peering create --name vpnhub-to-Hub1 --resource-group $rgname --vnet-name vpnhub --remote-vnet $Hub1Id --allow-vnet-access
+az network vnet peering create --name Hub1-To-Spoke1 --resource-group $rgname --vnet-name Hub1 --remote-vnet $Spoke1Id --allow-vnet-access
+az network vnet peering create --name Spoke1-to-Hub1 --resource-group $rgname --vnet-name Spoke1 --remote-vnet $Hub1Id --allow-vnet-access
+az network vnet peering create --name Hub1-To-Spoke2 --resource-group $rgname --vnet-name Hub1 --remote-vnet $Spoke2Id --allow-vnet-access
+az network vnet peering create --name Spoke2-to-Hub1 --resource-group $rgname --vnet-name Spoke2 --remote-vnet $Hub1Id --allow-vnet-access
 
-az network route-table create --name onprem-rt --resource-group vpn --location "UK West"
-az network route-table route create --name to-spoke1 --resource-group vpn --route-table-name onprem-rt --address-prefix 10.2.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.4
-az network route-table route create --name to-spoke2 --resource-group vpn --route-table-name onprem-rt --address-prefix 10.3.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.4
-az network vnet subnet update --name testVMSubnet --vnet-name onprem --resource-group vpn --route-table onprem-rt
-</pre>
 
-**Document all public IPs and paste them in notepad.**
-<pre lang="...">
-az network public-ip show --name JumpVM-pip --resource-group vpn --query [ipAddress] --output tsv
-az network public-ip show --name CSR2PublicIP --resource-group vpn --query [ipAddress] --output tsv
-az network public-ip show --name CSR1PublicIP --resource-group vpn --query [ipAddress] --output tsv
-az network public-ip show --name onpremVMPubIP --resource-group vpn --query [ipAddress] --output tsv
-az network public-ip show --name AZFW1-pip --resource-group vpn --query [ipAddress] --output tsv
-</pre>
+# Build route table for Azure firewall to send 10.100/16 to the CSR. Also build route table for the inside CSR2 interface to route Spoke1/2 to Azure firewall.
 
-**As a quick test, you can SSH to the Jump VM, from there SSH to Spoke1VM (10.2.10.10). Run curl ipconfig.io and the address should match the public IP of the Azure firewall. There will not yet be reachability between Spoke1/2 and on prem.**
+az network route-table create --name AZFW1-RT --resource-group $rgname --location $US
+az network route-table route create --resource-group $rgname --name to-Internet --route-table-name AZFW1-RT --address-prefix 0.0.0.0/0 --next-hop-type Internet
+az network route-table route create --resource-group $rgname --name to-onprem --route-table-name AZFW1-RT --address-prefix 10.100.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.0.1.4
+az network vnet subnet update -n AzureFirewallSubnet --resource-group $rgname --vnet-name Hub1 --address-prefixes 10.1.0.0/26 --route-table AZFW1-RT
+az network route-table create --name CSR2inside-RT --resource-group $rgname --location $UK
+az network route-table route create --resource-group $rgname --name to-spoke1 --route-table-name CSR2inside-RT --address-prefix 10.2.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.1.0.4
+az network route-table route create --resource-group $rgname --name to-spoke2 --route-table-name CSR2inside-RT --address-prefix 10.3.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.1.0.4
+az network vnet subnet update -n InsideSubnet --resource-group $rgname --vnet-name vpnhub --address-prefixes 10.0.1.0/24 --route-table CSR2inside-RT 
+
+
+# Build route table for Spoke1/2 VM subnets with a default route to Azure firewall
+
+az network route-table create --name Spoke1-RT --resource-group $rgname --location $US --disable-bgp-route-propagation
+az network route-table route create --resource-group $rgname --name Default-Route --route-table-name Spoke1-RT --address-prefix 0.0.0.0/0 --next-hop-type VirtualAppliance --next-hop-ip-address 10.1.0.4
+az network vnet subnet update -n Spoke1VMSubnet --resource-group $rgname --vnet-name Spoke1 --address-prefixes 10.2.10.0/24 --route-table Spoke1-RT
+az network route-table create --name Spoke2-RT --resource-group $rgname --location eastus --disable-bgp-route-propagation
+az network route-table route create --resource-group $rgname --name Default-Route --route-table-name Spoke2-RT --address-prefix 0.0.0.0/0 --next-hop-type VirtualAppliance --next-hop-ip-address 10.1.0.4
+az network vnet subnet update -n Spoke2VMSubnet --resource-group $rgname --vnet-name Spoke2 --address-prefixes 10.3.10.0/24 --route-table Spoke2-RT
+
+
+# Create a basic Azure firewall rule to allow 10/8 to any. Adjust as needed.**
+
+az network firewall network-rule create --resource-group $rgname --firewall-name AZFW1 --collection-name AZFW1-rules --priority 100 --action Allow --name Allow-All --protocols Any --source-addresses 10.0.0.0/8 --destination-addresses * --destination-ports *
+
+
+# Create a test VM in the on prem network and routes for Spoke1/2.
+
+az network public-ip create --name onpremVMPubIP --resource-group $rgname --location $UK --allocation-method Static
+az network nic create --resource-group $rgname -n onpremVMNIC --location $UK --subnet testVMSubnet --private-ip-address 10.100.10.10 --vnet-name onprem --public-ip-address onpremVMPubIP --ip-forwarding true
+az vm create -n onpremVM --resource-group $rgname --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics onpremVMNIC --no-wait --location $UK
+az network route-table create --name onprem-rt --resource-group $rgname --location $UK
+az network route-table route create --name to-spoke1 --resource-group $rgname --route-table-name onprem-rt --address-prefix 10.2.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.4
+az network route-table route create --name to-spoke2 --resource-group $rgname --route-table-name onprem-rt --address-prefix 10.3.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.4
+az network vnet subnet update --name testVMSubnet --vnet-name onprem --resource-group $rgname --route-table onprem-rt
+
+
+# Document all public IPs and paste them in notepad.
+
+az network public-ip show --name JumpVM-pip --resource-group $rgname --query [ipAddress] --output tsv
+az network public-ip show --name CSR2PublicIP --resource-group $rgname --query [ipAddress] --output tsv
+az network public-ip show --name CSR1PublicIP --resource-group $rgname --query [ipAddress] --output tsv
+az network public-ip show --name onpremVMPubIP --resource-group $rgname --query [ipAddress] --output tsv
+az network public-ip show --name AZFW1-pip --resource-group $rgname --query [ipAddress] --output tsv
+
 
 **SSH to CSR2 and paste in the below configs. Make sure to change CSR1PublicIP to the public IP of CSR documented in notepad.**
 <pre lang="...">
@@ -275,4 +283,4 @@ router bgp 65001
 ip route 192.168.1.2 255.255.255.255 Tunnel 11
 </pre>
 
-At this point, there should be communication between Spoke1/Spoke2 and the on prem VM. 
+At this point, there should be communication between Spoke1/Spoke2 and the on prem VM. You can also SSH to the Jump VM, from there SSH to Spoke1VM (10.2.10.10). Run curl ipconfig.io and the address should match the public IP of the Azure firewall. There will not yet be reachability between Spoke1/2 and on prem.
