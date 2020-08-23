@@ -30,7 +30,7 @@ Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name 
 Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "17_2_1-byol" | Set-AzureRmMarketplaceTerms -Accept
 </pre>
 
-**Lab Build
+# Lab Build
 <pre lang="...">
 # Define Resource Group and location variables. Build simulated on prem and VPN hub VNET in UK West. Also build CSR1 and CSR2.
 
