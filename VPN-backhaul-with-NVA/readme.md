@@ -141,7 +141,7 @@ az network public-ip show --name CSR2PublicIP --resource-group $rgname --query [
 az network public-ip show --name CSR1PublicIP --resource-group $rgname --query [ipAddress] --output tsv
 az network public-ip show --name onpremVMPubIP --resource-group $rgname --query [ipAddress] --output tsv
 az network public-ip show --name AZFW1-pip --resource-group $rgname --query [ipAddress] --output tsv
-
+</pre>
 
 **SSH to CSR2 and paste in the below configs. Make sure to change CSR1PublicIP to the public IP of CSR documented in notepad.**
 <pre lang="...">
