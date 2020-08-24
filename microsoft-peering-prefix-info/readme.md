@@ -39,3 +39,5 @@ $BGPStorageCommunity = Get-AzureRmBgpServiceCommunity | Where-Object { $_.Name -
 $BGPStorageCommunity.BgpCommunities.CommunityValue
 </pre>
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/bgpstoragecommunityvalue.PNG)
+
+Get-AzureRmBgpServiceCommunity | Where-Object { $_.Name -eq "AzureEastUS" }
