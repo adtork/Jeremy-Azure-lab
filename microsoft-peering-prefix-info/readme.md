@@ -42,7 +42,7 @@ $BGPStorageCommunity.BgpCommunities.CommunityValue
 
 **Show all information about the "AzureEastUS" prefixes**
 <pre lang="...">
-$BGPCommunityCount = Get-AzureRmBgpServiceCommunity | Where-Object { $_.Name -eq "AzureEastUS" }
+Get-AzureRmBgpServiceCommunity | Where-Object { $_.Name -eq "AzureEastUS" }
 </pre>
 
 **Count the number of prefixes in the "AzureEastUS" community**
