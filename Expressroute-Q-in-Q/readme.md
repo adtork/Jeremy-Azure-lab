@@ -7,6 +7,7 @@ Some Expressroute service providers require customers to use 802.1Q tunneling (a
 - Expressroute requires EBGP and does not support multihop.
 - C-tags (inner tags) is a customer configurable VLAN you assign to your Expressroute circuit. Both paths for your circuit will be assigned the same VLAN (ex VLAN 100)
 - S-tags (outer tags) are not customer configurable in Expressroute. S-tags are handled by your provider and Azure to ensure they are unique throughout their network. EX: customer defines VLAN 100 (C-tag) for the circuit. Azure will insert an outer S-tag (ex 1000) to encapsulate VLAN 100 and transport to the correct provider edge. The customer edge gear will receive S-tag 1000, strip the outer tag and will be presented the inner tag 100. It's CRITICAL to understand the physcal handoffs you receive from the provider, the hardware/software you are using for termination and if you will also be terminating BGP on the same gear (not all hardware/software supports that combination). You can acquire the S-tag from your provider if you are terminating Q-in-Q on customer equipment. 
+- The S-tag between Azure and the provider can't be changed. Some providers will allow you to change the S-tag between the provider edge and customer edge if the customer needs a specific S-tag.
 
 
 This guide will show Q-in-Q basic configs as well as more advanced configurations specific to Expressroute topologies. All configurations are done using simulation software so syntax may be slightly different. 
