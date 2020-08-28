@@ -11,4 +11,5 @@ Some Expressroute service providers require customers to use 802.1Q tunneling (a
 
 This guide will show Q-in-Q basic configs as well as more advanced configurations specific to Expressroute topologies. All configurations are done using simulation software so syntax may be slightly different. 
 
+# Basic Q-in-Q topology, configuration and order of operations. This is not an Expressroute topology.
 ![alt text](https://github.com/jwrightazure/lab/blob/master/Expressroute-Q-in-Q/q-in-q-topo.PNG)
