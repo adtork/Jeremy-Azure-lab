@@ -1,4 +1,4 @@
-# Expressroute 802.1Q Tunneling (Q-in-Q)- draft
+# Expressroute 802.1ad Tunneling (Q-in-Q)- draft
 Some Expressroute service providers require customers to use 802.1Q tunneling (aka Q-in-Q) for circuit termination. Other Expressroute Service Providers have the ability to terminate Q-in-Q for the customer and provide Q trunks, VLAN tagged, or untagged packets to the customer. Expressroute details are outside the scope of this document. Other important items to consider when terminating Q-in-Q for Expressroute:
 
 - Ethertype must be 0x8100
