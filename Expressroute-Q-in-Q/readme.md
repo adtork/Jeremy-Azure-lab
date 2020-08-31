@@ -1,4 +1,4 @@
-# Expressroute 802.1ad Tunneling (Q-in-Q)- draft
+# Expressroute 802.1ad (Q-in-Q)- draft
 Some Expressroute service providers require customers to use 802.1Q tunneling (aka Q-in-Q) for circuit termination. Other Expressroute Service Providers have the ability to terminate Q-in-Q for the customer and provide Q trunks, VLAN tagged, or untagged packets to the customer. Expressroute details are outside the scope of this document. Other important items to consider when terminating Q-in-Q for Expressroute:
 
 - Ethertype must be 0x8100
@@ -14,3 +14,10 @@ This guide will show Q-in-Q basic configs as well as more advanced configuration
 
 # Basic Q-in-Q topology, configuration and order of operations. This is not an Expressroute topology.
 ![alt text](https://github.com/jwrightazure/lab/blob/master/Expressroute-Q-in-Q/q-in-q-topo.PNG)
+
+In the above topology, R1 and R2 interfaces are on the same subnet seperated by the service provider Q-in-Q network. R1 and R2 interfaces will tag packets as VLAN 100. The service provider switches will tunnel any tagged packets it receives from the customer with S-tag 1000. The service provider network knows nothing about customer VLAN 100 (C-tag) and simply switches VLAN 1000 (S-tag) throughout their network. 
+
+# Tracing a packet when pinging from R1 to R2
+![alt text](https://github.com/jwrightazure/lab/blob/master/Expressroute-Q-in-Q/packet-capture-summary.PNG)
+
+The trace shows that R1 will tag packets with VLAN 100 when pinging R2 and ethertype 0x800. SW1 will apply S-tag 1000 on top of VLAN 100 and forward it to SW2. SW2 is simply switching VLAN 1000 packets. SW3 will strip the S-tag 1000, and forward the packet to R2 with a tag of 100.
