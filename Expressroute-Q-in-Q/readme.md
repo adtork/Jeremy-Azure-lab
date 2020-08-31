@@ -23,3 +23,8 @@ In the above topology, R1 and R2 interfaces are on the same subnet seperated by 
 ![alt text](https://github.com/jwrightazure/lab/blob/master/Expressroute-Q-in-Q/packet-capture-summary.PNG)
 
 The trace shows that R1 will tag packets with VLAN 100 when pinging R2 and ethertype 0x0800. SW1 will apply S-tag 1000 with ethertype 0x8100 on top of VLAN 100 and forward it to SW2. SW2 is simply switching VLAN 1000 packets. SW3 will strip the S-tag 1000, and forward the packet to R2 with a tag of 100 ethertype 0x0800.
+
+# Back to back Q-in-Q 
+![alt text](https://github.com/jwrightazure/lab/blob/master/Expressroute-Q-in-Q/q-in-q-b2b.PNG)
+
+In the back to back example, you can see that you can have multiple S-tags (1000,2000) arrive on different logical interfaces and present the same C-tag (100). The 0x9100 ethertype can be ignored as this is specific to my lab. 
