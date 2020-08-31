@@ -15,7 +15,7 @@ This guide will show Q-in-Q basic configs as well as more advanced configuration
 # Basic Q-in-Q topology, configuration and order of operations. This is not an Expressroute topology.
 ![alt text](https://github.com/jwrightazure/lab/blob/master/Expressroute-Q-in-Q/q-in-q-topo.PNG)
 
-In the above topology, R1 and R2 interfaces are on the same subnet seperated by the service provider Q-in-Q network. R1 and R2 interfaces will tag packets as VLAN 100. The service provider switches will tunnel any tagged packets it receives from the customer with S-tag 1000. The service provider network knows nothing about customer VLAN 100 (C-tag) and simply switches VLAN 1000 (S-tag) throughout their network. In this topology, the service provider switches facing the customer are responsible for stripping the packet.
+In the above topology, R1 and R2 interfaces are on the same subnet seperated by the service provider Q-in-Q network. R1 and R2 interfaces will tag packets as VLAN 100. The service provider switches will tunnel any tagged packets it receives from the customer with S-tag 1000. The service provider network knows nothing about customer VLAN 100 (C-tag) and simply switches VLAN 1000 (S-tag) throughout their network. In this topology, the service provider switches facing the customer are responsible for stripping the S-tag.
 
 # Tracing a packet when pinging from R1 to R2
 ![alt text](https://github.com/jwrightazure/lab/blob/master/Expressroute-Q-in-Q/packet-capture-summary.PNG)
