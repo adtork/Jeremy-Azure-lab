@@ -27,4 +27,4 @@ The trace shows that R1 will tag packets with VLAN 100 when pinging R2 and ether
 # Back to back Q-in-Q 
 ![alt text](https://github.com/jwrightazure/lab/blob/master/Expressroute-Q-in-Q/q-in-q-b2b.PNG)
 
-In the back to back example, you can see that you can have multiple S-tags (1000,2000) arrive on different logical interfaces and present the same C-tag (100). The 0x9100 ethertype can be ignored as this is specific to my lab. 
+In the back to back example, you can see that you can have multiple S-tags (1000,2000) arrive on different logical interfaces and present the same C-tag (100). The 0x9100 ethertype can be ignored as this is specific to my lab. When a customer terminates Q-in-Q on a single physical interface (2 logical interfaces), the S-tag must be unique. If the customer terminates Q-in-Q on seperate physical devices, the S-tag can be the same. Please check your hardware/software to validate.
