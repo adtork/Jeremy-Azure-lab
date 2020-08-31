@@ -20,4 +20,4 @@ In the above topology, R1 and R2 interfaces are on the same subnet seperated by 
 # Tracing a packet when pinging from R1 to R2
 ![alt text](https://github.com/jwrightazure/lab/blob/master/Expressroute-Q-in-Q/packet-capture-summary.PNG)
 
-The trace shows that R1 will tag packets with VLAN 100 when pinging R2 and ethertype 0x800. SW1 will apply S-tag 1000 on top of VLAN 100 and forward it to SW2. SW2 is simply switching VLAN 1000 packets. SW3 will strip the S-tag 1000, and forward the packet to R2 with a tag of 100.
+The trace shows that R1 will tag packets with VLAN 100 when pinging R2 and ethertype 0x800. SW1 will apply S-tag 1000 with ethertype 0x8100 on top of VLAN 100 and forward it to SW2. SW2 is simply switching VLAN 1000 packets. SW3 will strip the S-tag 1000, and forward the packet to R2 with a tag of 100.
