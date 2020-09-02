@@ -1,3 +1,5 @@
+# This lab creates 1 hub, 100 spokes and peers them together.
+
 #!/bin/bash
 #Create basic variables for Resource Group, Azure Region, and a number variable for the number of spoke VNETs you want to create. 
 #The "NUM" variable wil determine the number of spokes that are provisioned. Lab is set to 100 spokes. Change the number to the amount of spokes needed.
