@@ -11,6 +11,8 @@ NUM=100
 #Create the Resource Group, Hub1 VNET and an Azure Firewall Subnet (Azure Firewall will be used in a seperate lab)
 az group create --name $rgname --location $US --output none
 az network vnet create --resource-group $rgname --name Hub1 --address-prefixes 10.1.0.0/24 --subnet-name AzureFirewallSubnet --subnet-prefix 10.1.0.0/26 --location $US --output none
+</pre>
+
 
 <pre lang="...">
 #Create the amount of spoke VNETs specified in the "NUM" value with the first 2 octets being 10.1 and the 3rd octect will increment by one as the spoke VNETS are created.
