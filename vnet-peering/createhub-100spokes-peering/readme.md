@@ -16,7 +16,7 @@ az network vnet create --resource-group $rgname --name Hub1 --address-prefixes 1
 </pre>
 
 **Create the amount of spoke VNETs specified in the "NUM" value with the first 2 octets being 10.1 and the 3rd octect will increment by one as the spoke VNETS are created.
-Spoke1 will get 10.1.1/24, spoke2 will get 10.1.2/24 up until the number of spokes you specified.
+Spoke1 will get 10.1.1/24, spoke2 will get 10.1.2/24 up until the number of spokes you specified.**
 <pre lang="...">
 for ((i=0; i<NUM; i++)); do
     echo az network vnet create --resource-group $rgname --name spoke$(( $i + 1 )) --address-prefixes 10.1.$(( $i + 1 )).0/24  --subnet-name default --subnet-prefix 10.1.$(( $i + 1 )).0/24 --location $US --output none
