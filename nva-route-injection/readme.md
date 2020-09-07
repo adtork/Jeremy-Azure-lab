@@ -5,13 +5,14 @@
 **Topology**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/nva-route-injection/routeinjectiontopo.PNG)
 
-**Before deploying CSRs in the next steps, you may have to accept license agreement unless you have used it before. You can accomplish this through deploying a CSR in the portal or Powershell commands via Cloudshell**
+**Before deploying CSRs in the next steps, you may have to accept license agreement unless you have used it before. You can accomplish this through deploying a CSR in the portal or Powershell commands via Cloudshell.**
 <pre lang="...">
 Sample Powershell:
 Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "17_2_1-byol"
 Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "17_2_1-byol" | Set-AzureRmMarketplaceTerms -Accept
 </pre>
 
+**Lab build**
 <pre lang="...">
 #Create the Resource Group, Hub1 VNET, Azure VPN Gateway and the CSR in the hub.
 rg="route-injection"
