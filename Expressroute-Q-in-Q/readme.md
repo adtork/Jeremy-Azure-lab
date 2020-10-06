@@ -1,7 +1,7 @@
 # Expressroute 802.1ad (Q-in-Q)- draft
 Some Expressroute service providers require customers to use 802.ad tunneling (aka Q-in-Q) for circuit termination. Other Expressroute Service Providers have the ability to terminate Q-in-Q for the customer and provide Q trunks, VLAN tagged, or untagged packets to the customer. Expressroute details are outside the scope of this document. Other important items to consider when terminating Q-in-Q for Expressroute:
 
-- Ethertype must be 0x8100
+- Ethertype must be 0x8100 (any reference to 0x9100 is specific to my lab only)
 - A single Expressroute circuit is made up of 2 physical paths. Each physical path requires BGP peering to the Micrsoft Edge Routers (MSEEs).
 - It's highly recommended that customers work with their provider to determine if the customer will receive 1 or 2 physical hand offs and the impact on path redundancy.
 - Expressroute requires EBGP and does not support multihop.
@@ -27,4 +27,9 @@ The trace shows that R1 will tag packets with VLAN 100 when pinging R2 and ether
 # Back to back Q-in-Q 
 ![alt text](https://github.com/jwrightazure/lab/blob/master/Expressroute-Q-in-Q/q-in-q-b2b.PNG)
 
-In the back to back example, you can see that you can have multiple S-tags (1000,2000) arrive on different logical interfaces and present the same C-tag (100). The 0x9100 ethertype can be ignored as this is specific to my lab. When a customer terminates Q-in-Q on a single physical interface (2 logical interfaces), the S-tag must be unique. If the customer terminates Q-in-Q on seperate physical interfaces on the same device, the S-tag can be the same. Please check your hardware/software to validate.
+In the back to back example, you can see that you can have multiple S-tags (1000,2000) arrive on different logical interfaces and present the same C-tag (100).  When a customer terminates Q-in-Q on a single physical interface (2 logical interfaces), the S-tag must be unique. If the customer terminates Q-in-Q on seperate physical interfaces on the same device, the S-tag can be the same. Please check your hardware/software to validate.
+
+# Lab 1 - Expressroute with single CE, single handoff from provider
+![alt text]()
+
+Lab 1 shows a basic L2 Expressroute topology where the provider is only giving 1 physical handoff to the CE. As previously mentioned, each Microsoft Edge router (MSEE) will send the SAME S-tag to the provider switch(es). Most, if not all providers will have the ability to rewrite outer tags. For simplicity purposes, I've configured each MSEE to send a unique S-tag instead of rewriting S-tag at the switch level. The CE is terminating Q-in-Q on a single interface. Remember, depending on your edge HW/SW, you probably cannot terminate the same S-tag on 2 different subinterfaces belonging to the same single physical interface (this is why S-tag rewites are important). Each subinterface is configured to receive a unique S-tag (1000,2000), and the same C-tag (100). C-tag 100 is what the customer configures as the VLAN associated to the Expressroute circuit. The CE is BGP peerign with both MSEEs, sending a summary route of 10/8. The simulated VNET is 10.10.10/24. 
