@@ -1,5 +1,7 @@
 # Expressroute 802.1ad (Q-in-Q)- draft
-Some Expressroute service providers require customers to use 802.ad tunneling (aka Q-in-Q) for circuit termination. Other Expressroute Service Providers have the ability to terminate Q-in-Q for the customer and provide Q trunks, VLAN tagged, or untagged packets to the customer. Expressroute details are outside the scope of this document. Other important items to consider when terminating Q-in-Q for Expressroute:
+Some Expressroute service providers require customers to use 802.ad tunneling (aka Q-in-Q) for circuit termination. Other Expressroute Service Providers have the ability to terminate Q-in-Q for the customer and provide Q trunks, VLAN tagged, or untagged packets to the customer. This guide is intended to provide a high level overview of Q-in-Q functionality as well as example configurations for common Expressroute topologies. Expressroute details are outside the scope of this document. 
+
+*Important items to consider when terminating Q-in-Q for Expressroute*
 
 - Ethertype must be 0x8100 (any reference to 0x9100 is specific to my lab only)
 - A single Expressroute circuit is made up of 2 physical paths. Each physical path requires BGP peering to the Micrsoft Edge Routers (MSEEs).
