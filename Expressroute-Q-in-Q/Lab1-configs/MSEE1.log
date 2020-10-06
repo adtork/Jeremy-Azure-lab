@@ -1,0 +1,46 @@
+﻿MSEE1#sh run
+Building configuration...
+
+interface GigabitEthernet1
+ description Expressroute
+ dot1q tunneling ethertype 0x9100
+!
+interface GigabitEthernet1.100
+ description private peering path A S-tag 1000 C-tag 100
+ encapsulation dot1Q 1000 second-dot1q 100
+ ip address 172.16.1.2 255.255.255.252
+!
+router bgp 12076
+ bgp log-neighbor-changes
+ neighbor 10.0.24.4 remote-as 65515
+ neighbor 172.16.1.1 remote-as 65001
+ neighbor 172.16.1.1 soft-reconfiguration inbound
+!
+MSEE1#sh ip bgp neighbors 172.16.1.1 received-routes 
+BGP table version is 8, local router ID is 192.168.1.2
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal, 
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter, 
+              x best-external, a additional-path, c RIB-compressed, 
+              t secondary path, 
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>   1.1.1.1/32       172.16.1.1               0             0 65001 i
+ *>   10.0.0.0         172.16.1.1               0             0 65001 i
+
+Total number of prefixes 2 
+!
+MSEE1#sh ip bgp
+BGP table version is 8, local router ID is 192.168.1.2
+Status codes: s suppressed, d damped, h history, * valid, > best, i - internal, 
+              r RIB-failure, S Stale, m multipath, b backup-path, f RT-Filter, 
+              x best-external, a additional-path, c RIB-compressed, 
+              t secondary path, 
+Origin codes: i - IGP, e - EGP, ? - incomplete
+RPKI validation codes: V valid, I invalid, N Not found
+
+     Network          Next Hop            Metric LocPrf Weight Path
+ *>   1.1.1.1/32       172.16.1.1               0             0 65001 i
+ *>   10.0.0.0         172.16.1.1               0             0 65001 i
+ *>   10.10.10.0/24    10.0.24.4                0             0 65515 i
