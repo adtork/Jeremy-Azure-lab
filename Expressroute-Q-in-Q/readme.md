@@ -21,11 +21,6 @@ This guide will show Q-in-Q basic configs as well as more advanced configuration
 
 In the above topology, R1 and R2 interfaces are on the same subnet seperated by the service provider Q-in-Q network. R1 and R2 interfaces will tag packets as VLAN 100. The service provider switches will tunnel any tagged packets it receives from the customer with S-tag 1000. The service provider network knows nothing about customer VLAN 100 (C-tag) and simply switches VLAN 1000 (S-tag) throughout their network. In this topology, the service provider switches facing the customer are responsible for stripping the S-tag.
 
-# Tracing a packet when pinging from R1 to R2
-![alt text](https://github.com/jwrightazure/lab/blob/master/Expressroute-Q-in-Q/packet-capture-summary.PNG)
-
-The trace shows that R1 will tag packets with VLAN 100 when pinging R2 and ethertype 0x0800. SW1 will apply S-tag 1000 with ethertype 0x8100 on top of VLAN 100 and forward it to SW2. SW2 is simply switching VLAN 1000 packets. SW3 will strip the S-tag 1000, and forward the packet to R2 with a tag of 100 ethertype 0x0800.
-
 # Back to back Q-in-Q 
 ![alt text](https://github.com/jwrightazure/lab/blob/master/Expressroute-Q-in-Q/q-in-q-b2b.PNG)
 
