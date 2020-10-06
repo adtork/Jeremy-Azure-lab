@@ -34,3 +34,5 @@ Lab 1 shows a basic L2 Expressroute topology where the provider is only giving 1
 # Lab 2 - Expressroute with single CE, multiple handoffs from provider
 ![alt text](https://github.com/jwrightazure/lab/blob/master/Expressroute-Q-in-Q/Lab2-configs/sr-mi.png)
 
+Lab 2 is almost identical to lab 1. All IP addressing, BGP etc are all the same. The only difference is CSR1 is terminating Q-in-Q on multiple phyical interfaces. This *should* allow you to receive the same S-TAG from both path A and path B. 
+
