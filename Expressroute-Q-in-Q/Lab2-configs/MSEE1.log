@@ -1,0 +1,174 @@
+﻿MSEE1#sh run
+Building configuration...
+
+Current configuration : 1864 bytes
+!
+! Last configuration change at 20:22:18 UTC Tue Oct 6 2020
+!
+version 16.6
+service timestamps debug datetime msec
+service timestamps log datetime msec
+platform qfp utilization monitor load 80
+no platform punt-keepalive disable-kernel-core
+platform console serial
+!
+hostname MSEE1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+!
+!
+!
+!         
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+! 
+! 
+! 
+! 
+!
+!
+!         
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+license udi pid CSR1000V sn 9ECOQV28I8B
+diagnostic bootup level minimal
+spanning-tree extend system-id
+!
+!
+!
+!         
+redundancy
+!
+!
+!
+!
+!
+!
+! 
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+! 
+! 
+!         
+!
+interface GigabitEthernet1
+ description Expressroute
+ no ip address
+ negotiation auto
+ dot1q tunneling ethertype 0x9100
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet1.100
+ description private peering path A S-tag 1000 C-tag 100
+ encapsulation dot1Q 1000 second-dot1q 100
+ ip address 172.16.1.2 255.255.255.252
+!
+interface GigabitEthernet2
+ ip address 10.0.24.2 255.255.255.0
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet3
+ no ip address
+ shutdown 
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+interface GigabitEthernet4
+ no ip address
+ shutdown
+ negotiation auto
+ no mop enabled
+ no mop sysid
+!
+router bgp 12076
+ bgp log-neighbor-changes
+ neighbor 10.0.24.4 remote-as 65515
+ neighbor 172.16.1.1 remote-as 65001
+ neighbor 172.16.1.1 soft-reconfiguration inbound
+!
+!
+virtual-service csr_mgmt
+!
+ip forward-protocol nd
+ip http server
+ip http authentication local
+ip http secure-server
+!
+ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+!
+!
+!
+!
+!
+control-plane
+!
+!
+!
+!
+!
+!
+line con 0
+ stopbits 1
+line vty 0
+ login
+line vty 1 2
+ login
+ length 0 
+line vty 3 4
+ login
+!
+!
+!
+!
+!
+!
+end
+
