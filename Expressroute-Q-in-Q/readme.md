@@ -22,7 +22,7 @@ This guide will show Q-in-Q basic configs as well as more advanced configuration
 In the above topology, R1 and R2 interfaces are on the same subnet seperated by the service provider Q-in-Q network. R1 and R2 interfaces will tag packets as VLAN 100. The service provider switches will tunnel any tagged packets it receives from the customer with S-tag 1000. The service provider network knows nothing about customer VLAN 100 (C-tag) and simply switches VLAN 1000 (S-tag) throughout their network. In this topology, the service provider switches facing the customer are responsible for stripping the S-tag.
 
 # Back to back Q-in-Q 
-![alt text]()
+![alt text](https://github.com/jwrightazure/lab/blob/master/Expressroute-Q-in-Q/b2b2.png)
 
 In the back to back example, you can see that you can have multiple S-tags (1000,2000) arrive on different logical interfaces and present the same C-tag (100).  When a customer terminates Q-in-Q on a single physical interface (2 logical interfaces), the S-tag must be unique. If the customer terminates Q-in-Q on seperate physical interfaces on the same device, the S-tag can be the same. Please check your hardware/software to validate.
 
