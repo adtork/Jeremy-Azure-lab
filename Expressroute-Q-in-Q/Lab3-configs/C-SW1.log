@@ -1,0 +1,59 @@
+﻿C-SW1#sh run
+Building configuration...
+
+Current configuration : 2828 bytes
+!
+! Last configuration change at 20:04:47 UTC Wed Oct 7 2020
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+service compress-config
+!
+hostname C-SW1
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vlan 1000
+no aaa new-model
+!
+!
+!
+!
+!         
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+interface GigabitEthernet1/1
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ media-type rj45
+ negotiation auto
+!
+interface GigabitEthernet0/0
+ switchport access vlan 1000
+ switchport mode dot1q-tunnel
+ media-type rj45
+ negotiation auto
+!
+!
+control-plane
+!
+
+end       
+
+
+
