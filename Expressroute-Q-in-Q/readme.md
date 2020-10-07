@@ -3,7 +3,7 @@ Some Expressroute service providers require customers to use 802.ad tunneling (a
 
 **Important items to consider when terminating Q-in-Q for Expressroute**
 
-- Ethertype must be 0x8100
+- Ethertype must be 0x8100 for live Expressroute environments. If you are lab testing with a Cisco CSR, you will need to set the interface ethertype to 0x9100 (dot1q tunneling ethertype 0x9100) 
 - A single Expressroute circuit is made up of 2 physical paths. Each physical path requires BGP peering to the Micrsoft Edge Routers (MSEEs).
 - It's highly recommended that customers work with their provider to determine if the customer will receive 1 or 2 physical hand offs and the impact on path redundancy.
 - Expressroute requires EBGP and does not support multihop.
