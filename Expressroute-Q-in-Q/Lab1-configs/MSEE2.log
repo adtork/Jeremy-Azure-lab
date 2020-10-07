@@ -2,7 +2,6 @@
 !
 interface GigabitEthernet1
  description Expressroute
- dot1q tunneling ethertype 0x9100
 !
 interface GigabitEthernet1.200
  description private peering path A S-tag 2000 C-tag 100
