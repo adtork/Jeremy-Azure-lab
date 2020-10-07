@@ -3,7 +3,7 @@ Some Expressroute service providers require customers to use 802.ad tunneling (a
 
 **Important items to consider when terminating Q-in-Q for Expressroute**
 
-- Ethertype must be 0x8100 (any reference to 0x9100 is specific to my lab only)
+- Ethertype must be 0x8100
 - A single Expressroute circuit is made up of 2 physical paths. Each physical path requires BGP peering to the Micrsoft Edge Routers (MSEEs).
 - It's highly recommended that customers work with their provider to determine if the customer will receive 1 or 2 physical hand offs and the impact on path redundancy.
 - Expressroute requires EBGP and does not support multihop.
@@ -14,7 +14,7 @@ Some Expressroute service providers require customers to use 802.ad tunneling (a
 - You can acquire the S-tag from your provider if you are terminating Q-in-Q on customer equipment. The S-tag between Azure and the provider can't be changed. Some providers will allow you to change the S-tag between the provider edge and customer edge if the customer needs a specific S-tag.
 
 
-This guide will show Q-in-Q basic configs as well as more advanced configurations specific to Expressroute topologies. All configurations are done using simulation software so syntax may be slightly different. 
+This guide will show Q-in-Q basic configs as well as more advanced configurations specific to Expressroute topologies. All configurations are done using simulation software so syntax may be slightly different. The VNET router in each lab is for testing purposes only. On prem L1/L2 connectivity best practices is outside the scope of this document.
 
 # Basic Q-in-Q topology, configuration and order of operations. This is not an Expressroute topology.
 ![alt text](https://github.com/jwrightazure/lab/blob/master/Expressroute-Q-in-Q/basics.png)
