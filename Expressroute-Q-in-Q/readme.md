@@ -36,3 +36,5 @@ Lab 1 shows a basic L2 Expressroute topology where the provider is only giving 1
 
 Lab 2 is almost identical to lab 1. All IP addressing, BGP etc are all the same. The only difference is CSR1 is terminating Q-in-Q on multiple phyical interfaces. This *should* allow you to receive the same S-TAG from both path A and path B. Device configurations are provided in the Lab2-configs folder.
 
+# Lab 3 - Expressroute with single CE, multiple handoffs from provider, customer WAN switch strips S-tag, C-tag + BGP termination on different device than S-tag termination
+
