@@ -37,4 +37,6 @@ Lab 1 shows a basic L2 Expressroute topology where the provider is only giving 1
 Lab 2 is almost identical to lab 1. All IP addressing, BGP etc are all the same. The only difference is CSR1 is terminating Q-in-Q on multiple phyical interfaces. This *should* allow you to receive the same S-TAG from both path A and path B. Device configurations are provided in the Lab2-configs folder.
 
 # Lab 3 - Expressroute with single CE, multiple handoffs from provider, customer WAN switch strips S-tag, C-tag + BGP termination on different device than S-tag termination
+![alt text](https://github.com/jwrightazure/lab/blob/master/Expressroute-Q-in-Q/Lab3-configs/lab33-topo.png)
 
+Lab 3 is a scenario where a customer wants to terminate the S-tag on one of their WAN switches and "terminate" the C-tag/BGP on a different device. As previously mentioned, not all HW/SW have the ability to terminate both the S-tag and C-tag on the same device. In this topology, each MSEE sends the same S-tag (1000) and C-tag (100). The provider switches (P-SW1,P-SW2) only know about VLAN 1000 and are only Q trunks. The 2 customer WAN edge switches (C-SW1,C-SW2) terminate the S-tag and drop off VLAN 100 to R1. R1 is set to tag traffic with VLAN 100 and also has BGP peering with both MSEE1/2. 
