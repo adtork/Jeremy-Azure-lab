@@ -9,7 +9,7 @@ Important points to consider:
 - Available for both ER "traditional" and Direct
 - If the "hub" VNET that owns the ER GW with FP also has a spoke, inbound traffic to the spoke is still processed by the ER GW exactly like non-FP 
 - FP can be configured on existing or new connections
-- Enabling/disabling FP on an existing connection does not impact traffic
+- FP enable/disable should be done during a change window. Expect a small outage.
 - Connection 1 has Fastpath enabled. Connection 2 does not have Fastpath.
 
 
