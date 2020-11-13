@@ -9,7 +9,7 @@ Configure VNET router to send BGP community 100:100 to both MSEE1/2
 Configure CE1 to match community value 100:100 and set a higher weight for path selection
 
 # Topology:
-![alt text](https://github.com/jwrightazure/lab/blob/master/AZVPNGW-deny-branch-to-branch/s2s-branch-deny-topo.PNG)
+![alt text](https://github.com/jwrightazure/lab/blob/master/basic-bgp-community/basic-bgp-community-topo.png)
 
 **Validation:**
 <pre lang="...">
