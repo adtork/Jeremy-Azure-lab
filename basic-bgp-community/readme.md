@@ -2,7 +2,7 @@
 Sample lab showing how to use BGP communities to control outbound path selection. This particular example is matching on a community value and then setting a weight based on the peer. As mentioned, this is for lab purposes only. Final router configs are in this repo.
 
 # Goal:
-- VNET router is advertising 10.100.100.0/24 to both MSEE1 and MSEE1. You have no control of VNET or MSEEs.
+- VNET router is advertising 10.100.100.0/24 to both MSEE1 and MSEE2. You have no control of VNET or MSEEs.
 - CE1 receives 10.100.100.0/24 from both MSEEs and will select the path towards MSEE1 (based on lowest IP)
 - The goal is for CE1 to send traffic for 10.100.100.0/24 to MSEE2 based on BGP community
 - Configure VNET router to send BGP community 100:100 to both MSEE1/2
