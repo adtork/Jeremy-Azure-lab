@@ -12,8 +12,8 @@ Sample lab showing how to use BGP communities to control outbound path selection
 ![alt text](https://github.com/jwrightazure/lab/blob/master/basic-bgp-community/basic-bgp-community-topo.png)
 
 **Validation:**
-<pre lang="...">
 As you can see, CE1 is selecting path to MSEE1 (represented by >)
+<pre lang="...">
 ce1#sh ip bgp
 BGP table version is 2, local router ID is 10.1.13.1
 Status codes: s suppressed, d damped, h history, * valid, > best, i - internal, 
