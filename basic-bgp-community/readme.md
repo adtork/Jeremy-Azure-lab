@@ -1,5 +1,5 @@
 # Basic BGP Community Lab
-Sample lab showing how to use BGP communities to control outbound path selection. This particular example is matching on a community value and then setting a weight based on the peer. As mentioned, this is for lab purposes only. 
+Sample lab showing how to use BGP communities to control outbound path selection. This particular example is matching on a community value and then setting a weight based on the peer. As mentioned, this is for lab purposes only. Final router configs are in this repo.
 
 # Goal:
 VNET router is advertising 10.100.100.0/24 to both MSEE1 and MSEE1. You have no control of VNET or MSEEs.
