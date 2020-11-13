@@ -28,7 +28,7 @@ RPKI validation codes: V valid, I invalid, N Not found
  *>                    10.1.12.2                              0 12076 65515 i
 </pre>
 
-**The VNET router is sending community value 100:100 and CE1 sees it. Note- CE1 sees that community value from both CE1 and CE1**
+**The VNET router is sending community value 100:100 and CE1 sees it. Note- CE1 sees that community value from both MSEE1 and MSEE2**
 <pre lang="...">
 ce1#sh ip bgp 10.100.100.0
 BGP routing table entry for 10.100.100.0/24, version 0
