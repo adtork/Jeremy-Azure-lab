@@ -1,10 +1,10 @@
 # Azure Networking Lab- Basic Expressroute Configurations- Private Peering
-This lab shows the basic configs for Expressroute Private Peering and a few verification commands. Customers do not have access to the Microsoft Edge routers (MSEEs) or the VNET "router" in Azure. The lab includes configurations for the simulated MSEEs and VNET router. 
+This lab shows the basic configs for Expressroute Private Peering and a few verification commands. Customers do not have access to the Microsoft Edge routers (MSEEs) or the VNET "router" in Azure.
 
 # Notes:
 - Assumes ER L2, ER GW and a connection is esablished, switch has correct VLAN/port configs
 - VLAN 100 is used for both path A/B for ER. Provider rewrites to 2 different VLANs (10,20) 
-- BFD enabled BGP is used for peerings
+- BFD enabled BGP is used for peerings (BFD not required)
 - BFD is enabled by default on all new private peering circuits
 - You can enable BFD on an existing ER circuit by resetting (not destroying) your circuit on the Azure side
 - Verify your edge termination device supports BFD enabled BGP
