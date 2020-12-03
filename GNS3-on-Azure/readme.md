@@ -12,7 +12,7 @@ az network vnet create --name GNS3 --resource-group $rg --address-prefix 192.168
 
 # Create NSG to allow your source IP. Make sure to change the "sip" variable above to your source IP
 az network nsg create --resource-group $rg --name GNS3-NSG --location $loc
-az network nsg rule create --resource-group $rg --nsg-name GNS3-NSG --name Allow-HomeSIP --access Allow --protocol "*" --direction Inbound --priority 130 --source-address-prefix $sip --source-port-range "*" --destination-address-prefix "*" --destination-port-range "*"
+az network nsg rule create --resource-group $rg --nsg-name GNS3-NSG --name AllowSIP --access Allow --protocol "*" --direction Inbound --priority 130 --source-address-prefix $sip --source-port-range "*" --destination-address-prefix "*" --destination-port-range "*"
 
 # Create public IP, NIC and GNS3 VM
 az network public-ip create --name GNS3-publicIP --resource-group $rg --location $loc --allocation-method Static
