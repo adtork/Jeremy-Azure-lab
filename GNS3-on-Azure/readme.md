@@ -4,7 +4,7 @@
 <pre lang="...">
 rg="my-GNS3-resource-group"
 loc="eastus2"
-sip="change-to-your-source-IP"
+sip="change-to-your-source-IP/32"
 
 # Create resource group and VNET
 az group create --name $rg --location $loc
