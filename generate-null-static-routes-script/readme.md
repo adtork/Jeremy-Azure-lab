@@ -6,7 +6,7 @@ first = 172
 
 #Define the range for the 2nd octect.
 start_second = 16
-end_second = 16
+end_second = 18
 
 #Define the range of /24 subnets for the 3rd octet
 start_third = 0
