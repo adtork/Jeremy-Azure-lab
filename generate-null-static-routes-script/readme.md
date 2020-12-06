@@ -1,4 +1,4 @@
-# This script will generate /32 static null routes equal to the value specified in num_hosts times the difference between the variables start_third and end_third and write them to a file. The start_second and end_second can be modified for large scale route generation.
+# This script will generate /32 static null routes equal to the value specified in num_hosts times the difference between the variables start_third and end_third and write the static routes to a file. The start_second and end_second can be modified for large scale route generation.
 
 <pre lang="...">
 #Number for the starting 1st octet
@@ -6,11 +6,11 @@ first = 172
 
 #Define the range for the 2nd octect.
 start_second = 16
-end_second = 18
+end_second = 16
 
 #Define the range of /24 subnets for the 3rd octet
 start_third = 0
-end_third = 1
+end_third = 2
 
 #Number of /32 hosts per /24 prefix. The code example assumes that .1 will be the first address.
 num_hosts = 5
@@ -40,4 +40,19 @@ while second_octet <= end_second:
     second_octet += 1
 #At the end when the loops finish based on the conditions close the File.
 text_file.close()
+
+# Opening a file
+file = open("write.txt", "r")
+Counter = 0
+
+# Reading from file
+Content = file.read()
+CoList = Content.split("\n")
+
+for i in CoList:
+    if i:
+        Counter += 1
+
+print("Static routes generated:", Counter)
+
 </pre>
