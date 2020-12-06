@@ -13,7 +13,7 @@ start_third = 0
 end_third = 1
 
 #Number of /32 hosts per /24 prefix. The code example assumes that .1 will be the first address.
-num_hosts = 100
+num_hosts = 5
 
 #Creates a new text file "write.txt"
 text_file = open("write.txt", "w")
