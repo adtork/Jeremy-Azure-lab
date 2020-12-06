@@ -7,10 +7,10 @@ end_second = 16
 
 #Define the range of /24 subnets for the 3rd octet
 start_third = 0
-end_third = 1
+end_third = 2
 
 #Number of /32 hosts per /24 prefix. The code example assumes that .1 will be the first address.
-num_hosts = 100
+num_hosts = 5
 
 #Creates a new text file "write.txt"
 text_file = open("write.txt", "w")
@@ -37,3 +37,17 @@ while second_octet <= end_second:
     second_octet += 1
 #At the end when the loops finish based on the conditions close the File.
 text_file.close()
+
+# Opening a file
+file = open("write.txt", "r")
+Counter = 0
+
+# Reading from file
+Content = file.read()
+CoList = Content.split("\n")
+
+for i in CoList:
+    if i:
+        Counter += 1
+
+print("Static routes generated:", Counter)
