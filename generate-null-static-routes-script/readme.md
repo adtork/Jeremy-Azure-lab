@@ -41,7 +41,7 @@ while second_octet <= end_second:
 #At the end when the loops finish based on the conditions close the File.
 text_file.close()
 
-# Opening a file
+# Open the file generated (placeholder)
 file = open("write.txt", "r")
 Counter = 0
 
