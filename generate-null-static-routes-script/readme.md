@@ -1,4 +1,4 @@
-# This script will generate /32 static null routes equal to the value specified in num_hosts times the difference between the variables start_third and end_third.
+# This script will generate /32 static null routes equal to the value specified in num_hosts times the difference between the variables start_third and end_third. The start_second and end_second can be modified for large scale route generation.
 
 <pre lang="...">
 #Number for the starting 1st octet
