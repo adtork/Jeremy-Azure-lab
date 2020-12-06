@@ -1,4 +1,4 @@
-# Python script to quickly generate /32 static null routes and write them to a file. The script will generate static routes equal to the value specified in the num_hosts variable times the difference between the variables start_third and end_third. The start_second and end_second can be modified for large scale route generation. The script will also display the number of routes generated after completion. Yes the script can be optimized with certain pieces used as future placeholders.
+**Python script to quickly generate /32 static null routes and write them to a file. The script will generate static routes equal to the value specified in the num_hosts variable times the difference between the variables start_third and end_third. The start_second and end_second can be modified for large scale route generation. The script will also display the number of routes generated after completion. Yes the script can be optimized with certain pieces used as future placeholders.**
 
 <pre lang="...">
 #Number for the starting 1st octet
