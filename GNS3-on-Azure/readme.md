@@ -1,6 +1,6 @@
 # Azure CLI to create GNS3 on Azure
 
-**Azure CLI to create a VNET, NSG and a VM to host GNS3. The script also installs OpenVPN on the GNS3 server in Azure. You will be able to run the GNS3 app on your local machine and connect to the Azure VM. This allows you to offload the horsepower you need to a VM in Azure. To access the GNS3, you will need to install OpenVPN on your local machine. Please make sure to specify your source IP in the "sip" variable. I have specified a server size of "Standard_E20s_v3" that can be changed to meet your needs.The server will reboot at the end of the script to complete the install process.**
+**Azure CLI to create a VNET, NSG and a VM to host GNS3. The script also installs OpenVPN on the GNS3 server in Azure. You will be able to run the GNS3 app on your local machine and connect to the Azure VM. This allows you to offload the horsepower you need to a VM in Azure. To access the GNS3, you will need to install OpenVPN on your local machine. Please make sure to specify your source IP in the "sip" variable. I have specified a server size of "Standard_E20s_v3" that can be changed to meet your needs.**
 <pre lang="...">
 rg="my-GNS3-resource-group"
 loc="eastus2"
@@ -26,10 +26,12 @@ az vm extension set \
   --name CustomScript \
   --vm-name MyGNS3VM \
   --resource-group $rg \
-  --settings '{"commandToExecute":"cd /tmp && curl https://raw.githubusercontent.com/GNS3/gns3-server/master/scripts/remote-install.sh > gns3-remote-install.sh && sudo bash gns3-remote-install.sh --with-openvpn --with-iou --with-i386-repository && sudo reboot"}'
+  --settings '{"commandToExecute":"cd /tmp && curl https://raw.githubusercontent.com/GNS3/gns3-server/master/scripts/remote-install.sh > gns3-remote-install.sh && sudo bash gns3-remote-install.sh --with-openvpn --with-iou --with-i386-repository"}'
 
 # Get the public IP of the web server and SSH to the server with azureuser/Msft123Msft123
 az network public-ip show --resource-group $rg -n GNS3-publicIP --query "{address: ipAddress}" --output tsv
+
+# Please reboot the server to complete installation
 
 # Server rebooting now...
 </pre>
