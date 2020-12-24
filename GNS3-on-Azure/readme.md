@@ -26,7 +26,7 @@ az vm extension set \
   --name CustomScript \
   --vm-name MyGNS3VM \
   --resource-group $rg \
-  --settings '{"commandToExecute":"cd /tmp && curl https://raw.githubusercontent.com/GNS3/gns3-server/master/scripts/remote-install.sh > gns3-remote-install.sh && sudo bash gns3-remote-install.sh --with-openvpn --with-iou --with-i386-repository"}'
+  --settings '{"commandToExecute":"cd /tmp && curl https://raw.githubusercontent.com/GNS3/gns3-server/master/scripts/remote-install.sh > gns3-remote-install.sh && sudo bash gns3-remote-install.sh --with-openvpn --with-iou --with-i386-repository && sudo reboot"}'
 
 # Get the public IP of the web server and SSH to the server with azureuser/Msft123Msft123
 az network public-ip show --resource-group $rg -n GNS3-publicIP --query "{address: ipAddress}" --output tsv
