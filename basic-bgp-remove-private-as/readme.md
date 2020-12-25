@@ -7,6 +7,9 @@
 - If the AS path contains the AS number of the eBGP neighbor then it won’t be removed.
 - Lab is preconfigured with basic BGP info. R1 is advertising loopback 1.1.1.1/32
 
+**Topology**
+![alt text]()
+
 **By default, R3 will prefix 1.1.1.1/32 with ASN 2 and 65001.**
 <pre lang="...">
 R3#sh ip bgp
