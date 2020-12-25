@@ -10,7 +10,7 @@
 **Topology**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/basic-bgp-remove-private-as/bgp-removeas-topo.PNG)
 
-**By default, R3 will prefix 1.1.1.1/32 with ASN 2 and 65001.**
+**By default, R3 will receive prefix 1.1.1.1/32 with ASN 2 and 65001 in the path.**
 <pre lang="...">
 R3#sh ip bgp
 BGP table version is 2, local router ID is 3.3.3.3
