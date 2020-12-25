@@ -8,7 +8,7 @@
 - Lab is preconfigured with basic BGP info. R1 is advertising loopback 1.1.1.1/32
 
 **Topology**
-![alt text]()
+![alt text](https://github.com/jwrightazure/lab/blob/master/basic-bgp-remove-private-as/bgp-removeas-topo.PNG)
 
 **By default, R3 will prefix 1.1.1.1/32 with ASN 2 and 65001.**
 <pre lang="...">
