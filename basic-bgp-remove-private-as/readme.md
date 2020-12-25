@@ -23,5 +23,13 @@ RPKI validation codes: V valid, I invalid, N Not found
 
      Network          Next Hop            Metric LocPrf Weight Path
  *>   1.1.1.1/32       10.0.23.2                              0 2 65001 i
+ </pre>
 
+**Configure R2 to remove ASN 65001 when sending tupdate to R3
+<pre lang="...">
+ router bgp 2
+ bgp log-neighbor-changes
+ neighbor 10.0.12.1 remote-as 65001
+ neighbor 10.0.23.3 remote-as 3
+ neighbor 10.0.23.3 remove-private-as
  </pre>
