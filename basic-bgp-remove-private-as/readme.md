@@ -5,7 +5,7 @@
 - You can't remove private AS for an eBGP peer if the local device is originating the network.
 - By default, if you have a mix of public and private ASNs, the router won’t remove any ASNs.
 - If the AS path contains the AS number of the eBGP neighbor then it won’t be removed.
-- Lab is preconfigured with basic BGP info. R1 is advertising loopback 1.1.1.1/32, Clearing BGP sessions are not shown.
+- Lab is preconfigured with basic BGP info. R1 is advertising loopback 1.1.1.1/32. Clearing BGP sessions are not shown.
 
 **Topology**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/basic-bgp-remove-private-as/bgp-removeas-topo.PNG)
