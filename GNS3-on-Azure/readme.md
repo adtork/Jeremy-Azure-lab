@@ -32,7 +32,7 @@ az vm extension set \
 az network public-ip show --resource-group $rg -n GNS3-publicIP --query "{address: ipAddress}" --output tsv
 
 # Please reboot the server to complete installation
-
+# Check GNS version from Ubuntu CLI: /usr/bin/gns3server -v
 </pre>
 
 **The SSH prompt will include a download link for the OpenVPN profile for your local machine. When you go the link, it will automatically download the profile. Important- in SSH, run "sudo reboot" before trying to connect to VPN. Import the file you downloaded into your OpenVPN client. Connect using VPN and you will get an IP in the 172.16.253.x range. Make sure your local GNS3 client is pointing to 172.16.253.1:3080 as the server.**
