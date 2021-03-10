@@ -2,12 +2,12 @@
 first = 10
 
 #Define the range for the 2nd octect.
-start_second = 1
-end_second = 1
+start_second = 0
+end_second = 0
 
 #Define the range of /24 subnets for the 3rd octet
 start_third = 0
-end_third = 149
+end_third = 100
 
 #Number of /32 hosts per /24 prefix. The code example assumes that .1 will be the first address.
 num_hosts = 1
@@ -23,7 +23,7 @@ while second_octet <= end_second:
     second = str(second_octet)
     third_octet = start_third
 
-    #If the third octet is equal or less than the end_third variable continue with the next loop
+    #If the third octet is equal or less than the end_third variable continue with the next loop#
     while third_octet <= end_third:
         third = str(third_octet)
         last_octet = 1
@@ -31,7 +31,7 @@ while second_octet <= end_second:
         #If the last octet is equal or less than the num_host than write the current IP Address to File
         while last_octet <= num_hosts:
             last = str(last_octet)
-            text_file.write("az network route-table route create --resource-group AZFW --name to-Spoke3-Spoke4 --route-table-name AZFW1-RT --address-prefix " +
+            text_file.write("az network route-table route create --resource-group AZFW --name route" +third+ " --route-table-name AZFW1-RT --address-prefix " +
                             str(first)+"."+second+"."+third+"."+str(0)+"/24 --next-hop-type VirtualAppliance --next-hop-ip-address 10.20.0.4\n")
             last_octet += 1
         third_octet += 1
