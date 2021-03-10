@@ -1,0 +1,1 @@
+az network route-table show -g udr-test -n RT --query="routes" -o table | grep -v "Name" | grep -v "\-\-\-\-" | wc -l
