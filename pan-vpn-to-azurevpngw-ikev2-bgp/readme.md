@@ -46,7 +46,7 @@ az network public-ip create --name PAN1VPNPublicIP --resource-group onprem --idl
 az network nic create --name PAN1MgmtInterface -g onprem --subnet twonet --vnet onprem --public-ip-address PAN1MgmtIP --private-ip-address 10.1.2.4 --ip-forwarding true
 az network nic create --name PAN1OutsideInterface -g onprem --subnet zeronet --vnet onprem --public-ip-address PAN1VPNPublicIP --private-ip-address 10.1.0.4 --ip-forwarding true
 az network nic create --name PAN1InsideInterface -g onprem --subnet onenet --vnet onprem --private-ip-address 10.1.1.4 --ip-forwarding true
-az vm create --resource-group onprem --location eastus --name PAN1 --size Standard_D3_v2 --nics PAN1MgmtInterface PAN1OutsideInterface PAN1InsideInterface  --image paloaltonetworks:vmseries1:byol:8.1.0 --admin-username azureuser --admin-password Msft123Msft123
+az vm create --resource-group onprem --location eastus --name PAN1 --size Standard_D3_v2 --nics PAN1MgmtInterface PAN1OutsideInterface PAN1InsideInterface  --image paloaltonetworks:vmseries1:byol:9.1.0 --admin-username azureuser --admin-password Msft123Msft123
 </pre>
 
 **Build Azure side Linux VM**
@@ -89,12 +89,12 @@ az network vpn-connection create --name to-onprem --resource-group Hub --vnet-ga
 </pre>
 
 **Firewall configuration**
-- Download Firewall XML file: https://github.com/jwrightazure/lab/blob/master/pan-vpn-to-azurevpngw-ikev2-bgp/PAN-IKEv2-BGP.xml
-- Open the XML file and replace references to "Azure-VNGpubip1" with the public IP addresses for the Azure VPN gateway and save.
+- Download Firewall XML file: https://github.com/jwrightazure/lab/blob/master/pan-vpn-to-azurevpngw-ikev2-bgp/running-config.xml
+- Open the XML file and replace references to "Azure-VNGpubip" with the public IP addresses for the Azure VPN gateway and save.
 - HTTPS to the firewall
 - Select Device tab
 - Select Operations tab
-- Select Import Named Configuration Snapshot. Upload the firewall XML file.
+- Select Import Named Configuration Snapshot. Upload the running-config.xml file in this repo.
 - Select Load Named Configuration Snapshot. Select the firewall XML you previously uploaded.
 - Select Commit (top right) and then commit the configuration
 
