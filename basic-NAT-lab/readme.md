@@ -12,7 +12,46 @@ The SIP will be translated to 10.10.10.10 which is the first available address i
 
 R3 sees the packet on its incoming interface with a SIP of 10.10.10.10 and a DIP of 3.3.3.3. R3 will send the response to its default route (R2) since 10.10.10.x is not advertised into OSPF. The response from R3 will have a SIP of 3.3.3.3 and a DIP of 10.10.10.10. The "add-route" NAT config adds a host route based on the translation between the outside global and outside local address. Traffic will not flow correctly between NAT interfaces without this command in this particular scenario. If traffic sources from a different interface of R1 to DIP 3.3.3.3, no NAT will occur since the SIP/network is not referenced in the NAT ACL.
 
+**Configs**<br/>
 <pre lang="...">
+R1:
+interface Loopback0
+ ip address 1.1.1.1 255.255.255.255
+!
+interface GigabitEthernet0/0
+ ip address 10.1.1.1 255.255.255.0
+!
+router ospf 1
+ network 0.0.0.0 255.255.255.255 area 0
+ 
+---------------------------------------------
+R2:
+interface GigabitEthernet0/0
+ ip address 10.1.1.2 255.255.255.0
+ ip nat outside
+ 
+interface GigabitEthernet0/1
+ ip address 10.2.2.2 255.255.255.0
+ ip nat inside
+!
+router ospf 1
+ network 0.0.0.0 255.255.255.255 area 0
+ default-information originate always
 
+ip nat pool Net10 10.10.10.10 10.10.10.20 netmask 255.255.255.0
+ip nat outside source list 1 pool Net10 add-route
+!
+access-list 1 permit 1.1.1.1
+
+---------------------------------------------
+R3:
+interface Loopback0
+ ip address 3.3.3.3 255.255.255.255
+!
+interface GigabitEthernet0/0
+ ip address 10.2.2.3 255.255.255.0
+!
+router ospf 1
+ network 0.0.0.0 255.255.255.255 area 0
 
 </pre>
