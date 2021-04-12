@@ -4,7 +4,7 @@ This lab provides sample configurations when using the "ip nat outside source li
 ## Base Topology
 ![alt text](https://github.com/jwrightazure/lab/blob/master/basic-NAT-lab/nat-lab-topo.PNG)
 
-**Order of operations**
+**Order of operations**<br/>
 When traffic is sourced from R1's loopback to R3's loopback:
 
 R1 and R3 are learning a default route from R2 via the "default-information originate always" command.  R1 sends traffic sourcing from the loopback 0 (1.1.1.1) to R3's loopback (3.3.3.3). The traffic will arrive on the "outside" interface of R2 with a SIP of 1.1.1.1 and a DIP of 3.3.3.3. The SIP is referenced/permitted in access-list 1 and is used by the "ip nat outside source" list command. It is then translated to an address from the NAT pool Net10.
