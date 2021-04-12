@@ -1,2 +1,5 @@
 ## Basic NAT Lab
 This lab provides sample configurations when using the "ip nat outside source list" command. IP NAT outside is used to translate the source address of the IP packets that travel through the outside interface defined in NAT to an IP (specific IP in this lab) on the inside of the NAT "zone". The goal is for R2 to NAT traffic when the SIP is R1's loopback address and the DIP is R3's loopback. All other traffic should not be NAT'd.
+
+## Base Topology
+![alt text]()
