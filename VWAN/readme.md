@@ -41,7 +41,7 @@ az network vnet subnet create --address-prefix 10.100.1.0/24 --name onenet --res
 az network public-ip create --name CSR1PublicIP --resource-group DC1 --idle-timeout 30 --allocation-method Static
 az network nic create --name CSR1OutsideInterface -g DC1 --subnet zeronet --vnet DC1 --public-ip-address CSR1PublicIP --ip-forwarding true --private-ip-address 10.100.0.4
 az network nic create --name CSR1InsideInterface -g DC1 --subnet onenet --vnet DC1 --ip-forwarding true --private-ip-address 10.100.1.4
-az vm create --resource-group DC1 --location eastus2 --name CSR1 --size Standard_D2_v2 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:16_10-BYOL:16.10.220190622 --admin-username azureuser --admin-password Msft123Msft123 --no-wait
+az vm create --resource-group DC1 --location eastus2 --name CSR1 --size Standard_D2_v2 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:17_3_2-byol:17.3.220201106 --admin-username azureuser --admin-password Msft123Msft123 --no-wait
 az network public-ip create --name DC1VMPubIP --resource-group DC1 --location eastus2 --allocation-method Dynamic
 az network nic create --resource-group DC1 -n DC1VMNIC --location eastus2 --subnet VM --vnet-name DC1 --public-ip-address DC1VMPubIP --private-ip-address 10.100.10.4
 az vm create -n DC1VM -g DC1 --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics DC1VMNIC --no-wait
@@ -51,6 +51,7 @@ az network route-table route create --name To-VNET20 --resource-group DC1 --rout
 az network route-table route create --name To-VNET30 --resource-group DC1 --route-table-name DC1-RT --address-prefix 10.30.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.4
 az network route-table route create --name To-DC2 --resource-group DC1 --route-table-name DC1-RT --address-prefix 10.101.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.4
 az network vnet subnet update --name VM --vnet-name DC1 --resource-group DC1 --route-table DC1-RT
+az vm auto-shutdown -g DC1 -n CSR1 --time 2130
 </pre>
 
 **Build the same for simulated on prem DC2**
@@ -62,7 +63,7 @@ az network vnet subnet create --address-prefix 10.101.1.0/24 --name onenet --res
 az network public-ip create --name CSR2PublicIP --resource-group DC2 --idle-timeout 30 --allocation-method Static
 az network nic create --name CSR2OutsideInterface -g DC2 --subnet zeronet --vnet DC2 --public-ip-address CSR2PublicIP --ip-forwarding true --private-ip-address 10.101.0.4
 az network nic create --name CSR2InsideInterface -g DC2 --subnet onenet --vnet DC2 --ip-forwarding true --private-ip-address 10.101.1.4
-az VM create --resource-group DC2 --location westus2 --name CSR2 --size Standard_D2_v2 --nics CSR2OutsideInterface CSR2InsideInterface  --image cisco:cisco-csr-1000v:16_10-BYOL:16.10.220190622 --admin-username azureuser --admin-password Msft123Msft123 --no-wait
+az VM create --resource-group DC2 --location westus2 --name CSR2 --size Standard_D2_v2 --nics CSR2OutsideInterface CSR2InsideInterface  --image cisco:cisco-csr-1000v:17_3_2-byol:17.3.2202011062 --admin-username azureuser --admin-password Msft123Msft123 --no-wait
 az network public-ip create --name DC2VMPubIP --resource-group DC2 --location westus2 --allocation-method Dynamic
 az network nic create --resource-group DC2 -n DC2VMNIC --location westus2 --subnet DC2VM --vnet-name DC2 --public-ip-address DC2VMPubIP --private-ip-address 10.101.10.4
 az VM create -n DC2VM -g DC2 --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics DC2VMNIC --no-wait
@@ -72,6 +73,7 @@ az network route-table route create --name To-VNET20 --resource-group DC2 --rout
 az network route-table route create --name To-VNET30 --resource-group DC2 --route-table-name DC2-RT --address-prefix 10.30.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.101.1.4
 az network route-table route create --name To-DC1 --resource-group DC2 --route-table-name DC2-RT --address-prefix 10.100.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.101.1.4
 az network vnet subnet update --name DC2VM --vnet-name DC2 --resource-group DC2 --route-table DC2-RT
+az vm auto-shutdown -g DC2 -n CSR2 --time 2130
 </pre>
 
 **Build VNET 10 which includes a test VM. No routing needs to be defined as VWAN will inject routes.**
