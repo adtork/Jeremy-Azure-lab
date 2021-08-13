@@ -18,7 +18,7 @@ az network lb address-pool create --resource-group $rg --lb-name csr-lb --name c
 az network lb probe create --resource-group $rg --lb-name csr-lb --name myHealthProbe --protocol tcp --port 22
 az network lb rule create --resource-group $rg --lb-name csr-lb -n MyHAPortsRule  --protocol All --frontend-port 0 --backend-port 0 --backend-pool-name csr-backendpool --probe-name myHealthProbe
 
-#create nsg that all VMs will use. Replace public x.x.x.x with your source IP. This example includes allowing all PIPs asspciated with Azure East.
+#create nsg that all VMs will use. Replace public x.x.x.x with your source IP. This example includes allowing all PIPs asspciated with Azure East. If the source IP is a /32, do not specifiy a mask in the NSG
 az network nsg create --resource-group $rg --name SDWAN-NSG --location $loc
 az network nsg rule create --resource-group $rg --nsg-name SDWAN-NSG --name SDWAN-NSG --access Allow --protocol "*" --direction Inbound --priority 100 --source-address-prefix x.x.x.x 10.0.0.0/8 --source-port-range "*" --destination-address-prefix "*" --destination-port-range "*"
 az network nsg rule create --resource-group $rg --nsg-name SDWAN-NSG --name all-out --access Allow --protocol "*" --direction Outbound --priority 350 --source-address-prefix "*" --source-port-range "*" --destination-address-prefix "*" --destination-port-range "*"
