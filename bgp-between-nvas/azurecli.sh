@@ -8,8 +8,9 @@ az network vnet subnet create --address-prefix 10.255.10.0/24 --name test-vm --r
 az network vnet subnet create --address-prefix 10.255.2.0/24 --name CSR2-Outside --resource-group $rg --vnet-name vnet-site1
 az network vnet subnet create --address-prefix 10.255.3.0/24 --name CSR2-Inside --resource-group $rg --vnet-name vnet-site1
 
+#replace x.x.x.x with your source IP
 az network nsg create --resource-group $rg --name BGP-NSG --location $loc
-az network nsg rule create --resource-group $rg --nsg-name BGP-NSG --name BGP-NSG --access Allow --protocol "*" --direction Inbound --priority 100 --source-address-prefix 47.196.215.122/32 10.0.0.0/8 --source-port-range "*" --destination-address-prefix "*" --destination-port-range "*"
+az network nsg rule create --resource-group $rg --nsg-name BGP-NSG --name BGP-NSG --access Allow --protocol "*" --direction Inbound --priority 100 --source-address-prefix x.x.x.x/32 10.0.0.0/8 --source-port-range "*" --destination-address-prefix "*" --destination-port-range "*"
 az network nsg rule create --resource-group $rg --nsg-name BGP-NSG --name all-out --access Allow --protocol "*" --direction Outbound --priority 200 --source-address-prefix "*" --source-port-range "*" --destination-address-prefix "*" --destination-port-range "*"
 
 az network public-ip create --name csr1-PIP --resource-group $rg --allocation-method static --idle-timeout 30 --sku Standard
