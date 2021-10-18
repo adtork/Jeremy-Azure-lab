@@ -1,0 +1,30 @@
+Configure SuperNode:
+
+Run Supernode on VM…
+
+Deploy to Azure VNET or HCI cluster - should not matter which - does not have to be huge - 2vCPU/4GB RAM or better should suffice
+Need Windows Server OS
+Download and unzip edge/super node supernode:  n2n/n2n_v3_windows_x64_v2.9.0_r1009_static_by_heiye.zip at master · lucktu/n2n (github.com) - place in a working directory somewhere on VM - two files - supernode.exe and edge.exe
+In CMD window navigate to the directory where you copied files and execute:  Supernode -v
+Note the IP of supernode to be used in edge node config
+
+Configure Edge Nodes:
+
+Configure edge node on KVS system(s), Waystation VM (in Azure), etc.:
+
+Install OpenVPN Connect:  OpenVPN Client Connect For Windows | OpenVPN
+Download and unzip edge/super node complied EXE's to each node:  n2n/n2n_v3_windows_x64_v2.9.0_r1009_static_by_heiye.zip at master · lucktu/n2n (github.com) -  place in a working directory somewhere on VM - two files - supernode.exe and edge.exe
+Each EDGE node needs to have their own IP on an non-overlapping yet shared IPv4 CIDR - example below assumes 192.168.100.0/24***:
+In CMD window navigate to the directory where you copied files and execute: edge -a 192.168.100.XXX -c multi -k multi2 -l [IP of SUPERNODE]:7654 -E
+Find the IF number for TAP NIC (ROUTE PRINT from a CMD)
+From a CMD:  route change 224.0.0.0 mask 240.0.0.0 0.0.0.0 Metric 2 IF [number for TAP NIC]
+ 
+
+To test multicast:  https://www.singlewire.com/tools/multicast-testing-tool
+
+Run server on one edge node and client on all the others…
+ 
+
+***Need - to pick an unused (non-overlapping) IP CIDR to use for the N2N overlay
+
+https://github.com/lucktu/n2n/blob/master/Windows/n2n_v3_windows_x64_v2.9.0_r1009_static_by_heiye.zip
