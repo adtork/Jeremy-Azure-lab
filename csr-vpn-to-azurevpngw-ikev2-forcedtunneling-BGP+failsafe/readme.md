@@ -14,14 +14,15 @@ VMs in a VNET have access to the Internet by default (0/0->Internet). At the end
 
 All lab configs are done in Azure CLI so you can change them as needed to match your environment. There is no hardware reuored for this lab. The layered NSGs will be configured through the portal as it's easier to visual.
 
-Assumptions:
-- A valid Azure subscription account. If you don’t have one, you can create your free azure account (https://azure.microsoft.com/en-us/free/) today.
-- Latest Azure CLI, follow these instructions to install: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli 
-- Fundamental Azure networking knowledge
-
 # Base Topology
 The lab deploys an Azure VPN gateway into a VNET. We will also deploy a Cisco CSR in a seperate VNET to simulate on prem.
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/csrvpnikev2.png)
+
+**Before deploying CSR in the next step, you may have to accept license agreement unless you have used it before. You can accomplish this through deploying a CSR in the portal or Powershell commands via Cloudshell**
+<pre lang="...">
+Sample Azure CLI:
+az vm image terms accept --urn cisco:cisco-csr-1000v:17_3_4a-byol:latest
+</pre>
 
 **Build Resource Groups, VNETs and Subnets for the Azure Hub VNET**
 <pre lang="...">
@@ -54,7 +55,7 @@ az network nsg rule create --resource-group onprem --nsg-name onprem-CSR-NSG --n
 az network public-ip create --name CSR1PublicIP --resource-group onprem --idle-timeout 30 --allocation-method Static
 az network nic create --name CSR1OutsideInterface -g onprem --subnet zeronet --vnet onprem --public-ip-address CSR1PublicIP --private-ip-address 10.1.0.4 --ip-forwarding true --network-security-group onprem-CSR-NSG
 az network nic create --name CSR1InsideInterface -g onprem --subnet onenet --vnet onprem --ip-forwarding true --private-ip-address 10.1.1.4 --network-security-group onprem-CSR-NSG
-az vm create --resource-group onprem --location eastus2 --name CSR1 --size Standard_D2_v2 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:16_10-byol:16.10.120190108 --admin-username azureuser --admin-password Msft123Msft123 --no-wait
+az vm create --resource-group onprem --location eastus2 --name CSR1 --size Standard_D2_v2 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:17_3_4a-byol:latest --admin-username azureuser --admin-password Msft123Msft123 --no-wait
 </pre>
 
 **Create a route table for the on prem VNET and point the default route to the CSR inside interface. Note- you may need to update the route table to point your SSH SIP to next hop Internet**
