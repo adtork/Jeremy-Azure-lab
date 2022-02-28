@@ -1,12 +1,11 @@
 # Azure Networking Lab- IPSEC VPN (IKEv2) between Cisco CSR and Azure VPN Gateway- with BGP
 
-This lab guide illustrates how to build a basic IPSEC VPN tunnel w/IKEv2 between a Cisco CSR and the Azure VPN gateway with BGP. This is for lab testing purposes only. All Azure configs are done in Azure CLI so you can change them as needed to match your environment. Note- the on prem CSR has a private IP on the outside interface since it's hosted in Azure. You can apply a public IP if needed.
+This lab guide illustrates how to build a basic IPSEC VPN tunnel w/IKEv2 between a Cisco CSR and the Azure VPN gateway with BGP. This is for lab testing purposes only. All Azure configs are done in Azure CLI so you can change them as needed to match your environment. The entire lab including simulated on prem is done in Azure. No hardware required. Current CSR image used is 17.3.4a.
 
 **Before deploying CSR in the next step, you may have to accept license agreement unless you have used it before. You can accomplish this through deploying a CSR in the portal or Powershell commands via Cloudshell**
 <pre lang="...">
-Sample Powershell:
-Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "17_2_1-byol"
-Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "17_2_1-byol" | Set-AzureRmMarketplaceTerms -Accept
+Sample Azure CLI:
+az vm image terms accept --urn cisco:cisco-csr-1000v:17_3_4a-byol:latest
 </pre>
 
 # Base Topology
@@ -53,7 +52,7 @@ az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpub
 az network public-ip create --name CSR1PublicIP --resource-group onprem --idle-timeout 30 --allocation-method Static
 az network nic create --name CSR1OutsideInterface -g onprem --subnet zeronet --vnet onprem --public-ip-address CSR1PublicIP --ip-forwarding true
 az network nic create --name CSR1InsideInterface -g onprem --subnet onenet --vnet onprem --ip-forwarding true
-az vm create --resource-group onprem --location westus --name CSR1 --size Standard_D2_v2 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:17_2_1-byol:17.2.120200508 --admin-username azureuser --admin-password Msft123Msft123 --no-wait
+az vm create --resource-group onprem --location westus --name CSR1 --size Standard_D2_v2 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:17_3_4a-byol:latest --admin-username azureuser --admin-password Msft123Msft123 --no-wait
 </pre>
 
 **After the gateway and CSR have been created, document the public IP address for both. Value will be null until it has been successfully provisioned.**
@@ -101,15 +100,15 @@ crypto ikev2 policy to-onprem-policy
   exit
   
 crypto ikev2 keyring to-onprem-keyring
-  peer 40.118.238.212
-    address 40.118.238.212
+  peer "insert Azure VPN GW IP"
+    address "insert Azure VPN GW IP"
     pre-shared-key Msft123Msft123
     exit
   exit
 
 crypto ikev2 profile to-onprem-profile
   match address  local 10.1.0.4
-  match identity remote address 40.118.238.212 255.255.255.255
+  match identity remote address "insert Azure VPN GW IP" 255.255.255.255
   authentication remote pre-share
   authentication local  pre-share
   lifetime       3600
@@ -132,7 +131,7 @@ int tunnel 11
   tunnel mode ipsec ipv4
   ip tcp adjust-mss 1350
   tunnel source 10.1.0.4
-  tunnel destination 40.118.238.212
+  tunnel destination "insert Azure VPN GW IP"
   tunnel protection ipsec profile to-onprem-IPsecProfile
   exit
 
