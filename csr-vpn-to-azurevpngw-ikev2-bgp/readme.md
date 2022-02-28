@@ -14,73 +14,70 @@ The lab deploys an Azure VPN gateway into a VNET. We will also deploy a Cisco CS
 
 **Build Resource Groups, VNETs and Subnets**
 <pre lang="...">
-az group create --name Hub --location westus
-az network vnet create --resource-group Hub --name Hub --location westus --address-prefixes 10.0.0.0/16 --subnet-name HubVM --subnet-prefix 10.0.10.0/24
-az network vnet subnet create --address-prefix 10.0.0.0/24 --name GatewaySubnet --resource-group Hub --vnet-name Hub
+RG="VPN-rg"
+Location="eastus"
+VwanName="vwan"
+HubName="hub1"
+
+az group create --name VPN-rg --location $Location
+az network vnet create --resource-group $RG --name Hub --location $Location --address-prefixes 10.0.0.0/16 --subnet-name HubVM --subnet-prefix 10.0.10.0/24
+az network vnet subnet create --address-prefix 10.0.0.0/24 --name GatewaySubnet --resource-group $RG --vnet-name Hub
+az network vnet create --resource-group $RG --name onprem --location $Location --address-prefixes 10.1.0.0/16 --subnet-name VM --subnet-prefix 10.1.10.0/24
+az network vnet subnet create --address-prefix 10.1.0.0/24 --name zeronet --resource-group $RG --vnet-name onprem
+az network vnet subnet create --address-prefix 10.1.1.0/24 --name onenet --resource-group $RG --vnet-name onprem
 </pre>
 
-**Build Resource Groups, VNETs and Subnets to simulate on prem**
+**Build Azure and onprem Linux VMs**
 <pre lang="...">
-az group create --name onprem --location westus
-az network vnet create --resource-group onprem --name onprem --location westus --address-prefixes 10.1.0.0/16 --subnet-name VM --subnet-prefix 10.1.10.0/24
-az network vnet subnet create --address-prefix 10.1.0.0/24 --name zeronet --resource-group onprem --vnet-name onprem
-az network vnet subnet create --address-prefix 10.1.1.0/24 --name onenet --resource-group onprem --vnet-name onprem
-</pre>
+az network public-ip create --name HubVMPubIP --resource-group $RG --location $Location --allocation-method Dynamic
+az network nic create --resource-group $RG -n HubVMNIC --location $Location --subnet HubVM --private-ip-address 10.0.10.10 --vnet-name Hub --public-ip-address HubVMPubIP
+az vm create -n HubVM --resource-group $RG --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics HubVMNIC --no-wait
 
-**Build Azure side Linux VM**
-<pre lang="...">
-az network public-ip create --name HubVMPubIP --resource-group Hub --location westus --allocation-method Dynamic
-az network nic create --resource-group Hub -n HubVMNIC --location westus --subnet HubVM --private-ip-address 10.0.10.10 --vnet-name Hub --public-ip-address HubVMPubIP
-az vm create -n HubVM -g Hub --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics HubVMNIC --no-wait
-</pre>
-
-**Build onprem side Linux VM**
-<pre lang="...">
-az network public-ip create --name onpremVMPubIP --resource-group onprem --location westus --allocation-method Dynamic
-az network nic create --resource-group onprem -n onpremVMNIC --location westus --subnet VM --private-ip-address 10.1.10.10 --vnet-name onprem --public-ip-address onpremVMPubIP
-az vm create -n onpremVM -g onprem --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics onpremVMNIC --no-wait
+az network public-ip create --name onpremVMPubIP --resource-group $RG --location $Location --allocation-method Dynamic
+az network nic create --resource-group $RG -n onpremVMNIC --location $Location --subnet VM --private-ip-address 10.1.10.10 --vnet-name onprem --public-ip-address onpremVMPubIP
+az vm create -n onpremVM --resource-group $RG --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics onpremVMNIC --no-wait
 </pre>
 
 **Build Public IPs for Azure VPN Gateway. The VPN GW will take 20+ minutes to deploy.**
 <pre lang="...">
-az network public-ip create --name Azure-VNGpubip --resource-group Hub --allocation-method Dynamic
-az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpubip --resource-group Hub --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --no-wait --asn 65001
+az network public-ip create --name Azure-VNGpubip --resource-group $RG --allocation-method Dynamic
+az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpubip --resource-group $RG --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw3 --no-wait --asn 65001
 </pre>
 
 **Build onprem CSR. CSR image is specified from the Marketplace in this example.**
 <pre lang="...">
-az network public-ip create --name CSR1PublicIP --resource-group onprem --idle-timeout 30 --allocation-method Static
-az network nic create --name CSR1OutsideInterface -g onprem --subnet zeronet --vnet onprem --public-ip-address CSR1PublicIP --ip-forwarding true
-az network nic create --name CSR1InsideInterface -g onprem --subnet onenet --vnet onprem --ip-forwarding true
-az vm create --resource-group onprem --location westus --name CSR1 --size Standard_D2_v2 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:17_3_4a-byol:latest --admin-username azureuser --admin-password Msft123Msft123 --no-wait
+az network public-ip create --name CSRPublicIP --resource-group $RG --idle-timeout 30 --allocation-method Static
+az network nic create --name CSROutsideInterface --resource-group $RG --subnet zeronet --vnet onprem --public-ip-address CSRPublicIP --ip-forwarding true
+az network nic create --name CSRInsideInterface --resource-group $RG --subnet onenet --vnet onprem --ip-forwarding true
+az vm create --resource-group $RG --location $Location --name CSR --size Standard_D2_v2 --nics CSROutsideInterface CSRInsideInterface  --image cisco:cisco-csr-1000v:17_3_4a-byol:latest --admin-username azureuser --admin-password Msft123Msft123 --no-wait
 </pre>
 
 **After the gateway and CSR have been created, document the public IP address for both. Value will be null until it has been successfully provisioned.**
 <pre lang="...">
-az network public-ip show -g Hub -n Azure-VNGpubip --query "{address: ipAddress}"
-az network public-ip show -g onprem -n CSR1PublicIP --query "{address: ipAddress}"
+az network public-ip show --resource-group $RG -n Azure-VNGpubip --query "{address: ipAddress}"
+az network public-ip show --resource-group $RG -n CSRPublicIP --query "{address: ipAddress}"
 </pre>
 
 **Document BGP peer IP and ASN**
 <pre lang="...">
-az network vnet-gateway list --query [].[name,bgpSettings.asn,bgpSettings.bgpPeeringAddress] -o table --resource-group Hub
+az network vnet-gateway list --query [].[name,bgpSettings.asn,bgpSettings.bgpPeeringAddress] -o table --resource-group $RG
 </pre>
 
 **Create a route table and routes for the Azure VNET with correct association. This is for the onprem simulation to route traffic to the CSR**
 <pre lang="...">
-az network route-table create --name vm-rt --resource-group onprem
-az network route-table route create --name vm-rt --resource-group onprem --route-table-name vm-rt --address-prefix 10.0.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.1.1.4
-az network vnet subnet update --name VM --vnet-name onprem --resource-group onprem --route-table vm-rt
+az network route-table create --name vm-rt --resource-group $RG
+az network route-table route create --name vm-rt --resource-group $RG --route-table-name vm-rt --address-prefix 10.0.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.1.1.4
+az network vnet subnet update --name VM --vnet-name onprem --resource-group $RG --route-table vm-rt
 </pre>
 
 **Create Local Network Gateway. The 192.168.1.1 addrees is the IP of the tunnel interface on the CSR in BGP ASN 65002.**
 <pre lang="...">
-az network local-gateway create --gateway-ip-address "insert CSR Public IP" --name to-onprem --resource-group Hub --local-address-prefixes 192.168.1.1/32 --asn 65002 --bgp-peering-address 192.168.1.1
+az network local-gateway create --gateway-ip-address "insert CSR Public IP" --name to-onprem --resource-group $RG --local-address-prefixes 192.168.1.1/32 --asn 65002 --bgp-peering-address 192.168.1.1
 </pre>
 
 **Create VPN connections**
 <pre lang="...">
-az network vpn-connection create --name to-onprem --resource-group Hub --vnet-gateway1 Azure-VNG -l westus --shared-key Msft123Msft123 --local-gateway2 to-onprem --enable-bgp
+az network vpn-connection create --name to-onprem --resource-group $RG --vnet-gateway1 Azure-VNG -l westus --shared-key Msft123Msft123 --local-gateway2 to-onprem --enable-bgp
 </pre>
 
 **SSH to CSR public IP. Public IPs in the below config are an example.**
@@ -154,7 +151,7 @@ ip route 10.0.0.254 255.255.255.255 Tunnel 11
 
 **Validate VPN connection status in Azure CLI**
 <pre lang="...">
-az network vpn-connection show --name to-onprem --resource-group Hub --query "{status: connectionStatus}"
+az network vpn-connection show --name to-onprem --resource-group $RG --query "{status: connectionStatus}"
 </pre>
 
 
@@ -166,9 +163,9 @@ Key Cisco commands
 
 **List BGP advertised routes per peer.**
 <pre lang="...">
-az network vnet-gateway list-advertised-routes -g Hub -n Azure-VNG --peer 192.168.1.1
+az network vnet-gateway list-advertised-routes -g $RG -n Azure-VNG --peer 192.168.1.1
 
-PS Azure:\> az network vnet-gateway list-advertised-routes -g Hub -n Azure-VNG --peer 192.168.1.1
+PS Azure:\> az network vnet-gateway list-advertised-routes -g $RG -n Azure-VNG --peer 192.168.1.1
 {
   "value": [
     {
@@ -183,7 +180,7 @@ PS Azure:\> az network vnet-gateway list-advertised-routes -g Hub -n Azure-VNG -
 </pre>
 **If you add a new prefix to your existing VNET, it will automatically be advertised to the CSR. Example: I added 172.16.1.0/24 to the VNET address space.**
 <pre lang="...">
-PS Azure:\> az network vnet-gateway list-advertised-routes -g Hub -n Azure-VNG --peer 192.168.1.1
+PS Azure:\> az network vnet-gateway list-advertised-routes -g $RG -n Azure-VNG --peer 192.168.1.1
 {
   "value": [{
       "asPath": "65001",
@@ -216,7 +213,7 @@ CSR1(config-if)#router bgp 65002
 CSR1(config-router)#address-family ipv4
 CSR1(config-router-af)#  network 1.1.1.1 mask 255.255.255.255
 
-PS Azure:\> az network vnet-gateway list-learned-routes -g Hub -n Azure-VNG
+PS Azure:\> az network vnet-gateway list-learned-routes -g $RG -n Azure-VNG
 {
       "asPath": "65002",
       "localAddress": "10.0.0.254",
