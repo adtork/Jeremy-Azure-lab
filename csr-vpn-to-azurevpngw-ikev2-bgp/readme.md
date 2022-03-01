@@ -16,8 +16,6 @@ The lab deploys an Azure VPN gateway into a VNET. We will also deploy a Cisco CS
 <pre lang="...">
 RG="VPN-rg"
 Location="eastus"
-VwanName="vwan"
-HubName="hub1"
 
 az group create --name VPN-rg --location $Location
 az network vnet create --resource-group $RG --name Hub --location $Location --address-prefixes 10.0.0.0/16 --subnet-name HubVM --subnet-prefix 10.0.10.0/24
