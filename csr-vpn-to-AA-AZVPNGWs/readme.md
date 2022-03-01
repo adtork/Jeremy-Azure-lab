@@ -6,57 +6,59 @@ This lab guide illustrates how to build a basic IPSEC/IKEv2 VPN tunnel between a
 
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/csr-bgp.PNG)
 
-**Before deploying CSR in the next step, you may have to accept license agreement unless you have used it before. You can accomplish this through deploying a CSR in the portal or Powershell commands via Cloudshell**
+**Before deploying CSR in the next step, you may have to accept license agreement unless you have used it before. You can accomplish this through deploying a CSR in the portal or Powershell/Azure CLI commands via Cloudshell**
 <pre lang="...">
-Sample Powershell:
-Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "17_2_1-byol"
-Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "17_2_1-byol" | Set-AzureRmMarketplaceTerms -Accept
+Sample Azure CLI:
+az vm image terms accept --urn cisco:cisco-csr-1000v:17_3_4a-byol:latest
 </pre>
 
 **Build Resource Groups, VNET and Subnets for the hub and onprem networks. The Azure VPN gateways will take about 20 minutes to deploy.**
 <pre lang="...">
-az group create --name VPN --location eastus2
-az network vnet create --resource-group VPN --name VPNhub --location eastus2 --address-prefixes 10.0.0.0/16 --subnet-name VPNhubVM --subnet-prefix 10.0.10.0/24
-az network vnet subnet create --address-prefix 10.0.0.0/24 --name GatewaySubnet --resource-group VPN --vnet-name VPNhub
-az network vnet create --resource-group VPN --name onprem --location eastus2 --address-prefixes 10.1.0.0/16 --subnet-name onpremVM --subnet-prefix 10.1.10.0/24
-az network vnet subnet create --address-prefix 10.1.0.0/24 --name zeronet --resource-group VPN --vnet-name onprem
-az network vnet subnet create --address-prefix 10.1.1.0/24 --name onenet --resource-group VPN --vnet-name onprem
-az network public-ip create --name Azure-VNGpubip1 --resource-group VPN --allocation-method Dynamic
-az network public-ip create --name Azure-VNGpubip2 --resource-group VPN --allocation-method Dynamic
-az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpubip1 Azure-VNGpubip2 --resource-group VPN --vnet VPNhub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw1 --asn 65001 --no-wait 
-az network public-ip create --name CSRPublicIP --resource-group VPN --idle-timeout 30 --allocation-method Static
-az network nic create --name CSROutsideInterface -g VPN --subnet zeronet --vnet onprem --public-ip-address CSRPublicIP --ip-forwarding true --private-ip-address 10.1.0.4
-az network nic create --name CSRInsideInterface -g VPN --subnet onenet --vnet onprem --ip-forwarding true --private-ip-address 10.1.1.4
-az vm create --resource-group VPN --location eastus2 --name CSR --size Standard_DS3_v2 --nics CSROutsideInterface CSRInsideInterface --image cisco:cisco-csr-1000v:17_2_1-byol:17.2.120200508 --admin-username azureuser --admin-password Msft123Msft123 --no-wait 
-az network public-ip create --name VPNhubVM --resource-group VPN --location eastus2 --allocation-method Dynamic
-az network nic create --resource-group VPN -n VPNVMNIC --location eastus2 --subnet VPNhubVM --private-ip-address 10.0.10.10 --vnet-name VPNhub --public-ip-address VPNhubVM --ip-forwarding true
-az vm create -n VPNVM -g VPN --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics VPNVMNIC --no-wait 
-az network public-ip create --name onpremVM --resource-group VPN --location eastus2 --allocation-method Dynamic
-az network nic create --resource-group VPN -n onpremVMNIC --location eastus2 --subnet onpremVM --private-ip-address 10.1.10.10 --vnet-name onprem --public-ip-address onpremVM --ip-forwarding true
-az vm create -n onpremVM -g VPN --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics onpremVMNIC --no-wait 
-az network route-table create --name vm-rt --resource-group VPN
-az network route-table route create --name vm-rt --resource-group VPN --route-table-name vm-rt --address-prefix 10.0.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.1.1.4
-az network vnet subnet update --name onpremVM --vnet-name onprem --resource-group VPN --route-table vm-rt
+RG="VPN"
+Location="eastus"
+
+az group create --name VPN --location $Location
+az network vnet create --resource-group $RG --name VPNhub --location $Location --address-prefixes 10.0.0.0/16 --subnet-name VPNhubVM --subnet-prefix 10.0.10.0/24
+az network vnet subnet create --address-prefix 10.0.0.0/24 --name GatewaySubnet --resource-group $RG --vnet-name VPNhub
+az network vnet create --resource-group $RG --name onprem --location $Location --address-prefixes 10.1.0.0/16 --subnet-name onpremVM --subnet-prefix 10.1.10.0/24
+az network vnet subnet create --address-prefix 10.1.0.0/24 --name zeronet --resource-group $RG --vnet-name onprem
+az network vnet subnet create --address-prefix 10.1.1.0/24 --name onenet --resource-group $RG --vnet-name onprem
+az network public-ip create --name Azure-VNGpubip1 --resource-group $RG --allocation-method Dynamic
+az network public-ip create --name Azure-VNGpubip2 --resource-group $RG --allocation-method Dynamic
+az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpubip1 Azure-VNGpubip2 --resource-group $RG --vnet VPNhub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw3 --asn 65001 --no-wait 
+az network public-ip create --name CSRPublicIP --resource-group $RG --idle-timeout 30 --allocation-method Static
+az network nic create --name CSROutsideInterface --resource-group $RG --subnet zeronet --vnet onprem --public-ip-address CSRPublicIP --ip-forwarding true --private-ip-address 10.1.0.4
+az network nic create --name CSRInsideInterface --resource-group $RG --subnet onenet --vnet onprem --ip-forwarding true --private-ip-address 10.1.1.4
+az vm create --resource-group $RG --location $Location --name CSR --size Standard_DS3_v2 --nics CSROutsideInterface CSRInsideInterface --image cisco:cisco-csr-1000v:17_3_4a-byol:latest --admin-username azureuser --admin-password Msft123Msft123 --no-wait 
+az network public-ip create --name VPNhubVM --resource-group $RG --location $Location --allocation-method Dynamic
+az network nic create --resource-group $RG -n VPNVMNIC --location $Location --subnet VPNhubVM --private-ip-address 10.0.10.10 --vnet-name VPNhub --public-ip-address VPNhubVM --ip-forwarding true
+az vm create -n VPNVM --resource-group $RG --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics VPNVMNIC --no-wait 
+az network public-ip create --name onpremVM --resource-group $RG --location $Location --allocation-method Dynamic
+az network nic create --resource-group $RG -n onpremVMNIC --location $Location --subnet onpremVM --private-ip-address 10.1.10.10 --vnet-name onprem --public-ip-address onpremVM --ip-forwarding true
+az vm create -n onpremVM --resource-group $RG --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics onpremVMNIC --no-wait 
+az network route-table create --name vm-rt --resource-group $RG
+az network route-table route create --name vm-rt --resource-group $RG --route-table-name vm-rt --address-prefix 10.0.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.1.1.4
+az network vnet subnet update --name onpremVM --vnet-name onprem --resource-group $RG --route-table vm-rt
 </pre>
 
 **Document the public IPs for the test VMs, CSR and Azure VPN gateways and copy them to notepad. If the public IPs for the Azure VPN gateways return "none", do not continue. The gateways are deployed when they return a public IP.**
 <pre lang="...">
-az network public-ip show --resource-group VPN --name Azure-VNGpubip1 --query [ipAddress] --output tsv
-az network public-ip show --resource-group VPN --name Azure-VNGpubip2 --query [ipAddress] --output tsv
-az network public-ip show --resource-group VPN --name CSRPublicIP --query [ipAddress] --output tsv
-az network public-ip show --resource-group VPN --name VPNhubVM --query [ipAddress] --output tsv
-az network public-ip show --resource-group VPN --name onpremVM --query [ipAddress] --output tsv
+az network public-ip show --resource-group $RG --name Azure-VNGpubip1 --query [ipAddress] --output tsv
+az network public-ip show --resource-group $RG --name Azure-VNGpubip2 --query [ipAddress] --output tsv
+az network public-ip show --resource-group $RG --name CSRPublicIP --query [ipAddress] --output tsv
+az network public-ip show --resource-group $RG --name VPNhubVM --query [ipAddress] --output tsv
+az network public-ip show --resource-group $RG --name onpremVM --query [ipAddress] --output tsv
 </pre>
 
 **Document BGP information for the VPN gateway.**
 <pre lang="...">
-az network vnet-gateway list --query [].[name,bgpSettings.asn,bgpSettings.bgpPeeringAddress] -o table --resource-group VPN
+az network vnet-gateway list --query [].[name,bgpSettings.asn,bgpSettings.bgpPeeringAddress] -o table --resource-group $RG
 </pre>
 
 **Build the tunnel connection to the CSR. Replace "CSRPublicIP" with the public IP you copied to notepad. Note- only the /32 of the CSR loopback is allowed across the tunnel. All traffic will be allowed across the tunnel.**
 <pre lang="...">
-az network local-gateway create --gateway-ip-address "CSRPublicIP" --name to-onprem --resource-group VPN --local-address-prefixes 192.168.1.1/32 --asn 65002 --bgp-peering-address 192.168.1.1
-az network vpn-connection create --name to-onprem --resource-group VPN --vnet-gateway1 Azure-VNG -l eastus2 --shared-key Msft123Msft123 --local-gateway2 to-onprem --enable-bgp
+az network local-gateway create --gateway-ip-address "CSRPublicIP" --name to-onprem --resource-group $RG --local-address-prefixes 192.168.1.1/32 --asn 65002 --bgp-peering-address 192.168.1.1
+az network vpn-connection create --name to-onprem --resource-group $RG --vnet-gateway1 Azure-VNG -l $Location --shared-key Msft123Msft123 --local-gateway2 to-onprem --enable-bgp
 </pre>
 
 **SSH to the CSR and paste in the below config. Make sure to change "Azure-VNGpubip1" and "Azure-VNGpubip2" . After this step, the test VMs will be able to reach each other.**
