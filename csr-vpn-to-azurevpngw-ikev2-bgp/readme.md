@@ -77,7 +77,7 @@ az network local-gateway create --gateway-ip-address "insert CSR Public IP" --na
 
 **Create VPN connections**
 <pre lang="...">
-az network vpn-connection create --name to-onprem --resource-group $RG --vnet-gateway1 Azure-VNG -l westus --shared-key Msft123Msft123 --local-gateway2 to-onprem --enable-bgp
+az network vpn-connection create --name to-onprem --resource-group $RG --vnet-gateway1 Azure-VNG -l $Location --shared-key Msft123Msft123 --local-gateway2 to-onprem --enable-bgp
 </pre>
 
 **SSH to CSR public IP. Public IPs in the below config are an example.**
