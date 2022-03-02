@@ -83,7 +83,7 @@ az network vpn-connection create --name to-onprem --resource-group $RG --vnet-ga
 az network vpn-connection ipsec-policy add -g $RG --connection-name to-onprem --dh-group DHGroup14 --ike-encryption AES256 --ike-integrity SHA1 --ipsec-encryption GCMAES256 --ipsec-integrity GCMAES256 --pfs-group None --sa-lifetime 27000 --sa-max-size 102400000
 </pre>
 
-**SSH to C8K public IP. Public IPs in the below config are an example.**
+**SSH to C8K public IP. Public IPs in the below config are an example. Notice the first few steps that are required to enable the proper licensing.**
 <pre lang="...">
 license boot level network-advantage addon dna-advantage
 do wr mem
