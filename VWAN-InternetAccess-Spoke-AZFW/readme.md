@@ -52,7 +52,6 @@ az network vhub show -g $RG -n $hubname --query 'routingState' -o tsv
 
 ##Create connections from the VWAN hub to each spoke. Inject 0/0 into the fabric pointing to next hop of the private IP of Azure Firewall in Spoke1.
 <pre lang="...">
-nvavnet=Spoke1 #NVA VNET Name
 connname=to-spoke1
 az network vhub connection create --name to-Spoke1 --resource-group $RG --remote-vnet Spoke1 --vhub-name $hubname
 az network vhub connection create --name to-Spoke2 --resource-group $RG --remote-vnet Spoke2 --vhub-name $hubname 
