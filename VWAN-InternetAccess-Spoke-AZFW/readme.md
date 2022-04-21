@@ -5,6 +5,12 @@ This lab illustrates how to build a basic VWAN environment with Internet access 
 # Base Topology
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/vwan-inet-spoke.PNG)
 
+**Before deploying CSR in the next step, you may have to accept license agreement unless you have used it before. You can accomplish this through deploying a CSR in the portal or Powershell commands via Cloudshell**
+<pre lang="...">
+Sample Azure CLI:
+az vm image terms accept --urn cisco:cisco-csr-1000v:17_3_4a-byol:latest
+</pre>
+
 **Build Resource Groups, VNETs and Subnets**
 <pre lang="...">
 ##Variables#
