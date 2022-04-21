@@ -11,10 +11,8 @@ This lab illustrates how to build a basic VWAN environment with Internet access 
 RG="VWAN-test"
 Location="eastus"
 hubname="vhub1"
-</pre>
 
 ##Create RG and VWAN Hub
-<pre lang="...">
 az group create --name VWAN-test --location $Location
 az network vwan create --name VWAN --resource-group $RG --branch-to-branch-traffic true --location $Location
 az network vhub create --address-prefix 192.168.0.0/24 --name $hubname --resource-group $RG --vwan VWAN --location $Location --sku basic
