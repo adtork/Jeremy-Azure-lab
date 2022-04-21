@@ -42,8 +42,6 @@ az network vnet create --resource-group $RG --name Spoke2 --location $Location -
 az network public-ip create --name Spoke2VMPubIP --resource-group $RG --location $Location --allocation-method Dynamic
 az network nic create --resource-group $RG -n Spoke2VMNIC --location $Location --subnet Spoke2VM --vnet-name Spoke2 --public-ip-address Spoke2VMPubIP --private-ip-address 10.2.10.4
 az VM create -n Spoke2VM --resource-group $RG --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics Spoke2VMNIC --no-wait
-</pre>
-
 az network route-table create --name CSR-RT --resource-group $RG --location $Location
 az network route-table route create --resource-group $RG --name to-Internet --route-table-name CSR-RT --address-prefix 0.0.0.0/0 --next-hop-type Internet
 az network vnet subnet update --name zeronet --vnet-name Spoke1 --resource-group $RG --route-table CSR-RT
