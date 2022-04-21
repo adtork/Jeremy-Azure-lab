@@ -1,4 +1,4 @@
-# Azure Networking Lab- VWAN with Internet access through firewall in a spoke.
+# Azure Networking Lab- VWAN with Internet access through Azure firewall in a spoke.
 
 This lab illustrates how to build a basic VWAN environment with Internet access provided by an Azure Firewall in the spoke. The same principles apply if you were to use an NVA in the spoke in place of the Azure Firewall. All Azure configs are done in Azure CLI so you can change them as needed to match your environment. Note- VM username is "azureuser" and passwords are "Msft123Msft123". The VM in Spoke2 will have outbound Internet access through the firewall in Spoke1. VWAN Hub is injecting a default route out all of the connections with a next hop of Azure Firewall. In order to test connectivity, you will need to console/Bastion into the Spoke2 VM to test access or apply a UDR with your source IP to next hop Internet.
 
