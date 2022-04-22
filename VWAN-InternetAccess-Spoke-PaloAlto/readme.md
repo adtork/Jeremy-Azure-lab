@@ -68,7 +68,7 @@ az network vhub connection create --name to-Spoke1 --resource-group $RG --remote
 </pre>
 
 **Firewall configuration**
-- Download Firewall XML file: https://github.com/jwrightazure/lab/blob/master/pan-vpn-to-azurevpngw-ikev2-bgp/running-config.xml
+- Download Firewall XML file: https://github.com/jwrightazure/lab/blob/master/VWAN-InternetAccess-Spoke-PaloAlto/PAN-SPOKE.xml
 - Open the XML file and replace references to "Azure-VNGpubip" with the public IP addresses for the Azure VPN gateway and save.
 - HTTPS to the firewall
 - Select Device tab
