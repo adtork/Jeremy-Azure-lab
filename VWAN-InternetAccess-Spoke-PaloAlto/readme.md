@@ -67,19 +67,23 @@ vnetid=$(az network vnet show -g $RG -n Spoke1 --query id --out tsv)
 az network vhub connection create --name to-Spoke1 --resource-group $RG --remote-vnet $vnetid --vhub-name $hubname --route-name default --address-prefixes "0.0.0.0/0" --next-hop "10.1.1.4"
 </pre>
 
+##Document the FW management IP
+<pre lang="...">
+az network public-ip show --resource-group $RG -n PAN1MgmtIP --query "{address: ipAddress}"
+</pre>
+
+
 **Firewall configuration**
 - Download Firewall XML file: https://github.com/jwrightazure/lab/blob/master/VWAN-InternetAccess-Spoke-PaloAlto/PAN-SPOKE.xml
 - Open the XML file and replace references to "Azure-VNGpubip" with the public IP addresses for the Azure VPN gateway and save.
 - HTTPS to the firewall
 - Select Device tab
 - Select Operations tab
-- Select Import Named Configuration Snapshot. Upload the running-config.xml file in this repo.
+- Select Import Named Configuration Snapshot. Upload the PAN-SPOKE.xml file in this repo.
 - Select Load Named Configuration Snapshot. Select the firewall XML you previously uploaded.
 - Select Commit (top right) and then commit the configuration
 
-
-
 ##From the VM in Spoke2, curl ipconfig.io. The output should be the public IP of the CSR 
 <pre lang="...">
-az network public-ip show --resource-group $RG -n PAN1MgmtIP --query "{address: ipAddress}"
+az network public-ip show --resource-group $RG -n PAN-Outside-PublicIP --query "{address: ipAddress}"
 </pre>
