@@ -82,7 +82,7 @@ az network public-ip show --resource-group $RG -n PAN1MgmtIP --query "{address: 
 - Select Load Named Configuration Snapshot. Select the firewall XML you previously uploaded.
 - Select Commit (top right) and then commit the configuration
 
-##From the VM in Spoke2, curl ipconfig.io. The output should be the public IP of the CSR 
+##From the VM in Spoke2, curl ipconfig.io. The output should be the public IP of the FW.
 <pre lang="...">
 az network public-ip show --resource-group $RG -n PAN-Outside-PublicIP --query "{address: ipAddress}"
 </pre>
