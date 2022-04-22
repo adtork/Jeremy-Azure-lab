@@ -75,7 +75,6 @@ az network public-ip show --resource-group $RG -n PAN1MgmtIP --query "{address: 
 
 **Firewall configuration**
 - Download Firewall XML file: https://github.com/jwrightazure/lab/blob/master/VWAN-InternetAccess-Spoke-PaloAlto/PAN-SPOKE.xml
-- Open the XML file and replace references to "Azure-VNGpubip" with the public IP addresses for the Azure VPN gateway and save.
 - HTTPS to the firewall
 - Select Device tab
 - Select Operations tab
