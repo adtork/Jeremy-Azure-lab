@@ -11,7 +11,7 @@ az vm image terms accept --urn paloaltonetworks:vmseries1:byol:latest
 # Base Topology
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/service-tag-udr-topo.PNG)
 
-**Set your variables. Make sure to change "sourceIP" to the public IP you are sourcing traffic from EX: SSH to the vms
+**Set your variables. Make sure to change "sourceIP" to the public IP you are sourcing traffic from EX: SSH to the vms**
 <pre lang="...">
 ##Variables##
 RG="UDR-Service-Tag-RG"
@@ -22,7 +22,7 @@ sourceIP="x.x.x.x/32"
 </pre>
 
 
-# Create Hub VNET, PAN FW, Azure VPN GW and Hub vm.
+**Create Hub VNET, PAN FW, Azure VPN GW and Hub vm.**
 <pre lang="...">
 az group create --name UDR-Service-Tag-RG --location $Location
 az network vnet create --resource-group $RG --name $hubname --location $Location --address-prefixes 10.0.0.0/16 --subnet-name HubVM --subnet-prefix 10.0.10.0/24
@@ -54,7 +54,7 @@ az network route-table route create --name Default --resource-group $RG --route-
 az network route-table route create --name Source-IP-rt --resource-group $RG --route-table-name Hub-rt --address-prefix $sourceIP --next-hop-type Internet
 </pre>
 
-# Create a VNET to simulate on premises, CSR and on premises vm.
+**Create a VNET to simulate on premises, CSR and on premises vm.**
 <pre lang="...">
 az network vnet create --resource-group $RG --name onprem --location $Location --address-prefixes 10.1.0.0/16 --subnet-name VM --subnet-prefix 10.1.10.0/24
 az network vnet subnet create --address-prefix 10.1.0.0/24 --name zeronet --resource-group $RG --vnet-name onprem
@@ -77,27 +77,27 @@ az network nic create --resource-group $RG -n onpremVMNIC --location $Location -
 az vm create -n onpremVM --resource-group $RG --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics onpremVMNIC --no-wait
 </pre>
 
-# Create a route table for your source IP to be able to access PAN's management interface. Otherwise it will follow 0/0 advertised from on premises.
+**Create a route table for your source IP to be able to access PAN's management interface. Otherwise it will follow 0/0 advertised from on premises.**
 <pre lang="...">
 az network route-table create --name PAN-mgmt-rt --resource-group $RG
 az network route-table route create --resource-group $RG --route-table-name PAN-mgmt-rt -n Source-IP --address-prefix $sourceIP --next-hop-type Internet
 </pre>
 
-# Document public IPs for the VPN GW and CSR. Do not continue until you see an IP address associated with the VPN GW. This could take 15-20min.
+**Document public IPs for the VPN GW and CSR. Do not continue until you see an IP address associated with the VPN GW. This could take 15-20min.**
 <pre lang="...">
 az network public-ip show --resource-group $RG -n Azure-VNGpubip --query "{address: ipAddress}"
 az network public-ip show --resource-group $RG -n CSR1PublicIP --query "{address: ipAddress}"
 az network public-ip show --resource-group $RG -n onpremVMPubIP --query "{address: ipAddress}"
 </pre>
 
-# Update route tables. This is intentionally placed here due to timing of resources being provisioned in this lab.
+**Update route tables. This is intentionally placed here due to timing of resources being provisioned in this lab.**
 <pre lang="...">
 az network vnet subnet update --name HubVM --vnet-name $hubname --resource-group $RG --route-table Hub-rt
 az network vnet subnet update --name twonet --vnet-name $hubname --resource-group $RG --route-table PAN-mgmt-rt
 az network vnet subnet update --name VM --vnet-name onprem --resource-group $RG --route-table vm-rt
 </pre>
 
-# Create the Local Network Gateway and Connection for the VPN connection to the CSR. Change "CSR1PublicIP" to the CSR public IP.
+**Create the Local Network Gateway and Connection for the VPN connection to the CSR. Change "CSR1PublicIP" to the CSR public IP.**
 <pre lang="...">
 az network local-gateway create --gateway-ip-address "CSR1PublicIP" --name to-onprem --resource-group $RG --local-address-prefixes 192.168.1.1/32 --asn 65002 --bgp-peering-address 192.168.1.1
 
@@ -107,7 +107,7 @@ az network vpn-connection create --name to-onprem --resource-group $RG --vnet-ga
 az network vnet-gateway list --query [].[name,bgpSettings.asn,bgpSettings.bgpPeeringAddress] -o table --resource-group $RG
 </pre>
 
-# SSH to the onpremises vm. From there, SSH to azureuser@10.1.1.4 and paste in the following configuration AFTER changing "Azure-VNGpubip" to the VPN GW public IP. This will build a S2S tunnel to the VPN GW with BGP over IPSEC. The CSR will be injecting a default route into BGP and provide NAT services. Traffic sourced from the hub VNET will flow over the tunnel to the CSR and be NATd to the public IP address of the CSR.
+**SSH to the onpremises vm. From there, SSH to azureuser@10.1.1.4 and paste in the following configuration AFTER changing "Azure-VNGpubip" to the VPN GW public IP. This will build a S2S tunnel to the VPN GW with BGP over IPSEC. The CSR will be injecting a default route into BGP and provide NAT services. Traffic sourced from the hub VNET will flow over the tunnel to the CSR and be NATd to the public IP address of the CSR.**
 
 <pre lang="...">
 ip route 10.1.10.0 255.255.255.0 10.1.1.1
@@ -190,7 +190,7 @@ router bgp 65002
 ip route 10.0.100.254 255.255.255.255 Tunnel 11
 </pre>
 
-# Document PAN's public IP for management and follow the below steps to configure PAN. The XML file provides basic configurations for interfaces, security policies, NAT and Virtual Router.
+**Document PAN's public IP for management and follow the below steps to configure PAN. The XML file provides basic configurations for interfaces, security policies, NAT and Virtual Router.**
 <pre lang="...">
 az network public-ip show --resource-group $RG -n PAN1MgmtIP --query "{address: ipAddress}"
 
@@ -204,9 +204,8 @@ az network public-ip show --resource-group $RG -n PAN1MgmtIP --query "{address: 
 - Select Commit (top right) and then commit the configuration
 </pre>
 
-# Create a VNET and web server in Azure West. The NSGs created allow port 80 and 22.
+**Create a VNET and web server in Azure West. The NSGs created allow port 80 and 22.**
 <pre lang="...">
-
 az network vnet create --name VNET --resource-group $RG --address-prefix 10.0.0.0/16 --subnet-name web --subnet-prefix 10.0.0.0/24 --location $location2
 
 # Create NSG allowing any source to hit the web server on port 80 and SSH
@@ -229,23 +228,23 @@ az vm extension set \
   --settings '{"commandToExecute":"apt-get -y update && apt-get -y install nginx"}'
 </pre>
 
-# Document web server IP and test connectivityfrom your local browser. Also document the Hub vm.
+**Document web server IP and test connectivityfrom your local browser. Also document the Hub vm.**
 <pre lang="...">
 az network public-ip show --resource-group $RG -n Web-PubIP --query "{address: ipAddress}" --output tsv
 az network public-ip show --resource-group $RG -n HubVMPubIP --query "{address: ipAddress}"
 </pre>
 
-# SSH to the web server. Enable TCP for inbound port 80 requests (minus internal Azure management communication)
+**SSH to the web server. Enable TCP for inbound port 80 requests (minus internal Azure management communication)**
 <pre lang="...">
 sudo tcpdump -i eth0 -nn -s0 -v port 80 and host not 168.63.129.16
 </pre>
 
-# SSH to the Hub vm. Curl ipconfig.io. The source IP address in the output of the tcpdump will be the CSR public IP.
+**SSH to the Hub vm. Curl ipconfig.io. The source IP address in the output of the tcpdump will be the CSR public IP.**
 <pre lang="...">
 az network public-ip show --resource-group $RG -n CSR1PublicIP --query "{address: ipAddress}"
 </pre>
 
-# Change the route table associated with the PAN untrust interface to route the service tag of Azure West US with next hop Internet. PAN OS only has a default route pointing 0/0 out its untrust interface(10.0.0.4/24) with next hop of the fabric(10.0.0.1/24). After adding the UDR, the fabric will route traffic directly out its untrust interface, NATd to it's public IP and out the Azure backbone. After adding the UDR, the web server will see the PAN untrust public IP as the source.
+**Change the route table associated with the PAN untrust interface to route the service tag of Azure West US with next hop Internet. PAN OS only has a default route pointing 0/0 out its untrust interface(10.0.0.4/24) with next hop of the fabric(10.0.0.1/24). After adding the UDR, the fabric will route traffic directly out its untrust interface, NATd to it's public IP and out the Azure backbone. After adding the UDR, the web server will see the PAN untrust public IP as the source.**
 
 <pre lang="...">
 az network route-table create --name Service-Tag-rt --resource-group $RG
