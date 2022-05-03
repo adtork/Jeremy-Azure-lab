@@ -248,6 +248,7 @@ az network public-ip show --resource-group $RG -n CSR1PublicIP --query "{address
 # Change the route table associated with the PAN untrust interface to route the service tag of Azure West US with next hop Internet. PAN OS only has a default route pointing 0/0 out its untrust interface(10.0.0.4/24) with next hop of the fabric(10.0.0.1/24). After adding the UDR, the fabric will route traffic directly out its untrust interface, NATd to it's public IP and out the Azure backbone. After adding the UDR, the web server will see the PAN untrust public IP as the source.
 
 <pre lang="...">
+az network route-table create --name Service-Tag-rt --resource-group $RG
 az network route-table route create --resource-group $RG --route-table-name Service-Tag-rt -n Azure-West --address-prefix AzureCloud.westus --next-hop-type Internet
-az network vnet subnet update --name zeronet --vnet-name $hubname --resource-group $RG --route-table Service-Tag-rt
+az network vnet subnet update --name zeronet --vnet-name $hubname --resource-group $RG --route-table Service-Tag-r
 </pre>
