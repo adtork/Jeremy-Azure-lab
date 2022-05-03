@@ -168,8 +168,8 @@ int tunnel 11
 
 access-list 100 deny   ip 10.1.10.0 0.0.0.255 10.0.10.0 0.0.0.255
 access-list 100 deny   ip 10.0.10.0 0.0.0.255 10.1.10.0 0.0.0.255
-access-list 100 permit ip 10.1.10.0 0.0.0.255 any
-access-list 100 permit ip 10.0.10.0 0.0.0.255 any
+access-list 100 permit ip 10.0.0.0 0.255.255.255 any
+
 
 ip nat inside source list 100 interface GigabitEthernet1 overload
 ip nat inside source list GS_NAT_ACL interface GigabitEthernet1 vrf GS overload
@@ -195,7 +195,7 @@ ip route 10.0.100.254 255.255.255.255 Tunnel 11
 az network public-ip show --resource-group $RG -n PAN1MgmtIP --query "{address: ipAddress}"
 
 **Firewall configuration**
-- Download the firewall configuration XML in this repo. https://
+- Download the firewall configuration XML in this repo. https://github.com/jwrightazure/lab/blob/master/UDR-Service-Tag/pan-service-tag.xml
 - HTTPS to the firewall management IP.
 - Select Device tab
 - Select Operations tab
