@@ -195,7 +195,7 @@ ip route 10.0.100.254 255.255.255.255 Tunnel 11
 az network public-ip show --resource-group $RG -n PAN1MgmtIP --query "{address: ipAddress}"
 
 **Firewall configuration**
-- Download the firewall configuration XML in this repo. https://github.com/jwrightazure/lab/blob/master/UDR-Service-Tag/pan-service-tag.xml
+- Download the firewall configuration XML in this repo. https://github.com/jwrightazure/lab/blob/master/UDR-Service-Tag/pan-udr-service-tag-final.xml
 - HTTPS to the firewall management IP.
 - Select Device tab
 - Select Operations tab
