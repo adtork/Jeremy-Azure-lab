@@ -170,9 +170,7 @@ access-list 100 deny   ip 10.1.10.0 0.0.0.255 10.0.10.0 0.0.0.255
 access-list 100 deny   ip 10.0.10.0 0.0.0.255 10.1.10.0 0.0.0.255
 access-list 100 permit ip 10.0.0.0 0.255.255.255 any
 
-
 ip nat inside source list 100 interface GigabitEthernet1 overload
-ip nat inside source list GS_NAT_ACL interface GigabitEthernet1 vrf GS overload
 
 router bgp 65002
   bgp      log-neighbor-changes
