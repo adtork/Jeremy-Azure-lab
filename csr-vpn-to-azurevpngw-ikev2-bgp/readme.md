@@ -155,7 +155,7 @@ az network vpn-connection show --name to-onprem --resource-group $RG --query "{s
 
 Key Cisco commands
 - show interface tunnel 1
-- show crypto session)
+- show crypto session
 - show crypto ipsec transform-set
 - show crypto ikev2 proposal
 
