@@ -121,7 +121,7 @@ crypto ipsec profile to-onprem-IPsecProfile
   set security-association lifetime seconds 3600
   exit
 
-int tunnel 11
+int tunnel 1
   ip address 192.168.1.1 255.255.255.255
   tunnel mode ipsec ipv4
   ip tcp adjust-mss 1350
@@ -134,7 +134,7 @@ router bgp 65002
   bgp      log-neighbor-changes
   neighbor 10.0.0.254 remote-as 65001
   neighbor 10.0.0.254 ebgp-multihop 255
-  neighbor 10.0.0.254 update-source tunnel 11
+  neighbor 10.0.0.254 update-source tunnel 1
 
   address-family ipv4
     network 10.1.10.0 mask 255.255.255.0
@@ -143,7 +143,7 @@ router bgp 65002
   exit
 
 !route BGP peer IP over the tunnel
-ip route 10.0.0.254 255.255.255.255 Tunnel 11
+ip route 10.0.0.254 255.255.255.255 Tunnel 1
 
 </pre>
 
@@ -154,7 +154,7 @@ az network vpn-connection show --name to-onprem --resource-group $RG --query "{s
 
 
 Key Cisco commands
-- show interface tunnel 11
+- show interface tunnel 1
 - show crypto session)
 - show crypto ipsec transform-set
 - show crypto ikev2 proposal
