@@ -1,4 +1,4 @@
-# Azure Networking Lab- VWAN with Internet access through Palo Alto Firewalls in a spoke.
+# Azure Networking Lab- VWAN with Internet access through load balanced Palo Alto Firewalls in a spoke.
 
 This lab illustrates how to build a basic VWAN environment with Internet access provided by a load balanced pair of Palo Alto Firewalls in the spoke. The same principles apply if you were to use other vendor's NVA in the spoke in place of PAN. All Azure configs are done in Azure CLI so you can change them as needed to match your environment. Note- VM username is "azureuser" and passwords are "Msft123Msft123". The VM in Spoke2 will have outbound Internet access through the FWs in Spoke1. VWAN Hub is injecting a default route out all of the connections with a next hop of the Azure Load Balancer. The FW is providing NAT functionality which will map to it's public IP associated with the Trust NIC. In order to test connectivity, you will need to console/Bastion into the VM in Spoke2 to test access or apply a UDR with your source IP to next hop Internet. 
 
