@@ -12,7 +12,7 @@ hubname="Transit-VNET"
 sourceIP="x.x.x.x/32"
 </pre>
 
-**Accept terms for Cisco and PAN**
+**Accept terms for PAN**
 <pre lang="...">
 az vm image terms accept --urn paloaltonetworks:vmseries1:byol:latest
 </pre>
