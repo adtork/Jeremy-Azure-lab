@@ -101,7 +101,7 @@ az network public-ip show --resource-group $RG -n HubVMPubIP --query "{address: 
 **Validate ARS is receiving 0/0 from the PAN Trust interfaces**
 <pre lang="...">
 az network routeserver peering list-learned-routes --name to-PAN1 --routeserver RouteServer --resource-group $RG
-az network routeserver peering list-learned-routes --name to-PAN1 --routeserver RouteServer --resource-group $RG
+az network routeserver peering list-learned-routes --name to-PAN2 --routeserver RouteServer --resource-group $RG
 </pre>
 
 **Verify Hub VM effective route table shows both PAN Trust interfaces for 0/0.**
