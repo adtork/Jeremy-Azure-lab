@@ -70,6 +70,10 @@ az network vnet subnet update --name VMSubnet --vnet-name $hubname --resource-gr
 az network route-table create --name PANmgmt-vm-rt --resource-group $RG --disable-bgp-route-propagation true
 az network route-table route create --name default --resource-group $RG --route-table-name PANmgmt-vm-rt --address-prefix "0.0.0.0/0" --next-hop-type Internet
 az network vnet subnet update --name Mgmt --vnet-name $hubname --resource-group $RG --route-table PANmgmt-vm-rt
+
+az network route-table create --name PANTrust-vm-rt --resource-group $RG
+az network route-table route create --name default --resource-group $RG --route-table-name PANTrust-vm-rt --address-prefix "0.0.0.0/0" --next-hop-type Internet
+az network vnet subnet update --name FirewallSubnet --vnet-name $hubname --resource-group $RG --route-table PANTrust-vm-rt
 </pre>
 
 **Create BGP peering from ARS to the PAN Trust interfaces. Document ARS IPs for PAN to peer with**
