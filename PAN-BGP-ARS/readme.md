@@ -115,4 +115,4 @@ az network public-ip show --resource-group $RG -n PAN2-Trust-PublicIP --query "{
 az network nic show-effective-route-table -g $RG -n HubVMNIC -o table
 </pre>
 
-# Curl ipconfig.io from the test VM. You will see your source as one of the Trust interface IPs.
+**Curl ipconfig.io from the test VM. You will see your source as one of the Trust interface IPs.**
