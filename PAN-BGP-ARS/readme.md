@@ -1,6 +1,6 @@
 # Azure Networking Lab- Palo Alto Firewall Internet Egress with BGP
 
-This lab illustrates how to build multiple Palo Alto firewalls and have them be Internet egress for the VNET. Both PAN FWs will establish a BGP session with Azure Route Server (ARS) and then advertise a default route into the VNET. The test VM will see both Trust interfaces as the next hop for 0/0 and will load share across both FWs.
+This lab illustrates how to build multiple Palo Alto firewalls and have them be Internet egress for the VNET. Both PAN FWs will establish a BGP session with Azure Route Server (ARS) and then advertise a default route into the VNET. The test VM will see both Trust interfaces as the next hop for 0/0 and will load share across both FWs. Internet access via these firewalls can be extended to environments like AVS etc.
 # Topology
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/PAN-ARS-Topo.png)
 
