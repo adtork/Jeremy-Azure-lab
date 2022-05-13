@@ -89,7 +89,7 @@ az network public-ip show --resource-group $RG -n HubVMPubIP --query "{address: 
 
 **Repo has 2 FW XML configuration files. Apply configuration to the appropriate FW**
 <pre lang="...">
-- Download Firewall XML file for PAN1 and PAN2 Mgmt interfaces: 
+- Download Firewall XML file for PAN1 and PAN2: 
 - HTTPS to the firewall
 - Select Device tab
 - Select Operations tab
