@@ -80,8 +80,6 @@ az network routeserver show --name RouteServer --resource-group $RG
 
 **Document public IPs**
 <pre lang="...">
-az network public-ip show --resource-group $RG -n Azure-VNGpubip1 --query "{address: ipAddress}"
-az network public-ip show --resource-group $RG -n Azure-VNGpubip2 --query "{address: ipAddress}"
 az network public-ip show --resource-group $RG -n PAN1MgmtIP --query "{address: ipAddress}"
 az network public-ip show --resource-group $RG -n PAN2MgmtIP --query "{address: ipAddress}"
 az network public-ip show --resource-group $RG -n HubVMPubIP --query "{address: ipAddress}"
