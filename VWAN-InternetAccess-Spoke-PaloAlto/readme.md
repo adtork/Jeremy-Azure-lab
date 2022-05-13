@@ -100,7 +100,7 @@ az network public-ip show --resource-group $RG -n PAN1MgmtIP --query "{address: 
 - HTTPS to the firewall
 - Select Device tab
 - Select Operations tab
-- Select Import Named Configuration Snapshot. Upload the PAN-SPOKE.xml file in this repo.
+- Select Import Named Configuration Snapshot. Upload the appropriate XML files in this repo.
 - Select Load Named Configuration Snapshot. Select the firewall XML you previously uploaded.
 - Select Commit (top right) and then commit the configuration
 
