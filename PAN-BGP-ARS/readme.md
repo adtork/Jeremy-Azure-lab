@@ -104,15 +104,16 @@ az network routeserver peering list-learned-routes --name to-PAN1 --routeserver 
 az network routeserver peering list-learned-routes --name to-PAN1 --routeserver RouteServer --resource-group $RG
 </pre>
 
+**Verify Hub VM effective route table shows both PAN Trust interfaces for 0/0.**
+<pre lang="...">
+az network nic show-effective-route-table -g $RG -n HubVMNIC -o table
+</pre>
+
 **From the VM in Spoke2, curl ipconfig.io. The output should be the public IP of either FW.**
 <pre lang="...">
 az network public-ip show --resource-group $RG -n PAN1-Trust-PublicIP --query "{address: ipAddress}"
 az network public-ip show --resource-group $RG -n PAN2-Trust-PublicIP --query "{address: ipAddress}"
 </pre>
 
-**Verify Hub VM effective route table shows both PAN Trust interfaces for 0/0.**
-<pre lang="...">
-az network nic show-effective-route-table -g $RG -n HubVMNIC -o table
-</pre>
 
-**Curl ipconfig.io from the test VM. You will see your source as one of the Trust interface IPs.**
+
