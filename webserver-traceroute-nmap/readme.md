@@ -1,6 +1,6 @@
 # Azure Networking Lab- Create a linux vm with an NGINX web server, iperf, traceroute, and NMAP.
 
-This will build an Ubuntu server and install NGINX, iperf, traaceroute and NMAP. The lab includes an NSG allowing inbound port 80 and 22.
+This will build an Ubuntu server and install NGINX, iperf, traceroute and NMAP. The lab includes an NSG allowing inbound port 80 and 22.
 
 <pre lang="...">
 # Define resource group and region location variables
