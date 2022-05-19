@@ -128,7 +128,7 @@ Get-AzureRMVMImagePublisher -Location $locName | Select PublisherName
 $pubName="paloaltonetworks"
 Get-AzureRMVMImageOffer -Location $locName -Publisher $pubName | Select Offer
 
-$offerName="vmseries1"
+$offerName="vmseries-flex"
 Get-AzureRMVMImageSku -Location $locName -Publisher $pubName -Offer $offerName | Select Skus
 
 $skuName="byol"
