@@ -106,6 +106,7 @@ az network public-ip show --resource-group $RG -n PAN1MgmtIP --query "{address: 
 
 ##From the VM in Spoke2, curl ipconfig.io. The output should be the public IP of either FW.
 <pre lang="...">
+az network public-ip show --resource-group $RG -n Spoke2VMPubIP --query "{address: ipAddress}"
 az network public-ip show --resource-group $RG -n PAN1-Trust-PublicIP --query "{address: ipAddress}"
 az network public-ip show --resource-group $RG -n PAN2-Trust-PublicIP --query "{address: ipAddress}"
 </pre>
