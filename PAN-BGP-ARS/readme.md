@@ -15,7 +15,7 @@ sourceIP="x.x.x.x/32"
 
 **Accept terms for PAN**
 <pre lang="...">
-az vm image terms accept --urn paloaltonetworks:vmseries1:byol:latest
+az vm image terms accept --urn paloaltonetworks:vmseries-flex:byol:latest
 </pre>
 
 **Create RG and VNET/subnets**
@@ -50,13 +50,13 @@ az network public-ip create --name PAN1MgmtIP --resource-group $RG --idle-timeou
 az network public-ip create --name PAN1-Trust-PublicIP --resource-group $RG --idle-timeout 30 --sku Standard
 az network nic create --name PAN1MgmtInterface --resource-group $RG --subnet Mgmt --vnet-name $hubname --public-ip-address PAN1MgmtIP --private-ip-address 10.0.3.4 --ip-forwarding true --network-security-group PAN-NSG
 az network nic create --name PAN1TrustInterface --resource-group $RG --subnet FirewallSubnet --vnet-name $hubname --private-ip-address 10.0.2.4 --ip-forwarding true --network-security-group PAN-NSG --public-ip-address PAN1-Trust-PublicIP 
-az vm create --resource-group $RG --location $Location --name PAN1 --size Standard_D3_v2 --nics PAN1MgmtInterface PAN1TrustInterface  --image paloaltonetworks:vmseries1:byol:latest --admin-username azureuser --admin-password Msft123Msft123 --no-wait
+az vm create --resource-group $RG --location $Location --name PAN1 --size Standard_D3_v2 --nics PAN1MgmtInterface PAN1TrustInterface  --image paloaltonetworks:vmseries-flex:byol:latest --admin-username azureuser --admin-password Msft123Msft123 --no-wait
 
 az network public-ip create --name PAN2MgmtIP --resource-group $RG --idle-timeout 30 --sku Standard
 az network public-ip create --name PAN2-Trust-PublicIP --resource-group $RG --idle-timeout 30 --sku Standard
 az network nic create --name PAN2MgmtInterface --resource-group $RG --subnet Mgmt --vnet-name $hubname --public-ip-address PAN2MgmtIP --private-ip-address 10.0.3.5 --ip-forwarding true --network-security-group PAN-NSG
 az network nic create --name PAN2TrustInterface --resource-group $RG --subnet FirewallSubnet --vnet-name $hubname --private-ip-address 10.0.2.5 --ip-forwarding true --network-security-group PAN-NSG --public-ip-address PAN2-Trust-PublicIP 
-az vm create --resource-group $RG --location $Location --name PAN2 --size Standard_D3_v2 --nics PAN2MgmtInterface PAN2TrustInterface  --image paloaltonetworks:vmseries1:byol:latest --admin-username azureuser --admin-password Msft123Msft123 --no-wait
+az vm create --resource-group $RG --location $Location --name PAN2 --size Standard_D3_v2 --nics PAN2MgmtInterface PAN2TrustInterface  --image paloaltonetworks:vmseries-flex:byol:latest --admin-username azureuser --admin-password Msft123Msft123 --no-wait
 
 # Create test VM in the Hub
 az network public-ip create --name HubVMPubIP --resource-group $RG --location $Location --allocation-method Dynamic
