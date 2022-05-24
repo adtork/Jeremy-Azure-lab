@@ -134,3 +134,8 @@ Get-AzureRMVMImageSku -Location $locName -Publisher $pubName -Offer $offerName |
 $skuName="byol"
 Get-AzureRMVMImage -Location $locName -Publisher $pubName -Offer $offerName -Sku $skuName | Select Version
 </pre>
+
+**Azure CLI example to search all PAN images**
+<pre lang="...">
+az vm image list -p Palo --all --output table
+</pre>
