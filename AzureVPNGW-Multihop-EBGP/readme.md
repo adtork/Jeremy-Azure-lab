@@ -2,7 +2,7 @@
 
 This lab guide illustrates how to build a basic IKEv2 between a Cisco CSR and the Azure VPN gateway. The goal is to have the IKEv2 tunnel be established between the Azure VPN GW and CSR1 and establish BGP peering between the same VPN GW and CSR2 across the tunnel. This is for lab testing purposes only. All Azure configs are done in Azure CLI so you can change them as needed to match your environment. The entire lab including simulated on prem is done in Azure. No hardware required. Current CSR image used is 17.3.4a. All username/password are azureuser/Msft123Msft123.
 
-# Topology- VPN GW IKEv2 tunnel to CSR1, eBGP between VPN and CSR2
+# Topology- VPN GW IKEv2 tunnel to CSR1, eBGP between VPN GW and CSR2
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/vpn-ebgp-topo.PNG)
 
 **Before deploying CSR in the next step, you may have to accept license agreement unless you have used it before. You can accomplish this through deploying a CSR in the portal or Powershell commands via Cloudshell**
