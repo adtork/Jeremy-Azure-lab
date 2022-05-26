@@ -163,4 +163,4 @@ ip route 10.0.0.254 255.255.255.255 10.1.2.1
 ip route 10.1.10.0 255.255.255.0 10.1.3.1
 </pre>
 
-**At this point, there should be an IKEv2 tunnel between the VPN GW and CSR1. There is also a BGP session between the VPN GW and CSR2 without a tunnel. Both VMs will be able to communicate after BGP is synchronized.**
+**At this point, there should be an IKEv2 tunnel between the VPN GW and CSR1. There is also a BGP session between the VPN GW and CSR2 across the tunnel. Both VMs will be able to communicate after BGP is synchronized.**
