@@ -10,7 +10,7 @@ The lab deploys an Azure VPN gateway into a VNET. We will also deploy a Cisco AS
 **Build Resource Groups, VNETs, Subnets and test VMs**
 <pre lang="...">
 ##Variables#
-RG="VWAN-PAN-Lab"
+RG="ASA-VPN-LAB"
 Location="eastus2"
 
 az group create --name $RG --location $Location
