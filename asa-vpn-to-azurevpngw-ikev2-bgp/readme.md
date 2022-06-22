@@ -37,7 +37,7 @@ az network public-ip create --name Azure-VNGpubip --resource-group $RG --allocat
 az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpubip --resource-group $RG --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw3 --no-wait --location $Location
 </pre>
 
-**Before deploying ASA in the next step, you may have to accept license agreement unless you have used it before. You can accomplish this through deploying a ASA in the portal or Powershell/Azure CLI commands. This is a sample for a Cisco ASA. See [this article](../boot-specific-NVA-version/readme.md) for how to modify this depending on the license you want to be using.**
+**Before deploying ASA in the next step, you may have to accept license agreement unless you have used it before. You can accomplish this through deploying a ASA in the portal or Powershell/Azure CLI commands.**
 <pre lang="...">
 az vm image terms accept --urn cisco:cisco-asav:asav-azure-byol:latest
 </pre>
