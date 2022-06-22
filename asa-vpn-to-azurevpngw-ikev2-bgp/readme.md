@@ -1,10 +1,6 @@
 # Azure Networking Lab- IPSEC VPN (IKEv2) between Cisco ASAv and Azure VPN Gateway with BGP
 
-This lab guide illustrates how to build a basic IPSEC VPN tunnel w/IKEv2 between a Cisco ASAv and the Azure VPN gateway with BGP. NAT and security proposals shown can be narrowed down if need be. All Azure configs are done in Azure CLI so you can change them as needed to match your environment. Note- the on prem ASAv has a private IP on the outside interface since it's hosted in Azure. You can apply a public IP if needed. The on prem VNET is to simulate on prem connectivity. This is for lab testing purposes only.
-
-Assumptions:
-- A valid Azure subscription account. If you don’t have one, you can create your free azure account (https://azure.microsoft.com/en-us/free/) today.
-- Latest Azure CLI, follow these instructions to install: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli 
+This lab guide illustrates how to build a basic IKEv2 tunnel between a Cisco ASAv and the Azure VPN gateway with BGP. NAT and security proposals shown can be narrowed down as needed. All Azure configs are done in Azure CLI so you can change them as needed to match your environment. The on prem VNET is used to simulate on prem connectivity so there is no required hardware. This is for lab testing purposes only.
 
 
 # Base Topology
