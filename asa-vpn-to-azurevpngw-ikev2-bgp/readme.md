@@ -42,7 +42,7 @@ az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpub
 az vm image terms accept --urn cisco:cisco-asav:asav-azure-byol:latest
 </pre>
 
-**Build ASAv in the on prem VNET. It specifies a specific image that you can change. See [this article](../boot-specific-NVA-version/readme.md) for how to get current versions.**
+**Build ASAv in the on prem VNET.**
 <pre lang="...">
 az network public-ip create --name ASA1MgmtIP --resource-group $RG --idle-timeout 30 --allocation-method Static --location $Location
 az network public-ip create --name ASA1VPNPublicIP --resource-group $RG --idle-timeout 30 --allocation-method Static --location $Location
