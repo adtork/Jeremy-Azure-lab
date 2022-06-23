@@ -172,7 +172,7 @@ router bgp 65002
  bgp graceful-restart
  bgp router-id 192.168.2.1
  address-family ipv4 unicast
-  neighbor 10.0.0.254 remote-as 65001
+  neighbor 10.0.0.254 remote-as 65515
   neighbor 10.0.0.254 ebgp-multihop 255
   neighbor 10.0.0.254 activate
   network 10.1.10.0 mask 255.255.255.0
