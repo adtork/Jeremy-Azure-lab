@@ -1,3 +1,4 @@
+<pre lang="...">
 Lab builds a Hub VNET with ARS, VPN GW and a VNET CSR to inject routes into ARS. On prem is simulated with a VNET and a CSR. On prem CSR has an ikev2 tunnel to the VPNGW with BGP. On prem is advertising 10.1.10.0/24, ASN 65002. CSR in the VNET is advertising 1.1.1.1/32, ASN 65003
 
 #Accept user agreement for CSR. The CSR is used in the simulated on prem VNET and will have a S2S tunnel to the VPNGW
@@ -198,3 +199,4 @@ Gateway of last resort is 10.0.200.1 to network 0.0.0.0
       10.0.0.0/8 is variably subnetted, 6 subnets, 3 masks
 B        10.0.0.0/16 [20/0] via 10.0.100.5, 00:07:34
 B        10.1.10.0/24 [20/0] via 10.0.100.5, 00:07:34
+</pre>
