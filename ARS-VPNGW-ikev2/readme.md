@@ -10,7 +10,7 @@ Location="eastus2"
 
 #Create VNETS, A/A VPN GWs, ARS and CSR
 az group create --name $RG --location $Location
-az network vnet create --resource-group $RG --name $RG --location $Location --address-prefixes 10.0.0.0/16 --subnet-name $RGVM --subnet-prefix 10.0.10.0/24
+az network vnet create --resource-group $RG --name $RG --location $Location --address-prefixes 10.0.0.0/16 --subnet-name VM --subnet-prefix 10.0.10.0/24
 az network vnet subnet create --address-prefix 10.0.0.0/24 --name GatewaySubnet --resource-group $RG --vnet-name $RG
 az network vnet subnet create --address-prefix 10.0.100.0/24 --name RouteServerSubnet --resource-group $RG --vnet-name $RG
 az network vnet subnet create --address-prefix 10.0.200.0/24 --name NVASubnet --resource-group $RG --vnet-name $RG
