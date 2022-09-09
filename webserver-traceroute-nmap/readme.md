@@ -33,3 +33,8 @@ az vm extension set \
 # Get the public IP of the web server
 az network public-ip show --resource-group $rg -n Web-PubIP --query "{address: ipAddress}" --output tsv
 </pre>
+
+# TCPdump example in Azure
+<pre lang="...">
+sudo tcpdump -i eth0 -nn -s0 -v port 80 and host not 168.63.129.16
+</pre>
