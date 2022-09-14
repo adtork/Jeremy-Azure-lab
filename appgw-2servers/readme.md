@@ -43,6 +43,9 @@ az network public-ip show --resource-group $rg --name myAGPublicIPAddress --quer
 
 # Wireshark
 <pre lang="...">
-on wireshark:
 http.x_forwarded_for
 </pre>
+
+# Wireshark showing that App GW privaye IP is the source, but the original client IP is maintained in x-forwarded for. The original client IP has been blurred.
+**Topology**
+![alt text]()
