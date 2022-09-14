@@ -1,4 +1,4 @@
-##Lab builds appgw and 2 backend servers with IIS
+## Lab builds appgw and 2 backend servers with IIS. At the end of this lab, you can install Wireshark on the servers and filter on "http.x_forwarded_for" to verify the client IP is maintained through the flow. ##
 
 <pre lang="...">
 # Define resource group and region location variables
