@@ -48,4 +48,4 @@ http.x_forwarded_for
 
 # Wireshark showing that App GW privaye IP is the source, but the original client IP is maintained in x-forwarded for. The original client IP has been blurred.
 **Topology**
-![alt text]()
+![alt text](https://github.com/jwrightazure/lab/blob/master/appgw-2servers/appgw-cap1.PNG)
