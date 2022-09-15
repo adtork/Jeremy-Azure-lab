@@ -14,6 +14,7 @@ This lab shows the basic configs for Expressroute Private Peering and a few veri
 - MSEEs are using remove-private-AS towards CE
 - CE is advertising 10.0.0.0/8 summary address towards Azure
 - Loopbacks are for lab only
+- When the ERGW is connected to the circuit, the address prefix of that VNET will be advertised via BGP towards on prem
 
 # Base Topology
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/ER%20private%20peering%20basic%20configs.PNG)
