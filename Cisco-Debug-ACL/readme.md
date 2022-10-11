@@ -1,6 +1,4 @@
 # Cisco Debug to ACL
-
-# Cisco Debug to ACL
 This lab creates a basic topology where ping treffic is sent from a VM to a Catalyst 8000v. In order to validate the traffic is being sent to C8V, we will configure a basic ACL and turn on debugs against that ACL. At the end of this lab, you will be able to validate traffic is routed correctly through Azure and is received by the C8V. All username/passwords are azureuser/Msft123Msft123
 
 # Base Topology
