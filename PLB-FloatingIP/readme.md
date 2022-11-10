@@ -1,6 +1,7 @@
 This lab builds an Azure Public Load balancer and a single backend Windows 2019 Server with a web server. The lab also configures the LB rule to use Floating IP as well as the steps to configure the loopback on the Windows Server. You can also add new Frontends/Backends with/without Floating IP to test different LB port mappings. Note- The LB does not pass x-forwarded-for (unlike App GW).A Bastion jump box is also created to access the Windows VMs since the VMs do not have public IPs. The second part of the lab creates a Linux web server with Floating IP disabled. How to configure Floating IP loopback on Ubuntu is also included. Username/pw is azureuser/Msft123Msft123
 
-Floating IP Notes:
+**Floating IP Notes:**
+<pre lang="...">
 If you enable Floating IP** 
 •	The traffic from the client will reach the LB
 •	The LB will forward the traffic to the backend server without NATting
@@ -14,7 +15,7 @@ If you Disable Floating IP (default behavior)
 •	The LB also does port NATting (if you configured different frontend and backend ports)
 •	The backend server receives traffic on his DIP and normally replies - traffic goes back to the LB
 •	The LB does NAT back (IP and eventually port) to the client.
-
+</pre>
 
 <pre lang="...">
 # Define resource group and region location variables
