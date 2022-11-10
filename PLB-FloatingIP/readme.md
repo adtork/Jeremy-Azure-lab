@@ -47,9 +47,10 @@ az network nic create --resource-group $rg --name web1-vmnic --vnet-name VNET --
 az vm create --resource-group $rg --name myVM1 --nics web1-vmnic --image win2019datacenter --admin-username azureuser --admin-password Msft123Msft123 --zone 1 --no-wait
 az network nic ip-config address-pool add --address-pool myBackendPool --ip-config-name ipconfig1 --nic-name web1-vmnic --resource-group $rg --lb-name myLoadBalancer
 az vm run-command invoke -g $rg -n myVM1 --command-id RunPowerShellScript --scripts "Install-WindowsFeature -name Web-Server -IncludeManagementTools"
+</pre>
 
-#In order for Floating IP to work with the Windows backend, you must configure the a loopback with parameters. Each VM OS may behave differently. Bastion to the web server, open up a command prompt
-
+**In order for Floating IP to work wi**th the Windows backend, you must configure the a loopback with parameters. Each VM OS may behave differently. Bastion to the web server, open up a command prompt.
+<pre lang="...">
 #validate the name of the loopback interface
 netsh interface ipv4 show interface
 
