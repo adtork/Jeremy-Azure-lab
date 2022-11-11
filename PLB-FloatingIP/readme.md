@@ -7,7 +7,7 @@ This lab builds an Azure Public Load balancer and a single backend Windows 2019 
 •	The LB will forward the traffic to the backend server without NATting
 •	The backend server receives the packet with destination IP = the Loadbalancer’s IP
 •	The backend server replies directly to the client
-•	The return traffic DOES NOT go through the load balancer anymore (direct server return J 
+•	The return traffic DOES NOT go through the load balancer anymore (direct server return)
 
 **If you Disable Floating IP (default behavior)**
 •	The traffic from the client will reach the LB
