@@ -2,18 +2,18 @@ This lab builds an Azure Public Load balancer and a single backend Windows 2019 
 
 **Floating IP Notes:**
 <pre lang="...">
-If you enable Floating IP** 
+**If you enable Floating IP** 
 •	The traffic from the client will reach the LB
 •	The LB will forward the traffic to the backend server without NATting
-•	The backend server receives the packet with destination IP = the Loadbalancer’s IP !!!
+•	The backend server receives the packet with destination IP = the Loadbalancer’s IP
 •	The backend server replies directly to the client
 •	The return traffic DOES NOT go through the load balancer anymore (direct server return J 
 
-If you Disable Floating IP (default behavior) 
+**If you Disable Floating IP (default behavior)**
 •	The traffic from the client will reach the LB
 •	The LB does IP NATting and sends the traffic to the DIP of the backend server
 •	The LB also does port NATting (if you configured different frontend and backend ports)
-•	The backend server receives traffic on his DIP and normally replies - traffic goes back to the LB
+•	The backend server receives traffic on his DIP and normally replies - traffic goes back to client itself, not back to "through" the LB even though the backend server sees the LB as the SIP
 •	The LB does NAT back (IP and eventually port) to the client.
 </pre>
 
