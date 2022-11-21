@@ -20,7 +20,7 @@ route-map NEXT-HOP permit 10
 </pre>
 
 
------------------------------------------------------------------
+<pre lang="...">
 router bgp 1
  bgp log-neighbor-changes
  network 1.1.1.1 mask 255.255.255.255
@@ -36,3 +36,4 @@ route-map FILTER permit 10
  set ip next-hop 10.140.140.4
 !
 route-map FILTER permit 20
+</pre>
