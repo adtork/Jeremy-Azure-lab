@@ -18,3 +18,21 @@ route-map NEXT-HOP permit 10
  set ip next-hop 10.0.12.3
 !         
 </pre>
+
+
+-----------------------------------------------------------------
+router bgp 1
+ bgp log-neighbor-changes
+ network 1.1.1.1 mask 255.255.255.255
+ neighbor 10.0.0.2 remote-as 2
+ neighbor 10.0.0.2 default-originate
+ neighbor 10.0.0.2 soft-reconfiguration inbound
+ neighbor 10.0.0.2 route-map FILTER out
+!
+ip prefix-list FILTER seq 10 permit 0.0.0.0/0
+!
+route-map FILTER permit 10
+ match ip address prefix-list FILTER
+ set ip next-hop 10.140.140.4
+!
+route-map FILTER permit 20
