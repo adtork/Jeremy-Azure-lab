@@ -56,10 +56,10 @@ controller-mode enable
 config-t
 hostname 8k1
 system
-organization-name "GBB-NETWORKING"
-sp-organization-name "GBB-NETWORKING"
+organization-name "your-existing-org-name"
+sp-organization-name "your-existing-org-name"
 site-id 10
-vbond 23.100.66.1
+vbond x.x.x.x
 system-ip 111.111.111.111
 commit
 exit
@@ -146,10 +146,10 @@ controller-mode enable
 config-t
 hostname 8k2
 system
-organization-name "GBB-NETWORKING"
-sp-organization-name "GBB-NETWORKING"
+organization-name "your-existing-org-name"
+sp-organization-name "your-existing-org-name"
 site-id 20
-vbond 23.100.66.1
+vbond x.x.x.x
 system-ip 112.112.112.112
 commit
 exit
@@ -184,7 +184,7 @@ exit
 request platform software sdwan root-cert-chain install bootflash:ROOTCA.pem
 </pre>
 
-**Configure 8k2 to join the existing SD-WAN fabric. Change the chassis and token.**
+**Configure 8k2 to join the existing SD-WAN fabric. Change the chassis and token. After 8k2 joins the fabric, VM1 and VM2 will be able to communicate**
 <pre lang="...">
 request platform software sdwan vedge_cloud activate chassis-number C8K-19D16B9C-8037-F6CC-14B5-5C9523F558E3 token ca89876d04f5410a857fa6b1ff2c1fca
 </pre>
