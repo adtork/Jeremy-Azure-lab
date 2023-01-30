@@ -2,7 +2,7 @@
 This lab builds 2 different VNETs, each with a Catalyst 8000v and test VMs. The 8ks will be onboarded to an existing SD-WAN fabric. The configurations assume an existing Cisco SD-WAN fabric with available licensing and vManage acting as the CA. The 8kv will be onboarded and configured via CLI, not through vManage templates. All Azure configurations are done with Azure CLI through shell.azure.com. At the end of this lab, each VM will be able to communicate via the SD-WAN tunnel.
 
 # Topology
-![alt text](https://github.com/jwrightazure/lab/blob/master/images/8k-sdwan-branch-topo.drawio.png)
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/8k-sdwan-branch-topo2.drawio.png)
 
 **Define variables and accept terms to use the 8kv. Change "x.x.x.x/32" to your source IP.**
 <pre lang="...">
