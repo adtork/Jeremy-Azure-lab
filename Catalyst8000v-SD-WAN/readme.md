@@ -103,6 +103,7 @@ request platform software sdwan vedge_cloud activate chassis-number C8K-19D16B9C
 <pre lang="...">
 rg=Branch2
 loc=eastus
+sourceIP="$x.x.x.x/32"
 
 az group create --name $rg --location $loc
 az network nsg create --resource-group $rg --name 8k2-transport --location $loc
