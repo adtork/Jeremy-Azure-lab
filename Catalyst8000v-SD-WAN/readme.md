@@ -47,7 +47,7 @@ do wr mem
 
 **Important- To onboard the 8ks, generate a bootstrap config in vManage and include the certificate. Change the file name to "ciscosdwan_cloud_init" and make sure it's a .cfg. Transfer the .cfg to the 8k.** 
 
-**Change the 8k from autonomous mode to controller mode. Confirm the change and then no to the init file. The 8k will reboot at this time.**
+**Change the 8k from autonomous mode to controller mode. The 8k will reboot at this time.**
 <pre lang="...">
 controller-mode enable
 </pre>
@@ -137,7 +137,7 @@ do wr mem
 
 **Important- To onboard the 8ks, generate a bootstrap config in vManage and include the certificate. Change the file name to "ciscosdwan_cloud_init" and make sure it's a .cfg. Transfer the .cfg to the 8k.** 
 
-**Change the 8k from autonomous mode to controller mode. Confirm the change and then no to the init file. The 8k will reboot at this time.**
+**Change the 8k from autonomous mode to controller mode. The 8k will reboot at this time.**
 <pre lang="...">
 controller-mode enable
 </pre>
