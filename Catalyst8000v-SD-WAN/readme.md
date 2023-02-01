@@ -63,10 +63,10 @@ ip address dhcp
 commit
 exit
 system
-organization-name "GBB-NETWORKING"
-sp-organization-name "GBB-NETWORKING"
+organization-name "change"
+sp-organization-name "change"
 site-id 10
-vbond 23.100.66.1
+vbond x.x.x.x
 system-ip 111.111.111.111
 commit
 exit
@@ -153,10 +153,10 @@ ip address dhcp
 commit
 hostname 8k2
 system
-organization-name "GBB-NETWORKING"
-sp-organization-name "GBB-NETWORKING"
+organization-name "change"
+sp-organization-name "change"
 site-id 20
-vbond 23.100.66.1
+vbond x.x.x.x
 system-ip 112.112.112.112
 commit
 exit
