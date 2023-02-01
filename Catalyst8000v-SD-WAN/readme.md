@@ -8,7 +8,7 @@ This lab builds 2 different VNETs, each with a Catalyst 8000v and test VMs. The 
 <pre lang="...">
 rg=Branch1
 loc=eastus
-sourceIP="$x.x.x.x/32"
+sourceIP="x.x.x.x/32"
 az vm image terms accept --urn Cisco:cisco-c8000v:17_09_02a-byol:latest
 </pre>
 
