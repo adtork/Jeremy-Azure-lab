@@ -1,4 +1,4 @@
-# Catalsyt 8000v SD-WAN in Azure
+# Draft-Catalsyt 8000v SD-WAN in Azure
 This lab builds 2 different VNETs, each with a Catalyst 8000v and test VMs. The 8ks will be onboarded to an existing SD-WAN fabric. The configurations assume an existing Cisco SD-WAN fabric with available licensing and vManage acting as the CA. The 8kv will be onboarded and configured via CLI, not through vManage templates. All Azure configurations are done with Azure CLI through shell.azure.com. At the end of this lab, each VM will be able to communicate via the SD-WAN tunnel.
 
 # Topology
