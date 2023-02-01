@@ -1,8 +1,8 @@
-# Draft- Catalyst 8000v SD-WAN in Azure
+# Catalsyt 8000v SD-WAN in Azure
 This lab builds 2 different VNETs, each with a Catalyst 8000v and test VMs. The 8ks will be onboarded to an existing SD-WAN fabric. The configurations assume an existing Cisco SD-WAN fabric with available licensing and vManage acting as the CA. The 8kv will be onboarded and configured via CLI, not through vManage templates. All Azure configurations are done with Azure CLI through shell.azure.com. At the end of this lab, each VM will be able to communicate via the SD-WAN tunnel.
 
 # Topology
-![alt text](https://github.com/jwrightazure/lab/blob/master/images/8k-sdwan-branch-topo2.drawio.png)
+![alt text](https://github.com/jwrightazure/lab/blob/master/images/8k-sdwan-branch-topo.drawio.png)
 
 **Define variables and accept terms to use the 8kv. Change "x.x.x.x/32" to your source IP.**
 <pre lang="...">
@@ -42,26 +42,31 @@ int gi2
 ip address dhcp
 no shut
 ip route 10.1.10.0 255.255.255.0 10.1.1.1
-exit
-wr mem
+do wr mem
 </pre>
 
-**Important- The vManage used in this lab has a root certificate named "ROOTCA.pem". From vManage vshell, cat ROOTCA.pem to view the certificate. Transfer the ROOTCA.pem file to 8k1. EX: on vManage- cat ROOTCA.pem, copy the output to your local machine, save the file, scp the file to VM1, on 8k1- "copy scp: bootflash:" and follow the prompts. The cert will be installed in a later step.** 
+**Important- To onboard the 8ks, generate a bootstrap config in vManage and include the certificate. Change the file name to "ciscosdwan_cloud_init" and make sure it's a .cfg. Transfer the .cfg to the 8k.** 
 
 **Change the 8k from autonomous mode to controller mode. Confirm the change and then no to the init file. The 8k will reboot at this time.**
 <pre lang="...">
 controller-mode enable
 </pre>
 
-**Onboard 8k1 to the existing SD-WAN fabric. Note- in controller mode you have to use "config-t" and you have to "commit" the config changes. Make sure to change the fabric setting match your environment.**
+**Onboard 8k1 to the existing SD-WAN fabric. Note- in controller mode you have to use "config-t" and you have to "commit" the config changes. Make sure to change the fabric setting match your environment. After the 8k reboots, the default username is admin/admin. You will need to change the password.**
 <pre lang="...">
 config-t
 hostname 8k1
+interface GigabitEthernet1
+ip address dhcp
+interface GigabitEthernet2
+ip address dhcp
+commit
+exit
 system
-organization-name "your-existing-org-name"
-sp-organization-name "your-existing-org-name"
+organization-name "GBB-NETWORKING"
+sp-organization-name "GBB-NETWORKING"
 site-id 10
-vbond x.x.x.x
+vbond 23.100.66.1
 system-ip 111.111.111.111
 commit
 exit
@@ -91,29 +96,21 @@ commit
 exit
 </pre>
 
-**Install the root certificate that was previously transferred.**
-<pre lang="...">
-request platform software sdwan root-cert-chain install bootflash:ROOTCA.pem
-</pre>
-
-**Configure 8k1 to join the existing SD-WAN fabric. Change the chassis and token.**
-<pre lang="...">
-request platform software sdwan vedge_cloud activate chassis-number C8K-19D16B9C-8037-F6CC-14B5-5C9523F558E3 token ca89876d04f5410a857fa6b1ff2c1fca
-</pre>
-
 **Create RG,VNET and VMs for site2**
 <pre lang="...">
 rg=Branch2
 loc=eastus
-sourceIP="$x.x.x.x/32"
+sourceIP="x.x.x.x/32"
 
 az group create --name $rg --location $loc
 az network nsg create --resource-group $rg --name 8k2-transport --location $loc
 az network nsg rule create --resource-group $rg --nsg-name 8k2-transport --name Azure --access Allow --protocol "*" --direction Inbound --priority 400 --source-address-prefix AzureCloud --source-port-range "*" --destination-address-prefix "*" --destination-port-range "*"
 az network nsg rule create --resource-group $rg --nsg-name 8k2-transport --name home --access Allow --protocol "*" --direction Inbound --priority 500 --source-address-prefix $sourceIP --source-port-range "*" --destination-address-prefix "*" --destination-port-range "*"
+
 az network nsg create --resource-group $rg --name VM2 --location $loc
 az network nsg rule create --resource-group $rg --nsg-name VM2 --name Azure --access Allow --protocol "*" --direction Inbound --priority 400 --source-address-prefix AzureCloud --source-port-range "*" --destination-address-prefix "*" --destination-port-range "*"
 az network nsg rule create --resource-group $rg --nsg-name VM2 --name home --access Allow --protocol "*" --direction Inbound --priority 500 --source-address-prefix $sourceIP --source-port-range "*" --destination-address-prefix "*" --destination-port-range "*"
+
 az network vnet create --resource-group $rg --name site2 --location $loc --address-prefixes 10.2.0.0/16 --subnet-name 8k2-transport --subnet-prefix 10.2.0.0/24 
 az network vnet subnet create --address-prefix 10.2.1.0/24 --name 8k2-service --resource-group $rg --vnet-name site2 
 az network vnet subnet create --address-prefix 10.2.10.0/24 --name site2-vm --resource-group $rg --vnet-name site2 
@@ -135,24 +132,31 @@ int gi2
 ip address dhcp
 no shut
 ip route 10.2.10.0 255.255.255.0 10.2.1.1
+do wr mem
 </pre>
 
-**Important- The vManage used in this lab has a root certificate named "ROOTCA.pem". From vManage vshell, cat ROOTCA.pem to view the certificate. Transfer the ROOTCA.pem file to 8k2. EX: on vManage- cat ROOTCA.pem, copy the output to your local machine, save the file, scp the file to VM2, on 8k1- "copy scp: bootflash:" and follow the prompts. The cert will be installed in a later step.** 
+**Important- To onboard the 8ks, generate a bootstrap config in vManage and include the certificate. Change the file name to "ciscosdwan_cloud_init" and make sure it's a .cfg. Transfer the .cfg to the 8k.** 
 
 **Change the 8k from autonomous mode to controller mode. Confirm the change and then no to the init file. The 8k will reboot at this time.**
 <pre lang="...">
 controller-mode enable
 </pre>
 
-**Onboard 8k2 to the existing SD-WAN fabric. Note- in controller mode you have to use "config-t" and you have to "commit" the config changes. Make sure to change the fabric setting match your environment.**
+**Onboard 8k2 to the existing SD-WAN fabric. Note- in controller mode you have to use "config-t" and you have to "commit" the config changes. Make sure to change the fabric setting match your environment. After the 8k reboots, the default username is admin/admin. You will need to change the password.**
 <pre lang="...">
 config-t
 hostname 8k2
+interface GigabitEthernet1
+ip address dhcp
+interface GigabitEthernet2
+ip address dhcp
+commit
+hostname 8k2
 system
-organization-name "your-existing-org-name"
-sp-organization-name "your-existing-org-name"
+organization-name "GBB-NETWORKING"
+sp-organization-name "GBB-NETWORKING"
 site-id 20
-vbond x.x.x.x
+vbond 23.100.66.1
 system-ip 112.112.112.112
 commit
 exit
@@ -180,16 +184,6 @@ exit
 ip route vrf 100 10.2.10.0 255.255.255.0 10.2.1.1
 commit
 exit
-</pre>
-
-**Install the root certificate that was previously transferred.**
-<pre lang="...">
-request platform software sdwan root-cert-chain install bootflash:ROOTCA.pem
-</pre>
-
-**Configure 8k2 to join the existing SD-WAN fabric. Change the chassis and token. After 8k2 joins the fabric, VM1 and VM2 will be able to communicate**
-<pre lang="...">
-request platform software sdwan vedge_cloud activate chassis-number C8K-19D16B9C-8037-F6CC-14B5-5C9523F558E3 token ca89876d04f5410a857fa6b1ff2c1fca
 </pre>
 
 **Verification commands on 8ks**
