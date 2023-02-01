@@ -42,6 +42,8 @@ int gi2
 ip address dhcp
 no shut
 ip route 10.1.10.0 255.255.255.0 10.1.1.1
+exit
+wr mem
 </pre>
 
 **Important- The vManage used in this lab has a root certificate named "ROOTCA.pem". From vManage vshell, cat ROOTCA.pem to view the certificate. Transfer the ROOTCA.pem file to 8k1. EX: on vManage- cat ROOTCA.pem, copy the output to your local machine, save the file, scp the file to VM1, on 8k1- "copy scp: bootflash:" and follow the prompts. The cert will be installed in a later step.** 
