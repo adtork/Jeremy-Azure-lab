@@ -80,5 +80,5 @@ mon cap TEST access-list ping interface GigabitEthernet 1 both start
 show mon cap TEST buffer brief
 </pre>
 
-#Buffer output after ACL
+**Buffer output after ACL**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/Cisco-Embedded-Packet-Capture/cap-output.png)
