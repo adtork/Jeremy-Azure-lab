@@ -81,4 +81,4 @@ show mon cap TEST buffer brief
 </pre>
 
 #Buffer output after ACL
-![alt text]()
+![alt text](https://github.com/jwrightazure/lab/blob/master/Cisco-Embedded-Packet-Capture/cap-output.png)
