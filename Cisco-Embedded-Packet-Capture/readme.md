@@ -75,7 +75,7 @@ no mon cap TEST
 ip access-list extended ping
 permit icmp host 10.1.10.10 10.1.20.10 0.0.0.0
 
-#Start capture and view buffer
+#Start capture and view buffer. Initiate ping from VM1 to VM2.
 mon cap TEST access-list ping interface GigabitEthernet 1 both start
 show mon cap TEST buffer brief
 </pre>
