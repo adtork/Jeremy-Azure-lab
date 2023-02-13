@@ -1,5 +1,5 @@
 # Cisco Embedded Packet Capture
-This lab demonstrates Embedded Packet Capture on IOS/XE. The below lab is based on 17.9.2a.
+This lab demonstrates Embedded Packet Capture on IOS/XE. EPC allows you to capture data plane packets. The below lab build a test environment in Azure and demonstrates how to capture all traffic going to/through the Catalyst 8000v and how to limit the capture based on an ACL.
 
 # Topology
 ![alt text](https://github.com/jwrightazure/lab/blob/master/Cisco-Embedded-Packet-Capture/embedded-packet-capture.drawio.png)
