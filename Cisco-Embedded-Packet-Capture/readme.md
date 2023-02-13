@@ -1,8 +1,8 @@
 # Cisco Embedded Packet Capture
-
+This lab demonstrates Embedded Packet Capture on IOS/XE. The below lab is based on 17.9.2a.
 
 # Topology
-![alt text]()
+![alt text](https://github.com/jwrightazure/lab/blob/master/Cisco-Embedded-Packet-Capture/embedded-packet-capture.drawio.png)
 
 **Define variables and accept terms to use the 8kv. Change "x.x.x.x/32" to your source IP.**
 <pre lang="...">
