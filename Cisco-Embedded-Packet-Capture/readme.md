@@ -48,7 +48,7 @@ az network vnet subnet update --name Cisco-EPC-vm2 --vnet-name Cisco-EPC --resou
 **Connect to 8k1 and add routes for VM subnets**
 <pre lang="...">
 ip route 10.1.10.0 255.255.255.0 10.1.0.1
-ip route 10.1.10.0 255.255.255.0 10.1.0.1
+ip route 10.1.20.0 255.255.255.0 10.1.0.1
 </pre>
 
 **Create and start a capture on 8k1 for all traffic. Warning- this could impact performance in a production environment since it is capturing all traffic. Later in the lab it will be limited to an ACL. Commands are implemented in Privileged EXEC mode.**
