@@ -61,7 +61,11 @@ monitor capture TEST interface GigabitEthernet 1 both match any start
 show mon cap TEST buffer
 show mon cap TEST buffer brief
 
-#You can export the capture if needed
+#You can export the capture if needed. Note- pending the HW/SW, you may need to specify to write the file to bootflash (or other local storage) before exporting.
+
+monitor capture TEST interface te1/0/2 both match any start
+monitor capture TEST stop
+mon cap TEST export location bootflash:TEST.pcap
 mon cap TEST export 
 
 #Clear the buffer, stop the capture, delete the capture 
