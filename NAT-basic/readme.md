@@ -4,7 +4,7 @@ Basic Cisco configs convering PAT, NAT pools, and VRF aware NAT.
 ## Base Topology- PAT
 R1 BGP peers with R2, R2 peers with R1 and C8k, C8k peers with R2. R1 advertises the 192.168.0.0/24 into BGP since we are NATing (PAT) to interface e0/0.10 192.168.0.1. C8k is avertising 2.2.2.2/32. Any traffic that is sourced from 10.0.0.0/8 arriving on e0/1 or loopback100 (test interface) of R1 will be tranlated to the interface IP. When the PC sends traffic to 2.2.2.2, C8k will see the source as 192.168.0.1. C8k will use the Embedded Packet Capture feature for verification.
 
-![alt text]()
+![alt text](https://github.com/jwrightazure/lab/blob/master/NAT-basic/PAT-topo.drawio.png)
 
 **Configs**<br/>
 <pre lang="...">
