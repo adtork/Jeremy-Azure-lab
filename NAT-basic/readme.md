@@ -203,9 +203,7 @@ ip nat inside source list nat pool nat vrf customer1
 ip route vrf customer1 1.1.1.0 255.255.255.252 Null0
 !
 ip access-list extended nat
- deny   ip 192.168.0.0 0.0.0.255 192.168.0.0 0.0.0.255
  permit ip 10.0.0.0 0.255.255.255 any
 !         
 ip prefix-list msft-peering seq 5 permit 1.1.1.0/30
-ip prefix-list msft-peering seq 10 permit 192.168.0.0/24
 </pre>
