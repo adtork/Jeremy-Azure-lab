@@ -157,6 +157,56 @@ C8k#sho mon cap TEST buffer brief
 r1#sh ip nat translations 
 Pro Inside global      Inside local       Outside local      Outside global
 icmp 1.1.1.1:6         10.2.2.2:6         2.2.2.2:6          2.2.2.2:6
+</pre>
 
+## Base Topology- VRF Aware NAT Pool
+This section is the same as NAT pool section with the addition of VRF customer1.
+
+![alt text](https://github.com/jwrightazure/lab/blob/master/NAT-basic/NAT-pool-lab1-topo.drawio.png)
+
+**Configs**<br/>
+<pre lang="...">
+R1:
+ip vrf customer1
+ rd 65001:1
+
+interface Loopback100
+ ip vrf forwarding customer1
+ ip address 10.2.2.2 255.255.255.0
+ ip nat inside
+!
+interface Ethernet0/0.10
+ encapsulation dot1Q 10
+ ip vrf forwarding customer1
+ ip address 192.168.0.1 255.255.255.0
+ ip nat outside
+!
+interface Ethernet0/1
+ ip vrf forwarding customer1
+ ip address 10.1.1.1 255.255.255.0
+ ip nat inside
+!
+router bgp 65001
+ bgp router-id vrf auto-assign
+ bgp log-neighbor-changes
+ !
+ address-family ipv4 vrf customer1
+  bgp router-id 10.2.2.2
+  network 1.1.1.0 mask 255.255.255.252
+  neighbor 192.168.0.2 remote-as 12076
+  neighbor 192.168.0.2 activate
+  neighbor 192.168.0.2 prefix-list msft-peering out
+ exit-address-family
+!
+ip nat pool nat 1.1.1.1 1.1.1.2 netmask 255.255.255.252
+ip nat inside source list nat pool nat vrf customer1
+ip route vrf customer1 1.1.1.0 255.255.255.252 Null0
+!
+ip access-list extended nat
+ deny   ip 192.168.0.0 0.0.0.255 192.168.0.0 0.0.0.255
+ permit ip 10.0.0.0 0.255.255.255 any
+!         
+ip prefix-list msft-peering seq 5 permit 1.1.1.0/30
+ip prefix-list msft-peering seq 10 permit 192.168.0.0/24
 </pre>
 
