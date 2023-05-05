@@ -44,7 +44,7 @@ az network lb rule create --resource-group $rg --lb-name myLoadBalancer --name m
 
 #Create Web VM, add it to the LB pool and install the web server
 az network nic create --resource-group $rg --name web1-vmnic --vnet-name VNET --subnet web --network-security-group web-nsg
-az vm create --resource-group $rg --name myVM1 --nics web1-vmnic --image win2019datacenter --admin-username azureuser --admin-password Msft123Msft123 --zone 1 --no-wait
+az vm create --resource-group $rg --name myVM1 --nics web1-vmnic --image win2019datacenter --admin-username azureuser --admin-password Msft123Msft123 --zone 1 --size Standard_D2as_v4
 az network nic ip-config address-pool add --address-pool myBackendPool --ip-config-name ipconfig1 --nic-name web1-vmnic --resource-group $rg --lb-name myLoadBalancer
 az vm run-command invoke -g $rg -n myVM1 --command-id RunPowerShellScript --scripts "Install-WindowsFeature -name Web-Server -IncludeManagementTools"
 
