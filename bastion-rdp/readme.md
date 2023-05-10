@@ -12,7 +12,7 @@ az network vnet create --name VNET --resource-group $rg --address-prefix 10.100.
 # Create Bastion host
 az network public-ip create --resource-group $rg --name myBastionIP --sku Standard 
 az network vnet subnet create --resource-group $rg --name AzureBastionSubnet --vnet-name VNET --address-prefixes 10.100.1.0/27
-az network bastion create --resource-group $rg --name myBastionHost --public-ip-address myBastionIP --vnet-name VNET --location $location --enable-tunneling
+az network bastion create --resource-group $rg --name myBastionHost --public-ip-address myBastionIP --vnet-name VNET --location $location --enable-tunneling true
 
 # Create test server
 az network nic create --resource-group $rg --name web1-vmnic --vnet-name VNET --subnet web 
