@@ -30,7 +30,7 @@ az network vnet subnet create --resource-group $rg --vnet-name VNET -n LBsubnet 
 # Create Bastion host
 az network public-ip create --resource-group $rg --name myBastionIP --sku Standard 
 az network vnet subnet create --resource-group $rg --name AzureBastionSubnet --vnet-name VNET --address-prefixes 10.100.1.0/27
-az network bastion create --resource-group $rg --name myBastionHost --public-ip-address myBastionIP --vnet-name VNET --location $location
+az network bastion create --resource-group $rg --name myBastionHost --public-ip-address myBastionIP --vnet-name VNET --location $location --enable-tunneling
 
 # Create NSG allowing any source to hit the web server on port 80
 az network nsg create --resource-group $rg --name web-nsg --location $location
@@ -67,7 +67,7 @@ netsh advfirewall firewall add rule name="http" protocol=TCP localport=80 dir=in
 **Create a Linux Web server and tools for later use.**
 <pre lang="...">
 az network nic create --resource-group $rg --name web2-vmnic --vnet-name VNET --subnet web --network-security-group web-nsg
-az vm create --resource-group $rg --name myVM2 --nics web2-vmnic --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --zone 1 --no-wait
+az vm create --resource-group $rg --name myVM2 --nics web2-vmnic --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --zone 1 --no-wait --size Standard_D2as_v4
 
 az vm extension set --publisher Microsoft.Azure.Extensions --version 2.0 --name CustomScript --vm-name myVM2 --resource-group $rg --settings '{"commandToExecute":"apt-get -y update && apt-get -y install nginx && sudo apt update && sudo apt install iperf && sudo apt-get update && sudo apt-get install traceroute && sudo apt-get install nmap -y"}'
 </pre>
