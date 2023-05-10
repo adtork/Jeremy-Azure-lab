@@ -20,7 +20,7 @@ This lab builds an Azure Public Load balancer and a single backend Windows 2019 
 <pre lang="...">
 # Define resource group and region location variables
 rg="LB-test"
-location="eastus2"
+location="eastus"
 
 # Create a resource group named $rg and basic VNET
 az group create --name $rg --location $location
