@@ -30,7 +30,7 @@ az network vnet subnet create --resource-group $rg --vnet-name VNET -n LBsubnet 
 # Create Bastion host
 az network public-ip create --resource-group $rg --name myBastionIP --sku Standard 
 az network vnet subnet create --resource-group $rg --name AzureBastionSubnet --vnet-name VNET --address-prefixes 10.100.1.0/27
-az network bastion create --resource-group $rg --name myBastionHost --public-ip-address myBastionIP --vnet-name VNET --location $location --enable-tunneling
+az network bastion create --resource-group $rg --name myBastionHost --public-ip-address myBastionIP --vnet-name VNET --location $location --enable-tunneling true
 
 # Create NSG allowing any source to hit the web server on port 80
 az network nsg create --resource-group $rg --name web-nsg --location $location
