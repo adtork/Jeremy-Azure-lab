@@ -236,3 +236,10 @@ PrimaryBytesIn PrimaryBytesOut SecondaryBytesIn SecondaryBytesOut
 </pre>
 
 The Powershell script to run all of these commands together is in this repo (ER-Basic-Troubleshooting.ps1) . Make sure to change the variables to match your environment. The script will log to the path you specify. As you can see at the top of the script, it logs the commands to your screen and writes the commands plus the output. Simply change "Start-Transcript -Path "C:\transcripts\transcript0.txt" to a different path if need. Example: download the Powershell script to your desktop, edit the file with your subscription id, ER circuit name and Resource group. Open Powershell and drag the script to the window to run it. 
+
+**AZ CLI for ERGW**
+<pre lang="...">
+az network vnet-gateway list-bgp-peer-status -n ergw1 -g test -o table
+az network vnet-gateway list-learned-routes -n ergw1 -g test -o table
+az network vnet-gateway list-advertised-routes -n ergw1 -g test --peer 192.168.0.4 --query 'value[].{LocalAddress:localAddress, Network:network, NextHop:nextHop, ASPath: asPath, Origin:origin}' -o table
+</pre>
