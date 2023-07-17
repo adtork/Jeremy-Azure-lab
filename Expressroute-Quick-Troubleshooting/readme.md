@@ -239,7 +239,16 @@ The Powershell script to run all of these commands together is in this repo (ER-
 
 **AZ CLI for ERGW**
 <pre lang="...">
-az network vnet-gateway list-bgp-peer-status -n ergw1 -g test -o table
-az network vnet-gateway list-learned-routes -n ergw1 -g test -o table
-az network vnet-gateway list-advertised-routes -n ergw1 -g test --peer 192.168.0.4 --query 'value[].{LocalAddress:localAddress, Network:network, NextHop:nextHop, ASPath: asPath, Origin:origin}' -o table
+RG="PAN-ARS-RG"
+Location="eastus"
+hubname="Transit-VNET"
+
+#list BGP peers, anything 12076 are msft edge routers
+az network vnet-gateway list-bgp-peer-status -n ergw1 -g $RG -o table
+
+#list learned routes, assuming ergw is connected to avs, find AVS routes and document peer IP(s)
+az network vnet-gateway list-learned-routes -n ergw1 -g $RG -o table
+
+#see what ergw is advertising to AVS, 10.0.100.4 is one of the msft avs edge routers
+az network vnet-gateway list-advertised-routes -n ergw1 -g $RG --peer 10.0.100.4 --query 'value[].{LocalAddress:localAddress, Network:network, NextHop:nextHop, ASPath: asPath, Origin:origin}' -o table
 </pre>
