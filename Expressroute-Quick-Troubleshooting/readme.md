@@ -246,6 +246,9 @@ hubname="Transit-VNET"
 #list BGP peers, anything 12076 are msft edge routers
 az network vnet-gateway list-bgp-peer-status -n ergw1 -g $RG -o table
 
+#list any routes learned with ASN 12076-398656 which displays any routes learned from AVS to the VNET directly. 398656 is the AVS ASN.
+az network vnet-gateway list-learned-routes -n ergw1 -g $RG -o table | grep "12076-398656"
+
 #list learned routes, assuming ergw is connected to avs, find AVS routes and document peer IP(s)
 az network vnet-gateway list-learned-routes -n ergw1 -g $RG -o table
 
