@@ -1,32 +1,32 @@
 # A/A PAN LB with NAT Cheatsheet
 
 **Quick Notes**
-Web VM listening on port 80
-Internal LB with HA ports for outbound Internet, backend Trust interfaces
-Internal LB with HA ports for inbound web traffic, backend Web VM interfaces
-Public LB listening on port 80 with Floating IP enabled, backend Untrust interfaces
-2x A/A PAN FWs
-2x VRs Trust/Untrust
-Each FW has a PIP for in/out traffic and a mgmt PIP
-Make sure to set management profile appropriately for Azure LB health probes
-No NAT Azure LB probe 168.63.129.16 if allowing NATing all inbound 80 assuming port 80 probe 
-Hard set IP for Untrust/Trust interfaces
-VR Untrust static route 0/0 to 10.0.1.1
-VR Untrust static route 10.0.0.0/8 next hop VR Trust.
-VR Trust static route 10.0.0.0/8,168.63.129.16 t0 10.0.2.1
-VR Trust static route 0/0 next hop VR Untrust
-Outbound traffic from Web VM will go to ILB and load share to backend pool of Trust interfaces
-PANs will NAT outbound traffic to it's PIP ensuring symmetric return
-Azure LB does not pass X-Forwarded-For (AppGW does)
-You can access the web server through LB PIP or FW PIPs if needed, NATs to Inbound ILB
-X-Forwarded-For can be viewed on the FWs when accessing the web server through FW PIPs
-Web server will see inbound traffic from Internet source from one of the FWs Trust interfaces via SNAT ensuring symmetrical return to the correct FW
-Security/NAT rules are for lab only and can be further locked down
-Serial console on web VMs can be used to check outbound access
+- Web VM listening on port 80
+- Internal LB with HA ports for outbound Internet, backend Trust interfaces
+- Internal LB with HA ports for inbound web traffic, backend Web VM interfaces
+- Public LB listening on port 80 with Floating IP enabled, backend Untrust interfaces
+- 2x A/A PAN FWs
+- 2x VRs Trust/Untrust
+- Each FW has a PIP for in/out traffic and a mgmt PIP
+- Make sure to set management profile appropriately for Azure LB health probes
+- No NAT Azure LB probe 168.63.129.16 if allowing NATing all inbound 80 assuming port 80 probe 
+- Hard set IP for Untrust/Trust interfaces
+- VR Untrust static route 0/0 to 10.0.1.1
+- VR Untrust static route 10.0.0.0/8 next hop VR Trust.
+- VR Trust static route 10.0.0.0/8,168.63.129.16 t0 10.0.2.1
+- VR Trust static route 0/0 next hop VR Untrust
+- Outbound traffic from Web VM will go to ILB and load share to backend pool of Trust interfaces
+- PANs will NAT outbound traffic to it's PIP ensuring symmetric return
+- Azure LB does not pass X-Forwarded-For (AppGW does)
+- You can access the web server through LB PIP or FW PIPs if needed, NATs to Inbound ILB
+- X-Forwarded-For can be viewed on the FWs when accessing the web server through FW PIPs
+- Web server will see inbound traffic from Internet source from one of the FWs Trust interfaces via SNAT ensuring symmetrical return to the correct FW
+- Security/NAT rules are for lab only and can be further locked down
+- Serial console on web VMs can be used to check outbound access
 
 
 # Topology
-![alt text]()
+![alt text](https://github.com/jwrightazure/lab/blob/master/PAN-NAT-IN-OUT/pan-nat-in-out-topo.png)
 
 
 Lab Build
