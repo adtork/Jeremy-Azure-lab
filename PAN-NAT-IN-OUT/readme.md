@@ -104,16 +104,16 @@ az network public-ip show --resource-group $RG --name PAN1MgmtIP --query [ipAddr
 az network public-ip show --resource-group $RG --name PAN2MgmtIP --query [ipAddress] --output tsv
 
 #Load PAN XML configs on both FWs
-- Download Firewall XML file for PAN1 and PAN2: 
+- Download Firewall XML files for PAN1 and PAN2 located in this repo: 
 - HTTPS to the firewalls (azureuser/Msft123Msft123)
 - Select Device tab
 - Select Operations tab
 - IMPORTANT- make sure you load the correct XML file on the correct firewall
-- Select Import Named Configuration Snapshot. Upload the PAN-NAT-FINAL-FW1 and PAN-NAT-FINAL-FW2 file in this repo.
+- Select Import Named Configuration Snapshot. Upload the PAN-NAT-FINAL-FW1 and PAN-NAT-FINAL-FW2.
 - Select Load Named Configuration Snapshot. Select the firewall XML you previously uploaded.
 - Select Commit (top right) and then commit the configuration
 
-#Document PLB VIP
+#List Public LB PIP to access servers 
 az network public-ip show --resource-group $RG --name PLB-PIP1 --query [ipAddress] --output tsv
 </pre>
 
