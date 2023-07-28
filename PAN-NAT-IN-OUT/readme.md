@@ -1,5 +1,5 @@
 # A/A PAN LB with NAT Cheatsheet
-A/A PAN FWs with load balanced outbound internet and inbound access to web serves through either Public LB or FW PIPs.
+A/A PAN FWs with load balanced outbound internet and inbound access to web servers through either Public LB or FW PIPs.
 
 **Quick Notes**
 - Web VMs listening on port 80
