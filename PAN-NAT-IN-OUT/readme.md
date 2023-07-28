@@ -14,7 +14,7 @@ A/A PAN FWs with load balanced outbound internet and inbound access to web serve
 - Hard set IP for Untrust/Trust interfaces
 - VR Untrust static route 0/0 to 10.0.1.1
 - VR Untrust static route 10.0.0.0/8 next hop VR Trust.
-- VR Trust static route 10.0.0.0/8,168.63.129.16 t0 10.0.2.1
+- VR Trust static route 10.0.0.0/8,168.63.129.16 to 10.0.2.1
 - VR Trust static route 0/0 next hop VR Untrust
 - Outbound traffic from Web VM will go to ILB and load share to backend pool of Trust interfaces
 - PANs will NAT outbound traffic to it's PIP ensuring symmetric return
