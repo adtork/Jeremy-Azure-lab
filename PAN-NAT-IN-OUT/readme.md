@@ -1,7 +1,8 @@
 # A/A PAN LB with NAT Cheatsheet
+A/A PAN FWs with load balanced outbound internet and inbound access to web serves through either Public LB or FW PIPs.
 
 **Quick Notes**
-- Web VM listening on port 80
+- Web VMs listening on port 80
 - Internal LB with HA ports for outbound Internet, backend Trust interfaces
 - Internal LB with HA ports for inbound web traffic, backend Web VM interfaces
 - Public LB listening on port 80 with Floating IP enabled, backend Untrust interfaces
