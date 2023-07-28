@@ -29,7 +29,7 @@
 ![alt text](https://github.com/jwrightazure/lab/blob/master/PAN-NAT-IN-OUT/pan-nat-in-out-topo.png)
 
 
-Lab Build
+Lab Build- after deploying the lab, you will be able to access the web servers via the FW PIPs or LB PIP
 <pre lang="...">
 RG="PAN-RG"
 Location="eastus2"
