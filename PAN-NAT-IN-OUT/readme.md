@@ -118,6 +118,9 @@ az network public-ip show --resource-group $RG --name PAN2MgmtIP --query [ipAddr
 </pre>
 
 #Validate web servers through both Untrust PIPs and PLB Frontend
+RG="PAN-RG"
+Location="eastus2"
+hubname="Hub"
 <pre lang="...">
 PAN1-untrust=$(az network public-ip show --resource-group $rg -n PAN1-Unrust-PublicIP --query "{address: ipAddress}" --output tsv)
 curl $PAN1-untrust
