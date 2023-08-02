@@ -26,7 +26,7 @@ az vm extension set \
   --publisher Microsoft.Azure.Extensions \
   --version 2.0 \
   --name CustomScript \
-  --vm-name mywebserver \
+  --vm-name Web1 \
   --resource-group $rg \
   --settings '{"commandToExecute":"apt-get -y update && apt-get -y install nginx && sudo apt update && sudo apt install iperf && sudo apt-get update && sudo apt-get install traceroute && sudo apt-get install nmap -y && hostname > /var/www/html/index.html"}'
 
