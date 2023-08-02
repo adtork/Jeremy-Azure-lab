@@ -134,21 +134,21 @@ Location="eastus2"
 hubname="Hub"
 
 echo PAN1 PIP
-az network public-ip show --resource-group $rg -n PAN1-Unrust-PublicIP --query "{address: ipAddress}" --output tsv
+az network public-ip show --resource-group $RG -n PAN1-Unrust-PublicIP --query "{address: ipAddress}" --output tsv
 echo Curl PAN1 Untrust PIP
-PAN1-untrust=$(az network public-ip show --resource-group $rg -n PAN1-Unrust-PublicIP --query "{address: ipAddress}" --output tsv)
-curl $PAN1-untrust
+PAN1untrust=$(az network public-ip show --resource-group $RG -n PAN1-Unrust-PublicIP --query "{address: ipAddress}" --output tsv)
+curl $PAN1untrust
 
 echo PAN2 PIP
-az network public-ip show --resource-group $rg -n PAN2-Unrust-PublicIP --query "{address: ipAddress}" --output tsv
+az network public-ip show --resource-group $RG -n PAN2-Unrust-PublicIP --query "{address: ipAddress}" --output tsv
 echo Curl PAN2 Untrust PIP
-PAN2-untrust=$(az network public-ip show --resource-group $rg -n PAN2-Unrust-PublicIP --query "{address: ipAddress}" --output tsv)
-curl $PAN2-untrust
+PAN2untrust=$(az network public-ip show --resource-group $RG -n PAN2-Unrust-PublicIP --query "{address: ipAddress}" --output tsv)
+curl $PAN2untrust
 
 echo PLB Frontend PIP
 az network public-ip show --resource-group $RG --name PLB-PIP1 --query [ipAddress] --output tsv
 echo Curl PLB FE
-PLB-FE=$(az network public-ip show --resource-group $RG --name PLB-PIP1 --query [ipAddress] --output tsv)
-curl $PLB-FE
+PLBFE=$(az network public-ip show --resource-group $RG --name PLB-PIP1 --query [ipAddress] --output tsv)
+curl $PLBFE
 </pre>
 
