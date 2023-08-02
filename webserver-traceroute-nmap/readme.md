@@ -19,7 +19,7 @@ az network nsg rule create --resource-group $rg --nsg-name web-nsg --name allow-
 # Create a new virtual machine 
 az network public-ip create --name Web-PubIP --resource-group $rg --location $location --allocation-method Static
 az network nic create --name webserverNIC --resource-group $rg --subnet web --vnet VNET --public-ip-address Web-PubIP --ip-forwarding true --location $location --network-security-group web-nsg
-az vm create --resource-group $rg --name mywebserver --image Ubuntu2204 --location $location --admin-username azureuser --admin-password Msft123Msft123 --nics webserverNIC --size Standard_D8a_v4
+az vm create --resource-group $rg --name Web1 --image Ubuntu2204 --location $location --admin-username azureuser --admin-password Msft123Msft123 --nics webserverNIC --size Standard_D8a_v4
 
 # Use CustomScript extension to install NGINX.
 az vm extension set \
