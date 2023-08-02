@@ -113,9 +113,6 @@ az network public-ip show --resource-group $RG --name PAN2MgmtIP --query [ipAddr
 - Select Load Named Configuration Snapshot. Select the firewall XML you previously uploaded.
 - Select Commit (top right) and then commit the configuration
 
-#List Public LB PIP to access servers 
-
-
 #Validate web servers through both Untrust PIPs and PLB Frontend
 PAN1-untrust=$(az network public-ip show --resource-group $rg -n PAN1-Unrust-PublicIP --query "{address: ipAddress}" --output tsv)
 curl $PAN1-untrust
@@ -125,6 +122,5 @@ curl $PAN1-untrust
 
 PLB-FE=$(az network public-ip show --resource-group $RG --name PLB-PIP1 --query [ipAddress] --output tsv)
 curl $PLB-FE
-
 </pre>
 
