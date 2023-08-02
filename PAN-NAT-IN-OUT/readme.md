@@ -102,8 +102,11 @@ az network nic ip-config address-pool add --address-pool PAN-Untrust --ip-config
 #Document public IP of PAN Mgmt interfaces
 az network public-ip show --resource-group $RG --name PAN1MgmtIP --query [ipAddress] --output tsv
 az network public-ip show --resource-group $RG --name PAN2MgmtIP --query [ipAddress] --output tsv
+</pre>
+
 
 #Load PAN XML configs on both FWs
+<pre lang="...">
 - Download Firewall XML files for PAN1 and PAN2 located in this repo: 
 - HTTPS to the firewalls (azureuser/Msft123Msft123)
 - Select Device tab
@@ -112,8 +115,10 @@ az network public-ip show --resource-group $RG --name PAN2MgmtIP --query [ipAddr
 - Select Import Named Configuration Snapshot. Upload the PAN-NAT-FINAL-FW1 and PAN-NAT-FINAL-FW2.
 - Select Load Named Configuration Snapshot. Select the firewall XML you previously uploaded.
 - Select Commit (top right) and then commit the configuration
+</pre>
 
 #Validate web servers through both Untrust PIPs and PLB Frontend
+<pre lang="...">
 PAN1-untrust=$(az network public-ip show --resource-group $rg -n PAN1-Unrust-PublicIP --query "{address: ipAddress}" --output tsv)
 curl $PAN1-untrust
 
