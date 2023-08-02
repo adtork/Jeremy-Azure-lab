@@ -134,13 +134,13 @@ Location="eastus2"
 hubname="Hub"
 
 echo PAN1 Untrust PIP
-az network public-ip show --resource-group $RG -n PAN1-Unrust-PublicIP --query "{address: ipAddress}" --output tsv
+az network public-ip show --resource-group $RG -n PAN1-Unrust-PublicIP --query "{address: ipAddress}" --output table
 
 echo PAN2 Untrust PIP
-az network public-ip show --resource-group $RG -n PAN2-Unrust-PublicIP --query "{address: ipAddress}" --output tsv
+az network public-ip show --resource-group $RG -n PAN2-Unrust-PublicIP --query "{address: ipAddress}" --output table
 
 echo PLB Frontend PIP
-az network public-ip show --resource-group $RG --name PLB-PIP1 --query [ipAddress] --output tsv
+az network public-ip show --resource-group $RG --name PLB-PIP1 --query [ipAddress] --output table
 
 PAN1untrust=$(az network public-ip show --resource-group $RG -n PAN1-Unrust-PublicIP --query "{address: ipAddress}" --output tsv)
 echo Curl PAN1 Untrust PIP...This will show name Web1 or Web2 since it is load balanced.
