@@ -133,21 +133,24 @@ RG="PAN-RG"
 Location="eastus2"
 hubname="Hub"
 
-echo PAN1 PIP
+echo PAN1 Untrust PIP
 az network public-ip show --resource-group $RG -n PAN1-Unrust-PublicIP --query "{address: ipAddress}" --output tsv
-echo Curl PAN1 Untrust PIP
-PAN1untrust=$(az network public-ip show --resource-group $RG -n PAN1-Unrust-PublicIP --query "{address: ipAddress}" --output tsv)
-curl $PAN1untrust
 
-echo PAN2 PIP
+echo PAN2 Untrust PIP
 az network public-ip show --resource-group $RG -n PAN2-Unrust-PublicIP --query "{address: ipAddress}" --output tsv
-echo Curl PAN2 Untrust PIP
-PAN2untrust=$(az network public-ip show --resource-group $RG -n PAN2-Unrust-PublicIP --query "{address: ipAddress}" --output tsv)
-curl $PAN2untrust
 
 echo PLB Frontend PIP
 az network public-ip show --resource-group $RG --name PLB-PIP1 --query [ipAddress] --output tsv
-echo Curl PLB FE
+
+PAN1untrust=$(az network public-ip show --resource-group $RG -n PAN1-Unrust-PublicIP --query "{address: ipAddress}" --output tsv)
+echo Curl PAN1 Untrust PIP...This will show name Web1 or Web2 since it is load balanced.
+curl $PAN1untrust
+
+echo Curl PAN2 Untrust PIP...This will show name Web1 or Web2 since it is load balanced.
+PAN2untrust=$(az network public-ip show --resource-group $RG -n PAN2-Unrust-PublicIP --query "{address: ipAddress}" --output tsv)
+curl $PAN2untrust
+
+echo Curl PLB FE...This will show name Web1 or Web2 since it is load balanced.
 PLBFE=$(az network public-ip show --resource-group $RG --name PLB-PIP1 --query [ipAddress] --output tsv)
 curl $PLBFE
 </pre>
