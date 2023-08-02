@@ -36,7 +36,7 @@ Location="eastus2"
 hubname="Hub"
 
 #Accept PAN license
-az vm image terms accept --urn paloaltonetworks:vmseries-flex:byol:latest --only-show-errors
+az vm image terms accept --urn paloaltonetworks:vmseries-flex:byol:latest --only-show-errors --output
 
 #VNET
 echo Creating VNET..
@@ -115,7 +115,7 @@ az network public-ip show --resource-group $RG --name PAN2MgmtIP --query [ipAddr
 </pre>
 
 
-#Load PAN XML configs on both FWs
+#Load PAN XML configs on both FWs. Make sure to give adequate time between loading the config and committing the config as well as LB health probes.
 <pre lang="...">
 - Download Firewall XML files for PAN1 and PAN2 located in this repo: 
 - HTTPS to the firewalls (azureuser/Msft123Msft123)
@@ -133,14 +133,8 @@ RG="PAN-RG"
 Location="eastus2"
 hubname="Hub"
 
-echo PAN1 Untrust PIP
-az network public-ip show --resource-group $RG -n PAN1-Unrust-PublicIP --query "{address: ipAddress}" --output table
-
-echo PAN2 Untrust PIP
-az network public-ip show --resource-group $RG -n PAN2-Unrust-PublicIP --query "{address: ipAddress}" --output table
-
-echo PLB Frontend PIP
-az network public-ip show --resource-group $RG --name PLB-PIP1 --query [ipAddress] --output table
+echo List Public IPs
+az network public-ip list --resource-group $RG --output table
 
 PAN1untrust=$(az network public-ip show --resource-group $RG -n PAN1-Unrust-PublicIP --query "{address: ipAddress}" --output tsv)
 echo Curl PAN1 Untrust PIP...This will show name Web1 or Web2 since it is load balanced.
