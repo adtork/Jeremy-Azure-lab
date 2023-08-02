@@ -24,7 +24,7 @@ A/A PAN FWs with load balanced outbound internet and inbound access to web serve
 - Web server will see inbound traffic from Internet source from one of the FWs Trust interfaces via SNAT ensuring symmetrical return to the correct FW
 - Security/NAT rules are for lab only and can be further locked down
 - Serial console on web VMs can be used to check outbound access
-- Lab deployed through Cloudshell. You can also deploy by running the following command in Cloudshell: curl https://raw.githubusercontent.com/jwrightazure/lab/master/PAN-NAT-IN-OUT/PAN-NAT-IN-OUT.sh | bash
+
 # Topology
 ![alt text](https://github.com/jwrightazure/lab/blob/master/PAN-NAT-IN-OUT/pan-nat-in-out-topo.png)
 
