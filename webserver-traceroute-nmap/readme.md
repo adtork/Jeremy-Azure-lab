@@ -30,8 +30,9 @@ az vm extension set \
   --resource-group $rg \
   --settings '{"commandToExecute":"apt-get -y update && apt-get -y install nginx && sudo apt update && sudo apt install iperf && sudo apt-get update && sudo apt-get install traceroute && sudo apt-get install nmap -y && hostname > /var/www/html/index.html"}'
 
-# Get the public IP of the web server
-az network public-ip show --resource-group $rg -n Web-PubIP --query "{address: ipAddress}" --output tsv
+# Validate web server is up and displaying hostname
+web1pip=$(az network public-ip show --resource-group $rg -n Web-PubIP --query "{address: ipAddress}" --output tsv)
+curl $web1pip
 </pre>
 
 # TCPdump example in Azure
