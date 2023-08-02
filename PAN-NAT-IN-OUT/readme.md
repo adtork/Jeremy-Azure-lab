@@ -108,7 +108,9 @@ az network nic ip-config address-pool add --address-pool PAN-Untrust --ip-config
 az network nic ip-config address-pool add --address-pool PAN-Untrust --ip-config-name ipconfig1 --nic-name PAN2UntrustInterface --resource-group $RG --lb-name PLB1 --output none
 
 #Document public IP of PAN Mgmt interfaces
+echo PAN1 Mgmt PIP
 az network public-ip show --resource-group $RG --name PAN1MgmtIP --query [ipAddress] --output tsv
+echo PAN2 Mgmt PIP
 az network public-ip show --resource-group $RG --name PAN2MgmtIP --query [ipAddress] --output tsv
 </pre>
 
