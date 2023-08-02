@@ -68,10 +68,10 @@ az vm create --resource-group $RG --location $Location --name PAN2 --size Standa
 # Create web VMs in the Hub
 az network nic create --resource-group $RG -n Web1VMnic --location $Location --subnet web --private-ip-address 10.0.10.4 --vnet-name $hubname --ip-forwarding true
 az vm create -n web1 --resource-group $RG --image Ubuntu2204 --admin-username azureuser --admin-password Msft123Msft123 --nics Web1VMnic --size Standard_D8a_v4
-az vm extension set --publisher Microsoft.Azure.Extensions --version 2.0 --name CustomScript --vm-name web1 --resource-group $RG --settings '{"commandToExecute":"sudo apt-get -y update && sudo apt-get -y install nginx && sudo apt update"}'
+az vm extension set --publisher Microsoft.Azure.Extensions --version 2.0 --name CustomScript --vm-name web1 --resource-group $RG --settings '{"commandToExecute":"sudo apt-get -y update && sudo apt-get -y install nginx && sudo apt update && hostname > /var/www/html/index.html"}'
 az network nic create --resource-group $RG -n Web2VMnic --location $Location --subnet web --private-ip-address 10.0.10.5 --vnet-name $hubname --ip-forwarding true
 az vm create -n web2 --resource-group $RG --image Ubuntu2204 --admin-username azureuser --admin-password Msft123Msft123 --nics Web2VMnic --size Standard_D8a_v4
-az vm extension set --publisher Microsoft.Azure.Extensions --version 2.0 --name CustomScript --vm-name web2 --resource-group $RG --settings '{"commandToExecute":"sudo apt-get -y update && sudo apt-get -y install nginx && sudo apt update"}'
+az vm extension set --publisher Microsoft.Azure.Extensions --version 2.0 --name CustomScript --vm-name web2 --resource-group $RG --settings '{"commandToExecute":"sudo apt-get -y update && sudo apt-get -y install nginx && sudo apt update && hostname > /var/www/html/index.html"}'
 
 #ILB for inbound web
 az network lb create --resource-group $RG --name ILB-Web-In --sku Standard --vnet-name Hub --subnet Trust --backend-pool-name myBackEndPool --frontend-ip-name myFrontEnd --private-ip-address 10.0.2.200
@@ -114,6 +114,17 @@ az network public-ip show --resource-group $RG --name PAN2MgmtIP --query [ipAddr
 - Select Commit (top right) and then commit the configuration
 
 #List Public LB PIP to access servers 
-az network public-ip show --resource-group $RG --name PLB-PIP1 --query [ipAddress] --output tsv
+
+
+#Validate web servers through both Untrust PIPs and PLB Frontend
+PAN1-untrust=$(az network public-ip show --resource-group $rg -n PAN1-Unrust-PublicIP --query "{address: ipAddress}" --output tsv)
+curl $PAN1-untrust
+
+PAN2-untrust=$(az network public-ip show --resource-group $rg -n PAN2-Unrust-PublicIP --query "{address: ipAddress}" --output tsv)
+curl $PAN1-untrust
+
+PLB-FE=$(az network public-ip show --resource-group $RG --name PLB-PIP1 --query [ipAddress] --output tsv)
+curl $PLB-FE
+
 </pre>
 
