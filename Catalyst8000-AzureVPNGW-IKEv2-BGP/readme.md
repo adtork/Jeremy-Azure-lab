@@ -45,7 +45,7 @@ az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpub
 az network public-ip create --name C8KPublicIP --resource-group $RG --idle-timeout 30 --allocation-method Static
 az network nic create --name C8KOutsideInterface --resource-group $RG --subnet zeronet --vnet onprem --public-ip-address C8KPublicIP --ip-forwarding true
 az network nic create --name C8KInsideInterface --resource-group $RG --subnet onenet --vnet onprem --ip-forwarding true
-az vm create --resource-group $RG --location $Location --name C8K --size Standard_D8a_v4 --nics C8KOutsideInterface C8KInsideInterface  --image cisco:cisco-c8000v:17_07_01a-byol:latest --admin-username azureuser --admin-password Msft123Msft123 --no-wait
+az vm create --resource-group $RG --location $Location --name C8K --size Standard_D8a_v4 --nics C8KOutsideInterface C8KInsideInterface  --image cisco:cisco-c8000v:17_11_01a-byol:latest --admin-username azureuser --admin-password Msft123Msft123 --no-wait
 </pre>
 
 **After the gateway and C8K have been created, document the public IP address for both. Value will be null until it has been successfully provisioned.**
