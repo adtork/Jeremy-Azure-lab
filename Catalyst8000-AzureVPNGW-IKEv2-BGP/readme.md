@@ -68,9 +68,9 @@ az network route-table route create --name vm-rt --resource-group $RG --route-ta
 az network vnet subnet update --name VM --vnet-name onprem --resource-group $RG --route-table vm-rt
 </pre>
 
-**Create Local Network Gateway. The 192.168.1.1 addrees is the IP of the tunnel interface on the C8K in BGP ASN 65002.**
+**Create Local Network Gateway. The 192.168.1.1 addrees is the IP of the tunnel interface on the C8K in BGP ASN 65002. Make sure to change the 8k PIP**
 <pre lang="...">
-az network local-gateway create --gateway-ip-address 20.114.145.37 --name to-onprem --resource-group $RG --local-address-prefixes 192.168.1.1/32 --asn 65002 --bgp-peering-address 192.168.1.1
+az network local-gateway create --gateway-ip-address "C8KPublicIP" --name to-onprem --resource-group $RG --local-address-prefixes 192.168.1.1/32 --asn 65002 --bgp-peering-address 192.168.1.1
 </pre>
 
 **Create VPN connections**
