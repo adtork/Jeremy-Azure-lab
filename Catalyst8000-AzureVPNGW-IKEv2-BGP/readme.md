@@ -115,7 +115,7 @@ crypto ikev2 keyring to-onprem-keyring
 
 crypto ikev2 profile to-onprem-profile
   match address  local 10.1.0.4
-  match identity remote address 20.69.108.223 255.255.255.255
+  match identity remote address "Azure-VNGpubip" 255.255.255.255
   authentication remote pre-share
   authentication local  pre-share
   lifetime       3600
