@@ -1,6 +1,6 @@
 # Azure Networking Lab- IKEv2 between Cisco Catalyst 8000 and Azure VPN Gateway- with BGP
 
-This lab guide illustrates how to build a basic IKEv2 tunnel between a Cisco Catalyst 8000 and the Azure VPN gateway with BGP. This is for lab testing purposes only. All Azure configs are done in Azure CLI so you can change them as needed to match your environment. The entire lab including simulated on prem is done in Azure. No hardware required. C8V licensing, IKE Phase 1 and Phase 2 parameters are outside the scope of this lab. 
+This lab guide illustrates how to build a basic IKEv2 tunnel between a Cisco Catalyst 8000 and the Azure VPN gateway with BGP. This is for lab testing purposes only. All Azure configs are done in Azure CLI so you can change them as needed to match your environment. The entire lab including simulated on prem is done in Azure. No hardware required. C8V licensing, IKE Phase 1 and Phase 2 parameters are outside the scope of this lab. VM username/PW is azureuser/Msft123Msft123 and PSK for tunnel is Msft123Msft123
 
 **Before deploying C8K in the next step, you may have to accept license agreement unless you have used it before. You can accomplish this through deploying a C8K in the portal or Powershell/Azure CLI commands via Cloudshell**
 <pre lang="...">
