@@ -27,12 +27,10 @@ az network vnet subnet create --address-prefix 10.1.1.0/24 --name onenet --resou
 
 **Build Azure and onprem Linux VMs**
 <pre lang="...">
-az network public-ip create --name HubVMPubIP --resource-group $RG --location $Location --allocation-method Dynamic
-az network nic create --resource-group $RG -n HubVMNIC --location $Location --subnet HubVM --private-ip-address 10.0.10.10 --vnet-name Hub --public-ip-address HubVMPubIP
+az network nic create --resource-group $RG -n HubVMNIC --location $Location --subnet HubVM --private-ip-address 10.0.10.10 --vnet-name Hub
 az vm create -n HubVM --resource-group $RG --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics HubVMNIC --no-wait --size Standard_D8a_v4
 
-az network public-ip create --name onpremVMPubIP --resource-group $RG --location $Location --allocation-method Dynamic
-az network nic create --resource-group $RG -n onpremVMNIC --location $Location --subnet VM --private-ip-address 10.1.10.10 --vnet-name onprem --public-ip-address onpremVMPubIP
+az network nic create --resource-group $RG -n onpremVMNIC --location $Location --subnet VM --private-ip-address 10.1.10.10 --vnet-name onprem
 az vm create -n onpremVM --resource-group $RG --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics onpremVMNIC --no-wait --size Standard_D8a_v4
 </pre>
 
