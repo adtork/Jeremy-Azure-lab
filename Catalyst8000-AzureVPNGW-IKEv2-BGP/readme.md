@@ -109,8 +109,8 @@ crypto ikev2 policy to-onprem-policy
   exit
   
 crypto ikev2 keyring to-onprem-keyring
-  peer 20.69.108.223
-    address 20.69.108.223
+  peer "Azure-VNGpubip"
+    address "Azure-VNGpubip"
     pre-shared-key Msft123Msft123
     exit
   exit
@@ -140,7 +140,7 @@ int tunnel 11
   tunnel mode ipsec ipv4
   ip tcp adjust-mss 1350
   tunnel source 10.1.0.4
-  tunnel destination 20.69.108.223
+  tunnel destination "Azure-VNGpubip"
   tunnel protection ipsec profile to-onprem-IPsecProfile
   exit
 
