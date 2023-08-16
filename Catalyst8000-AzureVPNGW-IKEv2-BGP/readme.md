@@ -39,7 +39,7 @@ az vm create -n onpremVM --resource-group $RG --image UbuntuLTS --admin-username
 **Build Public IPs for Azure VPN Gateway. The VPN GW will take 20+ minutes to deploy.**
 <pre lang="...">
 az network public-ip create --name Azure-VNGpubip --resource-group $RG --allocation-method Dynamic
-az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpubip --resource-group $RG --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw3 --no-wait --asn 65001
+az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpubip --resource-group $RG --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw3 --asn 65001
 </pre>
 
 **Build onprem C8K. C8K image is specified from the Marketplace in this example.**
