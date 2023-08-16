@@ -5,7 +5,7 @@ This lab guide illustrates how to build a basic IKEv2 tunnel between a Cisco Cat
 **Before deploying C8K in the next step, you may have to accept license agreement unless you have used it before. You can accomplish this through deploying a C8K in the portal or Powershell/Azure CLI commands via Cloudshell**
 <pre lang="...">
 Sample Azure CLI:
-az vm image terms accept --urn cisco:cisco-c8000v:17_07_01a-byol:latest
+az vm image terms accept --urn cisco:cisco-c8000v:17_11_01a-byol:latest
 </pre>
 
 # Base Topology
