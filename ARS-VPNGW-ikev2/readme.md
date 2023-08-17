@@ -23,6 +23,9 @@ az network public-ip create --name VPNGW1pubip --resource-group $RG --allocation
 az network public-ip create --name VPNGW1pubip2 --resource-group $RG --allocation-method Static --sku standard
 az network vnet-gateway create --name VPNGW1 --public-ip-address VPNGW1pubip VPNGW1pubip2 --resource-group $RG --vnet $RG --gateway-type Vpn --vpn-type RouteBased --sku VpnGw3 --no-wait --asn 65515
 
+#Before proceeding, you may need to validate the Azure region has the available VM Sku size
+az vm list-skus --location eastus2 --output table | grep Standard_D
+    
 #Create on prem CSR
 az network public-ip create --name CSRPublicIP --resource-group $RG --idle-timeout 30 --allocation-method Static
 az network nic create --name CSROutsideInterface --resource-group $RG --subnet zeronet --vnet onprem --public-ip-address CSRPublicIP --ip-forwarding true
