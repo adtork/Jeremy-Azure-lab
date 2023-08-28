@@ -1,6 +1,6 @@
 ## Basic Linux cheat sheet
 
-**install traceroute**
+## install traceroute ##
 sudo apt-get update && sudo apt-get install traceroute 
 
 **add nginx**
