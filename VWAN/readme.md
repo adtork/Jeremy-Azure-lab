@@ -14,115 +14,116 @@ az vm image terms accept --urn cisco:cisco-csr-1000v:17_03_07-byol:latest
 
 **Create the VWAN hub that allows on prem to on prem to hairpin through the tunnel. The address space used should not overlap. VWAN deploys 2 "appliances" as well as a number of underlying components. We're starting here as the last command in this section can take 30+ minutes to deploy. By specifying "--no-wait", you can move on to other steps while this section of VWAN continues to deploy in the background.**
 <pre lang="...">
+
+#Create variables
+RG="VWAN"
+Location="eastus2"
+Location2="westus2"
+
 az group create --name VWAN --location eastus2
-az network vwan create --name VWAN --resource-group VWAN --branch-to-branch-traffic true --location eastus2
-az network vhub create --address-prefix 192.168.0.0/24 --name VWANEAST --resource-group VWAN --vwan VWAN --location eastus2 --sku basic
-az network vpn-gateway create --name VWANEAST --resource-group VWAN --vhub VWANEAST --location eastus2 --no-wait
-az network vhub create --address-prefix 192.168.1.0/24 --name VWANWEST --resource-group VWAN --vwan VWAN --location westus2 --sku basic
-az network vpn-gateway create --name VWANWEST --resource-group VWAN --vhub VWANWEST --location westus2 --no-wait
+az network vwan create --name VWAN --resource-group $RG --branch-to-branch-traffic true --location eastus2
+az network vhub create --address-prefix 192.168.0.0/24 --name VWANEAST --resource-group $RG --vwan VWAN --location eastus2 --sku basic
+az network vpn-gateway create --name VWANEAST --resource-group $RG --vhub VWANEAST --location eastus2 --no-wait
+az network vhub create --address-prefix 192.168.1.0/24 --name VWANWEST --resource-group $RG --vwan VWAN --location westus2 --sku basic
+az network vpn-gateway create --name VWANWEST --resource-group $RG --vhub VWANWEST --location westus2 --no-wait
 </pre>
 
 **Deploy the infrastructure for simulated on prem DC1 (10.100.0.0/16). This builds out all of the VNET/subnet/routing/VMs needed to simulate on prem including a Cisco CSR and test Linux machine.**
 <pre lang="...">
-az group create --name DC1 --location eastus2
-az network vnet create --resource-group DC1 --name DC1 --location eastus2 --address-prefixes 10.100.0.0/16 --subnet-name VM --subnet-prefix 10.100.10.0/24
-az network vnet subnet create --address-prefix 10.100.0.0/24 --name zeronet --resource-group DC1 --vnet-name DC1
-az network vnet subnet create --address-prefix 10.100.1.0/24 --name onenet --resource-group DC1 --vnet-name DC1
-az network public-ip create --name CSR1PublicIP --resource-group DC1 --idle-timeout 30 --allocation-method Static
-az network nic create --name CSR1OutsideInterface -g DC1 --subnet zeronet --vnet DC1 --public-ip-address CSR1PublicIP --ip-forwarding true --private-ip-address 10.100.0.4
-az network nic create --name CSR1InsideInterface -g DC1 --subnet onenet --vnet DC1 --ip-forwarding true --private-ip-address 10.100.1.4
-az vm create --resource-group DC1 --location eastus2 --name CSR1 --size Standard_D2as_v4 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:17_03_07-byol:latest --admin-username azureuser --admin-password Msft123Msft123 --no-wait
-az network nic create --resource-group DC1 -n DC1VMNIC --location eastus2 --subnet VM --vnet-name DC1 --private-ip-address 10.100.10.4
-az vm create -n DC1VM -g DC1 --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics DC1VMNIC --no-wait --size Standard_D2as_v4
-az network route-table create --name DC1-RT --resource-group DC1
-az network route-table route create --name To-VNET10 --resource-group DC1 --route-table-name DC1-RT --address-prefix 10.10.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.4
-az network route-table route create --name To-VNET20 --resource-group DC1 --route-table-name DC1-RT --address-prefix 10.20.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.4
-az network route-table route create --name To-VNET30 --resource-group DC1 --route-table-name DC1-RT --address-prefix 10.30.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.4
-az network route-table route create --name To-DC2 --resource-group DC1 --route-table-name DC1-RT --address-prefix 10.101.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.4
-az network vnet subnet update --name VM --vnet-name DC1 --resource-group DC1 --route-table DC1-RT
-az vm auto-shutdown -g DC1 -n CSR1 --time 2130
+
+az network vnet create --resource-group $RG --name DC1 --location eastus2 --address-prefixes 10.100.0.0/16 --subnet-name VM --subnet-prefix 10.100.10.0/24
+az network vnet subnet create --address-prefix 10.100.0.0/24 --name zeronet --resource-group $RG --vnet-name DC1
+az network vnet subnet create --address-prefix 10.100.1.0/24 --name onenet --resource-group $RG --vnet-name DC1
+az network public-ip create --name CSR1PublicIP --resource-group $RG --idle-timeout 30 --allocation-method Static
+az network nic create --name CSR1OutsideInterface --resource-group $RG --subnet zeronet --vnet DC1 --public-ip-address CSR1PublicIP --ip-forwarding true --private-ip-address 10.100.0.4
+az network nic create --name CSR1InsideInterface --resource-group $RG --subnet onenet --vnet DC1 --ip-forwarding true --private-ip-address 10.100.1.4
+az vm create --resource-group $RG --location eastus2 --name CSR1 --size Standard_D2as_v4 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:17_03_07-byol:latest --admin-username azureuser --admin-password Msft123Msft123 --no-wait
+az network nic create --resource-group $RG -n DC1VMNIC --location eastus2 --subnet VM --vnet-name DC1 --private-ip-address 10.100.10.4
+az vm create -n DC1VM --resource-group $RG --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics DC1VMNIC --no-wait --size Standard_D2as_v4
+az network route-table create --name DC1-RT --resource-group $RG
+az network route-table route create --name To-VNET10 --resource-group $RG --route-table-name DC1-RT --address-prefix 10.10.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.4
+az network route-table route create --name To-VNET20 --resource-group $RG --route-table-name DC1-RT --address-prefix 10.20.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.4
+az network route-table route create --name To-VNET30 --resource-group $RG --route-table-name DC1-RT --address-prefix 10.30.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.4
+az network route-table route create --name To-DC2 --resource-group $RG --route-table-name DC1-RT --address-prefix 10.101.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.100.1.4
+az network vnet subnet update --name VM --vnet-name DC1 --resource-group $RG --route-table DC1-RT
 </pre>
 
 **Build the same for simulated on prem DC2**
 <pre lang="...">
-az group create --name DC2 --location westus2
-az network vnet create --resource-group DC2 --name DC2 --location westus2 --address-prefixes 10.101.0.0/16 --subnet-name DC2VM --subnet-prefix 10.101.10.0/24
-az network vnet subnet create --address-prefix 10.101.0.0/24 --name zeronet --resource-group DC2 --vnet-name DC2
-az network vnet subnet create --address-prefix 10.101.1.0/24 --name onenet --resource-group DC2 --vnet-name DC2
-az network public-ip create --name CSR2PublicIP --resource-group DC2 --idle-timeout 30 --allocation-method Static
-az network nic create --name CSR2OutsideInterface -g DC2 --subnet zeronet --vnet DC2 --public-ip-address CSR2PublicIP --ip-forwarding true --private-ip-address 10.101.0.4
-az network nic create --name CSR2InsideInterface -g DC2 --subnet onenet --vnet DC2 --ip-forwarding true --private-ip-address 10.101.1.4
-az VM create --resource-group DC2 --location westus2 --name CSR2 --size Standard_D2as_v4 --nics CSR2OutsideInterface CSR2InsideInterface  --image cisco:cisco-csr-1000v:17_03_07-byol:latest --admin-username azureuser --admin-password Msft123Msft123 --no-wait
-az network nic create --resource-group DC2 -n DC2VMNIC --location westus2 --subnet DC2VM --vnet-name DC2 --private-ip-address 10.101.10.4
-az VM create -n DC2VM -g DC2 --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics DC2VMNIC --no-wait --size Standard_D2as_v4
-az network route-table create --name DC2-RT --resource-group DC2
-az network route-table route create --name To-VNET10 --resource-group DC2 --route-table-name DC2-RT --address-prefix 10.10.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.101.1.4
-az network route-table route create --name To-VNET20 --resource-group DC2 --route-table-name DC2-RT --address-prefix 10.20.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.101.1.4
-az network route-table route create --name To-VNET30 --resource-group DC2 --route-table-name DC2-RT --address-prefix 10.30.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.101.1.4
-az network route-table route create --name To-DC1 --resource-group DC2 --route-table-name DC2-RT --address-prefix 10.100.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.101.1.4
-az network vnet subnet update --name DC2VM --vnet-name DC2 --resource-group DC2 --route-table DC2-RT
-az vm auto-shutdown -g DC2 -n CSR2 --time 2130
+az network vnet create --resource-group $RG --name DC2 --location westus2 --address-prefixes 10.101.0.0/16 --subnet-name DC2VM --subnet-prefix 10.101.10.0/24 --location $Location2
+az network vnet subnet create --address-prefix 10.101.0.0/24 --name zeronet --resource-group $RG --vnet-name DC2 
+az network vnet subnet create --address-prefix 10.101.1.0/24 --name onenet --resource-group $RG --vnet-name DC2
+az network public-ip create --name CSR2PublicIP --resource-group $RG --idle-timeout 30 --allocation-method Static --location $Location2
+az network nic create --name CSR2OutsideInterface --resource-group $RG --subnet zeronet --vnet DC2 --public-ip-address CSR2PublicIP --ip-forwarding true --private-ip-address 10.101.0.4 --location $Location2
+az network nic create --name CSR2InsideInterface --resource-group $RG --subnet onenet --vnet DC2 --ip-forwarding true --private-ip-address 10.101.1.4 --location $Location2
+az VM create --resource-group $RG --location $Location2 --name CSR2 --size Standard_D2as_v4 --nics CSR2OutsideInterface CSR2InsideInterface  --image cisco:cisco-csr-1000v:17_03_07-byol:latest --admin-username azureuser --admin-password Msft123Msft123 --no-wait
+az network nic create --resource-group $RG -n DC2VMNIC --location westus2 --subnet DC2VM --vnet-name DC2 --private-ip-address 10.101.10.4 --location $Location2
+az VM create -n DC2VM --resource-group $RG --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics DC2VMNIC --no-wait --size Standard_D2as_v4 --location $Location2
+az network route-table create --name DC2-RT --resource-group $RG --location $Location2
+az network route-table route create --name To-VNET10 --resource-group $RG --route-table-name DC2-RT --address-prefix 10.10.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.101.1.4
+az network route-table route create --name To-VNET20 --resource-group $RG --route-table-name DC2-RT --address-prefix 10.20.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.101.1.4
+az network route-table route create --name To-VNET30 --resource-group $RG --route-table-name DC2-RT --address-prefix 10.30.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.101.1.4
+az network route-table route create --name To-DC1 --resource-group $RG --route-table-name DC2-RT --address-prefix 10.100.0.0/16 --next-hop-type VirtualAppliance --next-hop-ip-address 10.101.1.4
+az network vnet subnet update --name DC2VM --vnet-name DC2 --resource-group $RG --route-table DC2-RT
 </pre>
 
 **Build VNET 10 which includes a test VM. No routing needs to be defined as VWAN will inject routes.**
 <pre lang="...">
-az group create --name VNET10 --location eastus2
-az network vnet create --resource-group VNET10 --name VNET10 --location eastus2 --address-prefixes 10.10.0.0/16 --subnet-name VNET10VM --subnet-prefix 10.10.10.0/24
-az network vnet subnet create --address-prefix 10.10.0.0/24 --name zeronet --resource-group VNET10 --vnet-name VNET10
-az network vnet subnet create --address-prefix 10.10.1.0/24 --name onenet --resource-group VNET10 --vnet-name VNET10
-az network nic create --resource-group VNET10 -n VNET10VMNIC --location eastus2 --subnet VNET10VM --vnet-name VNET10 --private-ip-address 10.10.10.4
-az VM create -n VNET10VM -g VNET10 --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics VNET10VMNIC --no-wait --size Standard_D2as_v4
+az network vnet create --resource-group $RG --name VNET10 --location eastus2 --address-prefixes 10.10.0.0/16 --subnet-name VNET10VM --subnet-prefix 10.10.10.0/24
+az network vnet subnet create --address-prefix 10.10.0.0/24 --name zeronet --resource-group $RG --vnet-name VNET10
+az network vnet subnet create --address-prefix 10.10.1.0/24 --name onenet --resource-group $RG --vnet-name VNET10
+az network nic create --resource-group $RG -n VNET10VMNIC --location eastus2 --subnet VNET10VM --vnet-name VNET10 --private-ip-address 10.10.10.4
+az VM create -n VNET10VM --resource-group $RG --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics VNET10VMNIC --no-wait --size Standard_D2as_v4
 </pre>
 
 **Build VNET 20**
 <pre lang="...">
-az group create --name VNET20 --location westus2
-az network vnet create --resource-group VNET20 --name VNET20 --location westus2 --address-prefixes 10.20.0.0/16 --subnet-name VNET20VM --subnet-prefix 10.20.10.0/24
-az network vnet subnet create --address-prefix 10.20.0.0/24 --name zeronet --resource-group VNET20 --vnet-name VNET20
-az network vnet subnet create --address-prefix 10.20.1.0/24 --name onenet --resource-group VNET20 --vnet-name VNET20
-az network nic create --resource-group VNET20 -n VNET20VMNIC --location westus2 --subnet VNET20VM --vnet-name VNET20 --private-ip-address 10.20.10.4
-az VM create -n VNET20VM -g VNET20 --image UbuntuLTS --admin-password Msft123Msft123 --nics VNET20VMNIC --no-wait --size Standard_D2as_v4
+az network vnet create --resource-group $RG --name VNET20 --location westus2 --address-prefixes 10.20.0.0/16 --subnet-name VNET20VM --subnet-prefix 10.20.10.0/24
+az network vnet subnet create --address-prefix 10.20.0.0/24 --name zeronet --resource-group $RG --vnet-name VNET20
+az network vnet subnet create --address-prefix 10.20.1.0/24 --name onenet --resource-group $RG --vnet-name VNET20
+az network nic create --resource-group $RG -n VNET20VMNIC --location westus2 --subnet VNET20VM --vnet-name VNET20 --private-ip-address 10.20.10.4
+az VM create -n VNET20VM --resource-group $RG --image UbuntuLTS --admin-password Msft123Msft123 --nics VNET20VMNIC --no-wait --size Standard_D2as_v4
 </pre>
 
 **Validate "provisioningstate" of the VPN GWs are successful. Do not continue if provisioning was not successful. The VPN appliances can take 30+ minutes to create.**
 <pre lang="...">
-az network vpn-gateway list --resource-group VWAN -o table
+az network vpn-gateway list --resource-group $RG -o table
 </pre>
 
 **Build a connection between the VWANEAST hub and VNET10. Also build a connection between VWANWEST and VNET 20. Replace XX with your subscription.**
 <pre lang="...">
-az network vhub connection create --name toVNET10 --remote-vnet /subscriptions/XX/resourceGroups/VNET10/providers/Microsoft.Network/virtualNetworks/VNET10 --resource-group VWAN --vhub-name VWANEAST
+az network vhub connection create --name toVNET10 --remote-vnet /subscriptions/XX/resourceGroups/VNET10/providers/Microsoft.Network/virtualNetworks/VWAN --resource-group $RG --vhub-name VWANEAST
 
-az network vhub connection create --name toVNET20 --remote-vnet /subscriptions/XX/resourceGroups/VNET20/providers/Microsoft.Network/virtualNetworks/VNET20 --resource-group VWAN --vhub-name VWANWEST
+az network vhub connection create --name toVNET20 --remote-vnet /subscriptions/XX/resourceGroups/VNET20/providers/Microsoft.Network/virtualNetworks/VWAN --resource-group $RG --vhub-name VWANWEST
 </pre>
 
 **Get the public IP of the CSR in DC1. This is the address of on the on prem DC1 side that the VPN tunnels will terminate on. Copy it to notepad.**
 <pre lang="...">
-az network public-ip show -g DC1 -n CSR1PublicIP --query "{address: ipAddress}"
+az network public-ip show --resource-group $RG -n CSR1PublicIP --query "{address: ipAddress}"
 </pre>
 
 **Build a VPN site and connection between VWANEAST and the DC1 CSR. Replace "CSR1PublicIP" with the IP address from the previous step. Remember a VPN site "connection" in Azure will build a S2S VPN from both VPN appliances in VWAN Hub VWANEAST. For BGP over IPSEC, this assumes CSR1 BGP ASN is 65001 and the VTI is 172.16.0.1 (not the PIP of the CSR).**
 <pre lang="...">
-az network vpn-site create --ip-address "CSR1PublicIP" --name DC1 --resource-group VWAN --location eastus2 --virtual-wan VWAN --asn 65001 --bgp-peering-address 172.16.0.1
+az network vpn-site create --ip-address "CSR1PublicIP" --name DC1 --resource-group $RG --location eastus2 --virtual-wan VWAN --asn 65001 --bgp-peering-address 172.16.0.1
 
-az network vpn-gateway connection create --gateway-name VWANEAST --name DC1 --remote-vpn-site DC1 --resource-group VWAN --protocol-type IKEv2 --shared-key Msft123Msft123 --enable-bgp
+az network vpn-gateway connection create --gateway-name VWANEAST --name DC1 --remote-vpn-site DC1 --resource-group $RG --protocol-type IKEv2 --shared-key Msft123Msft123 --enable-bgp
 </pre>
 
 **Get the public IP of the CSR in DC2. This is the address of on the on prem side that the VPN tunnels will terminate on. Copy it to notepad.**
 <pre lang="...">
-az network public-ip show -g DC2 -n CSR2PublicIP --query "{address: ipAddress}"
+az network public-ip show --resource-group $RG -n CSR2PublicIP --query "{address: ipAddress}"
 </pre>
 
 **Build a VPN site and connection between VWAN and the DC2 CSR. Replace "CSR2PublicIP" with the IP address from the previous step.**
 <pre lang="...">
-az network vpn-site create --ip-address "CSR2PublicIP" --name DC2 --resource-group VWAN --location westus2 --virtual-wan VWAN --asn 65002 --bgp-peering-address 172.16.0.4
+az network vpn-site create --ip-address "CSR2PublicIP" --name DC2 --resource-group $RG --location westus2 --virtual-wan VWAN --asn 65002 --bgp-peering-address 172.16.0.4
 
-az network vpn-gateway connection create --gateway-name VWANWEST --name DC2 --remote-vpn-site DC2 --resource-group VWAN --protocol-type IKEv2 --shared-key Msft123Msft123 --enable-bgp
+az network vpn-gateway connection create --gateway-name VWANWEST --name DC2 --remote-vpn-site DC2 --resource-group $RG --protocol-type IKEv2 --shared-key Msft123Msft123 --enable-bgp
 </pre>
 
-**Document the public IPs of Instance0 and Instance1**
+**Document the public IPs of Instance0 and Instance1 for VWAN EAST**
 <pre lang="...">
-az network vpn-gateway show -n VWANEAST -g VWAN --query 'ipConfigurations'
+az network vpn-gateway show -n VWANEAST -g $RG --query 'ipConfigurations'
 </pre>
 
 **Connect to CSR1 and paste in the below config. Replace "Instance0" and "Instance1" with the PIPs of VWANEAST. Make sure the static routes at the end of the config are pointing to the correct peering IP and routing across the right tunnel.**
@@ -249,8 +250,13 @@ ping 10.20.10.4 source gi2
 
 **Validate VMs in VNET10 and VNET20 see 2 paths to DC1 (10.100.0.0/16). Remember we created 2 tunnels to DC1.
 <pre lang="...">
-az network nic show-effective-route-table -g VNET10 -n VNET10VMNIC --output table
-az network nic show-effective-route-table -g VNET20 -n VNET20VMNIC --output table
+az network nic show-effective-route-table --resource-group $RG -n VNET10VMNIC --output table
+az network nic show-effective-route-table --resource-group $RG -n VNET20VMNIC --output table
+</pre>
+
+**Document the public IPs of Instance0 and Instance1 of VWANWEST**
+<pre lang="...">
+az network vpn-gateway show -n VWANWEST -g $RG --query 'ipConfigurations'
 </pre>
 
 **Connect to CSR2 and paste in the below config. Replace "Instance0" and "Instance1" with the PIPs of VWANWEST. Make sure the static routes at the end of the config are pointing to the correct peering IP and routing across the right tunnel.**
