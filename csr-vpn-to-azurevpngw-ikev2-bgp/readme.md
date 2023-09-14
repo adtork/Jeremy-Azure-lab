@@ -68,7 +68,7 @@ az network vnet subnet update --name VM --vnet-name onprem --resource-group $RG 
 
 **Create Local Network Gateway. The 192.168.1.1 addrees is the IP of the tunnel interface on the CSR in BGP ASN 65002.**
 <pre lang="...">
-az network local-gateway create --gateway-ip-address "insert CSR Public IP" --name to-onprem --resource-group $RG --local-address-prefixes 192.168.1.1/32 --asn 65002 --bgp-peering-address 192.168.1.1
+az network local-gateway create --gateway-ip-address "insert CSR Public IP" --name to-onprem --resource-group $RG --local-address-prefixes 192.168.1.1/32 --asn 65001 --bgp-peering-address 192.168.1.1
 </pre>
 
 **Create VPN connections**
