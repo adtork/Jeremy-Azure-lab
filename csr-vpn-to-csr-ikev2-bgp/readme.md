@@ -1,17 +1,12 @@
 # Azure Networking Lab- IPSEC VPN (IKEv2) between Cisco CSRs with BGP
 This lab guide illustrates how to build a basic IPSEC VPN tunnel w/IKEv2 between Cisco CSRs with BGP. This is for lab testing purposes only and should not be considered production configurations. All Azure configs are done in Azure CLI so you can change them as needed to match your environment. Note- Loopback address have been added to each CSR for troubleshooting purposes as well as the UDRs for reachability to them. The on prem VNET is to simulate on prem connectivity. Each CSR uses code version 16.10 which has introduced new default configurations. 
 
-Assumptions:
-- A valid Azure subscription account. If you don’t have one, you can create your free azure account (https://azure.microsoft.com/en-us/free/) today.
-- Latest Azure CLI, follow these instructions to install: https://docs.microsoft.com/en-us/cli/azure/install-azure-cli 
-
 # Base Topology
 ![alt text](https://github.com/jwrightazure/lab/blob/master/images/csrvpnikev2bgp.PNG)
 
 **You may have to accept the NVA agreement if you've never deployed this image before. This is just an example:**
 <pre lang="...">
-Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "16_10-byol"
-Get-AzureRmMarketplaceTerms -Publisher "Cisco" -Product "cisco-csr-1000v" -Name "16_10-byol" | Set-AzureRmMarketplaceTerms -Accept
+az vm image terms accept --urn cisco:cisco-csr-1000v:17_03_07-byol:latest
 </pre>
 
 **Create CSR VNET and subnets**
@@ -38,7 +33,7 @@ az network nsg rule create --resource-group CSR --nsg-name Azure-CSR-NSG --name 
 az network public-ip create --name CSR1PublicIP --resource-group CSR --idle-timeout 30 --allocation-method Static --sku standard
 az network nic create --name CSR1OutsideInterface -g CSR --subnet OutsideSubnet --vnet CSR --public-ip-address CSR1PublicIP --private-ip-address 10.0.0.4 --ip-forwarding true --network-security-group Azure-CSR-NSG
 az network nic create --name CSR1InsideInterface -g CSR --subnet InsideSubnet --vnet CSR --ip-forwarding true --private-ip-address 10.0.1.4 --network-security-group Azure-CSR-NSG
-az vm create --resource-group CSR --location westus --name CSR1 --size Standard_D2_v2 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:16_12-byol:16.12.120190816 --admin-username azureuser --admin-password Msft123Msft123 --no-wait
+az vm create --resource-group CSR --location westus --name CSR1 --size Standard_D2_v2 --nics CSR1OutsideInterface CSR1InsideInterface  --image cisco:cisco-csr-1000v:17_03_07-byol:latest --admin-username azureuser --admin-password Msft123Msft123 --no-wait
 </pre>
 
 **Create onprem VNET and subnets**
