@@ -1,6 +1,6 @@
 # Azure Networking Lab- IPSEC VPN (IKEv2) between Cisco CSR and Azure VPN Gateway- with BGP
 
-This lab guide illustrates how to build a basic IPSEC VPN tunnel w/IKEv2 between a Cisco CSR and the Azure VPN gateway with BGP. This is for lab testing purposes only. All Azure configs are done in Azure CLI so you can change them as needed to match your environment. The entire lab including simulated on prem is done in Azure. No hardware required. Current CSR image used is 17.3.4a. All username/password are azureuser/Msft123Msft123.
+This lab guide illustrates how to build a basic IPSEC VPN tunnel w/IKEv2 between a Cisco CSR and the Azure VPN gateway with BGP. This is for lab testing purposes only. All Azure configs are done in Azure CLI so you can change them as needed to match your environment. The entire lab including simulated on prem is done in Azure. No hardware required. Current CSR image used is 17.3.4a. All username/password are azureuser/Msft123Msft123. VM access except for CSR is done through serial console.
 
 **Before deploying CSR in the next step, you may have to accept license agreement unless you have used it before. You can accomplish this through deploying a CSR in the portal or Powershell commands via Cloudshell**
 <pre lang="...">
@@ -27,13 +27,11 @@ az network vnet subnet create --address-prefix 10.1.1.0/24 --name onenet --resou
 
 **Build Azure and onprem Linux VMs**
 <pre lang="...">
-az network public-ip create --name HubVMPubIP --resource-group $RG --location $Location --allocation-method Dynamic
-az network nic create --resource-group $RG -n HubVMNIC --location $Location --subnet HubVM --private-ip-address 10.0.10.10 --vnet-name Hub --public-ip-address HubVMPubIP
-az vm create -n HubVM --resource-group $RG --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics HubVMNIC --no-wait
+az network nic create --resource-group $RG -n HubVMNIC --location $Location --subnet HubVM --private-ip-address 10.0.10.10 --vnet-name Hub 
+az vm create -n HubVM --resource-group $RG --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics HubVMNIC --no-wait --size Standard_D2as_v4
 
-az network public-ip create --name onpremVMPubIP --resource-group $RG --location $Location --allocation-method Dynamic
-az network nic create --resource-group $RG -n onpremVMNIC --location $Location --subnet VM --private-ip-address 10.1.10.10 --vnet-name onprem --public-ip-address onpremVMPubIP
-az vm create -n onpremVM --resource-group $RG --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics onpremVMNIC --no-wait
+az network nic create --resource-group $RG -n onpremVMNIC --location $Location --subnet VM --private-ip-address 10.1.10.10 --vnet-name onprem 
+az vm create -n onpremVM --resource-group $RG --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics onpremVMNIC --no-wait --size Standard_D2as_v4
 </pre>
 
 **Build Public IPs for Azure VPN Gateway. The VPN GW will take 20+ minutes to deploy.**
@@ -47,7 +45,7 @@ az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpub
 az network public-ip create --name CSRPublicIP --resource-group $RG --idle-timeout 30 --allocation-method Static
 az network nic create --name CSROutsideInterface --resource-group $RG --subnet zeronet --vnet onprem --public-ip-address CSRPublicIP --ip-forwarding true
 az network nic create --name CSRInsideInterface --resource-group $RG --subnet onenet --vnet onprem --ip-forwarding true
-az vm create --resource-group $RG --location $Location --name CSR --size Standard_D2_v2 --nics CSROutsideInterface CSRInsideInterface  --image cisco:cisco-csr-1000v:17_3_4a-byol:latest --admin-username azureuser --admin-password Msft123Msft123 --no-wait
+az vm create --resource-group $RG --location $Location --name CSR --size Standard_D2as_v4 --nics CSROutsideInterface CSRInsideInterface  --image cisco:cisco-csr-1000v:17_3_4a-byol:latest --admin-username azureuser --admin-password Msft123Msft123 --no-wait
 </pre>
 
 **After the gateway and CSR have been created, document the public IP address for both. Value will be null until it has been successfully provisioned.**
@@ -130,9 +128,9 @@ int tunnel 1
   tunnel protection ipsec profile to-onprem-IPsecProfile
   exit
 
-router bgp 65002
+router bgp 65001
   bgp      log-neighbor-changes
-  neighbor 10.0.0.254 remote-as 65001
+  neighbor 10.0.0.254 remote-as 65515
   neighbor 10.0.0.254 ebgp-multihop 255
   neighbor 10.0.0.254 update-source tunnel 1
 
