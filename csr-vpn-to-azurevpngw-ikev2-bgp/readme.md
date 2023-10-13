@@ -67,7 +67,7 @@ az network vnet subnet update --name VM --vnet-name onprem --resource-group $RG 
 
 **Create Local Network Gateway. The 192.168.1.1 addrees is the IP of the tunnel interface on the CSR in BGP ASN 65002.**
 ```bash
-az network local-gateway create --gateway-ip-address "insert CSR Public IP" --name to-onprem --resource-group $RG --local-address-prefixes 192.168.1.1/32 --asn 65515 --bgp-peering-address 192.168.1.1
+az network local-gateway create --gateway-ip-address "insert CSR Public IP" --name to-onprem --resource-group $RG --local-address-prefixes 192.168.1.1/32 --asn 65001 --bgp-peering-address 192.168.1.1
 ```
 
 **Create VPN connections**
@@ -127,7 +127,7 @@ int tunnel 1
   tunnel protection ipsec profile to-onprem-IPsecProfile
   exit
 
-router bgp 65515
+router bgp 65001
   bgp      log-neighbor-changes
   neighbor 10.0.0.254 remote-as 65515
   neighbor 10.0.0.254 ebgp-multihop 255
@@ -204,13 +204,13 @@ Routing entry for 172.16.1.0/24
 CSR:
 CSR1(config)#int lo100
 CSR1(config-if)#ip address 1.1.1.1 255.255.255.255
-CSR1(config-if)#router bgp 65002
+CSR1(config-if)#router bgp 65001
 CSR1(config-router)#address-family ipv4
 CSR1(config-router-af)#  network 1.1.1.1 mask 255.255.255.255
 
 PS Azure:\> az network vnet-gateway list-learned-routes -g $RG -n Azure-VNG
 {
-      "asPath": "65002",
+      "asPath": "65001",
       "localAddress": "10.0.0.254",
       "network": "1.1.1.1/32",
       "nextHop": "192.168.1.1",
