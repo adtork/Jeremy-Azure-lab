@@ -26,10 +26,10 @@ az network vnet subnet create --address-prefix 10.1.1.0/24 --name onenet --resou
 **Build Azure and onprem Linux VMs**
 ```bash
 az network nic create --resource-group $RG -n HubVMNIC --location $Location --subnet HubVM --private-ip-address 10.0.10.10 --vnet-name Hub 
-az vm create -n HubVM --resource-group $RG --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics HubVMNIC --no-wait --size Standard_D2as_v4
+az vm create -n HubVM --resource-group $RG --image Ubuntu2204 --admin-username azureuser --admin-password Msft123Msft123 --nics HubVMNIC --no-wait --size Standard_D2as_v4
 
 az network nic create --resource-group $RG -n onpremVMNIC --location $Location --subnet VM --private-ip-address 10.1.10.10 --vnet-name onprem 
-az vm create -n onpremVM --resource-group $RG --image UbuntuLTS --admin-username azureuser --admin-password Msft123Msft123 --nics onpremVMNIC --no-wait --size Standard_D2as_v4
+az vm create -n onpremVM --resource-group $RG --image Ubuntu2204 --admin-username azureuser --admin-password Msft123Msft123 --nics onpremVMNIC --no-wait --size Standard_D2as_v4
 ```
 
 **Build Public IPs for Azure VPN Gateway. The VPN GW will take 20+ minutes to deploy.**
