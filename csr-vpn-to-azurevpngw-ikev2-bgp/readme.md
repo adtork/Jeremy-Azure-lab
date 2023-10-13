@@ -35,7 +35,7 @@ az vm create -n onpremVM --resource-group $RG --image Ubuntu2204 --admin-usernam
 **Build Public IPs for Azure VPN Gateway. The VPN GW will take 20+ minutes to deploy.**
 ```bash
 az network public-ip create --name Azure-VNGpubip --resource-group $RG --allocation-method Dynamic
-az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpubip --resource-group $RG --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw3 --no-wait --asn 65001
+az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpubip --resource-group $RG --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw3 
 ```
 
 **Build onprem CSR. CSR image is specified from the Marketplace in this example.**
@@ -66,7 +66,7 @@ az network vnet subnet update --name VM --vnet-name onprem --resource-group $RG 
 
 **Create Local Network Gateway. The 192.168.1.1 addrees is the IP of the tunnel interface on the CSR in BGP ASN 65002.**
 ```bash
-az network local-gateway create --gateway-ip-address "insert CSR Public IP" --name to-onprem --resource-group $RG --local-address-prefixes 192.168.1.1/32 --asn 65001 --bgp-peering-address 192.168.1.1
+az network local-gateway create --gateway-ip-address "insert CSR Public IP" --name to-onprem --resource-group $RG --local-address-prefixes 192.168.1.1/32 --asn 65515 --bgp-peering-address 192.168.1.1
 ```
 
 **Create VPN connections**
@@ -126,7 +126,7 @@ int tunnel 1
   tunnel protection ipsec profile to-onprem-IPsecProfile
   exit
 
-router bgp 65001
+router bgp 65515
   bgp      log-neighbor-changes
   neighbor 10.0.0.254 remote-as 65515
   neighbor 10.0.0.254 ebgp-multihop 255
@@ -163,7 +163,7 @@ PS Azure:\> az network vnet-gateway list-advertised-routes -g $RG -n Azure-VNG -
 {
   "value": [
     {
-      "asPath": "65001",
+      "asPath": "65515",
       "localAddress": "10.0.0.254",
       "network": "10.0.0.0/16",
       "nextHop": "10.0.0.254",
@@ -177,7 +177,7 @@ PS Azure:\> az network vnet-gateway list-advertised-routes -g $RG -n Azure-VNG -
 PS Azure:\> az network vnet-gateway list-advertised-routes -g $RG -n Azure-VNG --peer 192.168.1.1
 {
   "value": [{
-      "asPath": "65001",
+      "asPath": "65515",
       "localAddress": "10.0.0.254",
       "network": "172.16.1.0/24",
       "nextHop": "10.0.0.254",
@@ -189,13 +189,13 @@ PS Azure:\> az network vnet-gateway list-advertised-routes -g $RG -n Azure-VNG -
  CSR1#sh ip route 172.16.1.0
 Routing entry for 172.16.1.0/24
   Known via "bgp 65002", distance 20, metric 0
-  Tag 65001, type external
+  Tag 65515, type external
   Last update from 10.0.0.254 00:02:31 ago
   Routing Descriptor Blocks:
   * 10.0.0.254, from 10.0.0.254, 00:02:31 ago
       Route metric is 0, traffic share count is 1
       AS Hops 1
-      Route tag 65001
+      Route tag 65515
       MPLS label: none
 ```
 **Advertise a new prefix from on prem over BGP**
