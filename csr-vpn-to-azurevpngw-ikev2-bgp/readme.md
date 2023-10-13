@@ -39,12 +39,12 @@ az network public-ip create --name Azure-VNGpubip --resource-group $RG --allocat
 az network vnet-gateway create --name Azure-VNG --public-ip-address Azure-VNGpubip --resource-group $RG --vnet Hub --gateway-type Vpn --vpn-type RouteBased --sku VpnGw3 
 ```
 
-**Build onprem CSR. CSR image is specified from the Marketplace in this example.**
+**Build onprem CSR.**
 ```bash
 az network public-ip create --name CSRPublicIP --resource-group $RG --idle-timeout 30 --allocation-method Static
 az network nic create --name CSROutsideInterface --resource-group $RG --subnet zeronet --vnet onprem --public-ip-address CSRPublicIP --ip-forwarding true
 az network nic create --name CSRInsideInterface --resource-group $RG --subnet onenet --vnet onprem --ip-forwarding true
-az vm create --resource-group $RG --location $Location --name CSR --size Standard_D2as_v4 --nics CSROutsideInterface CSRInsideInterface  --image cisco:cisco-csr-1000v:17_3_4a-byol:latest --admin-username azureuser --admin-password Msft123Msft123 --no-wait
+az vm create --resource-group $RG --location $Location --name CSR --size Standard_D2as_v4 --nics CSROutsideInterface CSRInsideInterface  --image cisco:cisco-csr-1000v:17_03_08-byol:latest --admin-username azureuser --admin-password Msft123Msft123 --no-wait
 ```
 
 **After the gateway and CSR have been created, document the public IP address for both. Value will be null until it has been successfully provisioned.**
