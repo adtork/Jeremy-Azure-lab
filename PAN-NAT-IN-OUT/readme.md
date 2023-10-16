@@ -36,7 +36,7 @@ Location="eastus2"
 hubname="Hub"
 
 #Accept PAN license
-az vm image terms accept --urn paloaltonetworks:vmseries-flex:byol:latest --only-show-errors --output
+az vm image terms accept --urn paloaltonetworks:vmseries-flex:byol:latest --only-show-errors
 
 #VNET
 echo Creating VNET..
