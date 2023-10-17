@@ -17,7 +17,7 @@ action 3.5 cli command "end"
 
 event manager applet bgp-neighbor-up
 event syslog pattern " %BGP-5-ADJCHANGE: neighbor.*Up" 
-action 1.0 syslog msg "shutdown loopback interface"
+action 1.0 syslog msg "enable loopback interface"
 action 1.5 cli command "enable"
 action 2.0 cli command "conf t"
 action 2.5 cli command "int lo0"
