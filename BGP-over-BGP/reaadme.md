@@ -15,10 +15,10 @@ an NVA or NVA HA. On top of solving the route limits challenge, this will hopefu
 - The amount of routes the NVA can support is outside the scope this solution.
 - Lab uses public address space for on prem.
 
-# Topology before "BGP over BGP" NOTE- the 150 network is part of the 15k routes and can't be advertised over the BGP session between CE1 and ER. This is a standard NVA deployment.
+**Topology before "BGP over BGP" NOTE- the 150 network is part of the 15k routes and can't be advertised over the BGP session between CE1 and ER. This is a standard NVA deployment.**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/BGP-over-BGP/basic-er-nva-topo.png)
 
-**A Note on Forced Tuunelling**
+**A Note on Forced Tunnelling**
 Forced tunneling will not solve this challenge due to the requirement of the VNET using the NVA for outbound internet. If you advertise 0/0 from on prem, the NVA will receive the route, still use it's guest OS default route to the fabric and the fabric will steer it to on prem. Remember, the VNET must use the NVA and Azure for Internet traffic. EX: VM in Azure initiates a connecttion to the Internet, follows the 0/0 UDR to the NVA, the guest OS has a default route out the "outside" interface to the fabric, the fabric will forward the traffic to ER since on prem is advertising 0/0. Even if you disable route propagation on both NVA interfaces, you sill have the same problem. This will still not work if you have a route table on the outside interface for 0/0 setting the next hop as Internet. EX: VM in Azure initiates a connecttion to the Internet, follows the 0/0 UDR to the NVA, the guest OS has a default route out the "outside" interface to the fabric and it will successfully go to the Internet. However, if the VM initiates a connections to the 150 network which is part of the 15k routes, it will follow 0/0 to the NVA and be sent out the Internet. Remember the 4k/10k prefix adverisement limit from on prem over ER.
 
 **BGP over BGP**
