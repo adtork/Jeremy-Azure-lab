@@ -27,7 +27,7 @@ To solve this, you could establish a new BGP session between a different on prem
 **Topology with "BGP over BGP"**
 ![alt text](https://github.com/jwrightazure/lab/blob/master/BGP-over-BGP/bgp-multihop.png)
 
-**Forwarding issue and resolution**
+# Forwarding issue and resolution
 A VM initiates a connection to the internet and it works fine as previously discussed. When a VM initiates a connection to 150.0.0.1, it follows 0/0 to the NVA. I'm using a Cisco CSR in this example. As you can see from the output below, the NVA sees 150.0.0.1/32 (I'm using a /32 for lab purposes only) in it's BGP table. The lookup for that prefix shows the next hop to be the loopback address of CE1 11.11.11.11 which is correct based on multihop mechanics. If you look at the route table of the CSR for destination 11.11.11.11, it points to the fabric next hop of 10.1.1.1 which we previously defined with a guest OS static route earlier. The CSR will forward the packet destin to 150.0.0.1 to 10.1.1.1 which is the fabric and the fabric will drop it because the underlay knows nothing about the 150 prefix. Remember, we are only advertising 11.11.11.11/32 from CE1 to the underlay via ER. To solve this, inject 0/0 from on prem to trick the fabric into forwarding any unknown traffic to on prem. Injecting 0/0 has no impact to steering outbound Internet traffic over ER.
 
 # NVA Routes
