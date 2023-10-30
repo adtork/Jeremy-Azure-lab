@@ -11,7 +11,7 @@ an NVA or NVA HA. On top of solving the route limits challenge, this will hopefu
 - Customer requires advertising 15k non contiguous prefixes and CAN'T SUMMARIZE.
 - Traffic load to/from the 15k prefixes is not large.
 - An overlay from on prem to the NVA is not allowed.
-- Multi-NIC NVA required, route propagation is diabled on the VM subnet in Azure.
+- Multi-NIC NVA required
 - The amount of routes the NVA can support is outside the scope this solution.
 - Lab uses public address space for on prem.
 
