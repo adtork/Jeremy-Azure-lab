@@ -34,7 +34,7 @@ A VM initiates a connection to the internet and it works fine as previously disc
 ![alt text](https://github.com/jwrightazure/lab/blob/master/BGP-over-BGP/routes.png)
 
 **Summary**
-- Summarization would be a better option to solve this problem but it is not always an option
+- Summarization would be a better option to solve this problem but not always an option
 - Complexity is somewhat high and support could be challenging. Strong knowledge of on prem BGP and Azure networking
 - If using this solution, limit your route advertisement to the underlay and include BGP multihop address and 0/0
 - Configure a route table on the NVA outside inteface for 0/0 with next hop internet, multi-NIC NVA required
