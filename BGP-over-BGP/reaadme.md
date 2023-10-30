@@ -1,5 +1,5 @@
 # Bypassing Expressroute Prefix Limits with "BGP over BGP"- DRAFT
-Expressroute currently allows on prem to advertise 4k routes with standard licensing and 10k routes with premium licensing. In a very a rare situation, customers need to send more than 10k prefixes into Azure. IMPORTANT- the complexity of solving this is high and you must have a solid understanding of both on prem and Azure BGP. Specifically FIB/RIB
+Expressroute currently allows on prem to advertise 4k routes with standard licensing and 10k routes with premium licensing. In rare situations, customers need to send more than 10k prefixes into Azure. IMPORTANT- the complexity of solving this is high and you must have a solid understanding of both on prem and Azure BGP. Specifically FIB/RIB
 behavior, next hop BGP requirements and underlay vs overlay forwarding in Azure. The other important aspect of this option is supportability on the customer side as well as
 the Azure side. This overview does not cover Expressroute fundamentals or other networking aspects like the built in redundancy or basic forwarding of ER, steering traffic to
 an NVA or NVA HA. On top of solving the route limits challenge, this will hopefully help with other creative ideas by "hiding" routes in the NVA for other designs.
